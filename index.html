@@ -3505,7 +3505,7 @@ function startRoom() {
     const nm = leaderInfo ? esc(leaderInfo.n) : "";
     let h = `<div class="waiting"><span class="spinner"></span>${tri(msg)}</div>`;
     if (me && !leaderOnline()) {
-      if (canTake()) h += `<div class="leadbar"><div class="small">${leaderInfo ? `組長 ${nm} 目前離線 · 조장이 오프라인이에요` : "這組還沒有組長 · 아직 조장이 없어요"}</div><input id="takePw" type="password" inputmode="numeric" autocomplete="off" placeholder="🔑 組長密碼" style="padding:12px;border-radius:12px;border:1.5px solid var(--line);font-size:16px;text-align:center"><button class="btn gold" data-take>👑 我來當組長 · 제가 조장을 할게요</button><div id="takeMsg" class="small" style="color:var(--a-ink)"></div></div>`;
+      if (canTake()) h += `<div class="leadbar"><div class="small">${leaderInfo ? `組長 ${nm} 目前離線 · 조장이 오프라인이에요` : "這組還沒有組長 · 아직 조장이 없어요"}</div>${TESTR ? "" : "<input id=\"takePw\" type=\"password\" inputmode=\"numeric\" autocomplete=\"off\" placeholder=\"🔑 組長密碼\" style=\"padding:12px;border-radius:12px;border:1.5px solid var(--line);font-size:16px;text-align:center\">"}<button class="btn gold" data-take>👑 我來當組長 · 제가 조장을 할게요</button><div id="takeMsg" class="small" style="color:var(--a-ink)"></div></div>`;
       else h += `<div class="leadbar"><div class="small">組長 ${nm} 暫時離線，等待重新連線…<br>約 ${Math.ceil((GRACE - leaderOffFor()) / 1000)} 秒後可由其他同學接任</div></div>`;
     }
     return h;
@@ -3544,7 +3544,7 @@ function startRoom() {
     const tpw = $("#takePw"); if (tpw) { const had = takePwVal; tpw.value = had; tpw.oninput = () => { takePwVal = tpw.value; }; tpw.onkeydown = e => { if (e.key === "Enter") $("[data-take]").click(); }; }
     const tk = $("[data-take]"); if (tk) tk.onclick = () => {
       const f = $("#takePw");
-      if (cyrb53((f && f.value || "").trim()) !== LEAD_HASH) { if (f) { f.value = ""; f.focus(); } const mm = $("#takeMsg"); if (mm) mm.textContent = "組長密碼錯誤"; return; }
+      if (!TESTR && cyrb53((f && f.value || "").trim()) !== LEAD_HASH) { if (f) { f.value = ""; f.focus(); } const mm = $("#takeMsg"); if (mm) mm.textContent = "組長密碼錯誤"; return; }
       tryLead();
     };
     const e = $("#edit"); if (e) e.onclick = () => { editing = true; render(); };
@@ -3617,7 +3617,7 @@ function startRoom() {
     app.innerHTML = `<div class="wrap">
       <div class="topbar"><span class="roomtag">${TESTR ? "🧪 測試房間 · 테스트 방" : "房間 · 방 " + LBL}</span><button class="linkbtn" id="leave">← 換房間 · 방 선택</button></div>
       <div class="card">
-        <h1 class="join-brand">默契二選一 <span class="brand-version">test 29</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></h1>
+        <h1 class="join-brand">默契二選一 <span class="brand-version">test 31</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></h1>
         <div class="muted">${tri({zh:"你們的默契有多好？一起來試試！", ko:"우리 얼마나 잘 통할까요? 같이 알아봐요!"})}</div>
         <label class="field"><span class="lbl">${tri({zh:"你的名字", ko:"이름"}, "inline")}</span>
           <input id="nm" type="text" maxlength="16" autocomplete="off" placeholder="例如：小安／민지" value="${esc(me ? me.n : "")}"></label>
@@ -3626,12 +3626,12 @@ function startRoom() {
             <button class="${lead === false ? "on" : ""}" data-l="0" aria-pressed="${lead === false}">🙋 組員<br><span class="small muted">조원</span></button>
             <button class="${lead === true ? "on" : ""}" data-l="1" aria-pressed="${lead === true}">👑 組長<br><span class="small muted">조장</span></button>
           </div>
-          <label id="pwBox" style="display:${lead && !(me && me.lead) ? "block" : "none"};margin-top:12px"><span class="lbl">${tri({zh:"🔑 組長密碼（老師提供）", ko:"🔑 조장 비밀번호 (선생님 안내)"}, "inline")}</span>
+          <label id="pwBox" style="display:${!TESTR && lead && !(me && me.lead) ? "block" : "none"};margin-top:12px"><span class="lbl">${tri({zh:"🔑 組長密碼（老師提供）", ko:"🔑 조장 비밀번호 (선생님 안내)"}, "inline")}</span>
             <input id="lpw" type="password" inputmode="numeric" autocomplete="off" placeholder="••••" style="width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--line);font-size:18px"></label></div>
         <button id="go" class="btn" style="width:100%;margin-top:6px" disabled>${tri({zh:"加入房間", ko:"입장하기"}, "inline")}</button>
         <div id="goHint" class="small muted center" style="margin-top:8px"></div>
       </div>${prevIds()}${testBar()}</div>`;
-    const needPw = () => lead === true && !(me && me.lead);
+    const needPw = () => !TESTR && lead === true && !(me && me.lead);
     function upd() {
       const okN = !!$("#nm").value.trim(), okR = lead !== null, okP = !needPw() || !!$("#lpw").value.trim();
       $("#pwBox").style.display = needPw() ? "block" : "none";
@@ -3830,7 +3830,7 @@ function startLanding() {
   };
   function render() {
     app.innerHTML = `<div class="wrap">
-      <div class="topbar"><span class="landing-brand"><strong>默契二選一</strong><span class="brand-version">test 29</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
+      <div class="topbar"><span class="landing-brand"><strong>默契二選一</strong><span class="brand-version">test 31</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
       <div class="card">
         <h1 class="room-choice-title">${tri({zh:"選擇你的房間", ko:"방을 선택하세요"}, "inline")}</h1>
       </div>
@@ -3861,7 +3861,7 @@ function startLanding() {
       <h1 style="font-size:22px">🔒 老師重置房間</h1>
       <p class="small muted">重置後，房間內所有人會被送回選房間畫面，進度與評語卡會清空，無法復原。</p>
       <label class="field"><span class="lbl">要重置哪一間？</span>
-        <select id="rsRoom" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line)"><option value="all">全部房間（1–${ROOMS}）</option>${Array.from({ length: ROOMS }, (_, i) => `<option value="${i + 1}">房間 · 방 ${i + 1}</option>`).join("")}</select></label>
+        <select id="rsRoom" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line)"><option value="all">全部房間（1–${ROOMS}＋測試房間） · 모든 방</option><option value="0">測試房間 · 테스트 방</option>${Array.from({ length: ROOMS }, (_, i) => `<option value="${i + 1}">房間 · 방 ${i + 1}</option>`).join("")}</select></label>
       <label class="field"><span class="lbl">密碼</span><input id="rsPw" type="password" autocomplete="off" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);font-size:16px"></label>
       <div id="rsMsg" class="small" style="color:var(--a-ink);min-height:18px"></div>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
@@ -3876,8 +3876,8 @@ function startLanding() {
       if (cyrb53($("#rsPw", m).value) !== RESET_HASH) { $("#rsMsg", m).textContent = "密碼錯誤"; $("#rsPw", m).value = ""; return; }
       if (!client || !client.connected) { $("#rsMsg", m).textContent = "尚未連線，請稍後再試"; return; }
       const v = $("#rsRoom", m).value;
-      const rooms = v === "all" ? Array.from({ length: ROOMS }, (_, i) => i + 1) : [+v];
-      if (!confirm(`確定要重置 ${v === "all" ? "全部房間" : "房間 " + v}？`)) return;
+      const rooms = v === "all" ? Array.from({ length: ROOMS + 1 }, (_, i) => i) : [+v];
+      if (!confirm(`確定要重置 ${v === "all" ? "全部房間（含測試房間）" : v === "0" ? "測試房間" : "房間 " + v}？`)) return;
       close(); doReset(rooms);
     };
   }
@@ -3890,7 +3890,7 @@ function startLanding() {
   }
   function doReset(rooms) {
     rooms.forEach(r => { const id = rid(10); client.publish(RTOP(r), JSON.stringify({ id, t: Date.now() }), { qos: 1, retain: true }); setEp(r, id); });
-    render(); toast(`已重置 ${rooms.length === ROOMS ? "全部房間" : "房間 " + rooms[0]}`);
+    render(); toast(`已重置 ${rooms.length === ROOMS + 1 ? "全部房間（含測試房間）" : rooms[0] === 0 ? "測試房間" : "房間 " + rooms[0]}`);
   }
   render();
   let t = null; const later = () => { clearTimeout(t); t = setTimeout(render, 200); };
