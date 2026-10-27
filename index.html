@@ -172,6 +172,17 @@ body.spec .minicards{grid-template-columns:1fr 1fr}
 .lead-line{font-size:14px;margin-top:4px}
 .group-stars{margin-top:14px}.group-stars h2{font-size:20px;margin:0 0 12px}.pair-record{border-top:1px solid var(--line);padding:14px 0}.pair-record.includes-me{border-left:3px solid #8b929e;padding-left:12px}.pair-names{font-weight:700}.pair-count{font-size:14px;margin-top:5px}.star-record{font-size:22px;line-height:1.7;overflow-wrap:anywhere;letter-spacing:3px;margin-top:7px}.discussion{margin-top:14px}.discussion p{margin-top:0}.col .hd{flex-wrap:wrap}.group-stars .tri .zh{color:var(--ink)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.sc-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.sc-key{font-size:13px;color:var(--muted);white-space:nowrap}
+.sc-row{display:flex;gap:0;overflow-x:auto;border:1.5px solid var(--line);border-radius:12px}
+.sc{flex:1 0 76px;max-width:120px;display:flex;flex-direction:column;align-items:center;padding:10px 6px;gap:2px;border-right:1.5px solid var(--line);min-width:0}
+.sc:last-child{border-right:none}
+.sc-stars{min-height:22px;flex:1;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-start;font-size:22px;line-height:1.05;margin-bottom:6px}
+.sc-stars i,.sc-key i{font-style:normal}
+.sg{color:#f5b400;text-shadow:0 1px 0 #c98f00}
+.sr{color:#e5352b;text-shadow:0 1px 0 #a5211a}
+.sc-nm{font-size:14px;font-weight:700;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-nm.TW{color:var(--tw)} .sc-nm.KR{color:var(--kr)}
 </style>
 </head>
 <body>
@@ -2798,11 +2809,15 @@ function startRoom() {
   function scoreCards() {
     if (!st || !me || !(st.names || {})[me.pid]) return "";
     const others = Object.entries(st.names || {}).filter(([pid]) => pid !== me.pid);
-    const rows = others.map(([pid, o]) => {
-      const score = (st.history || []).filter(h => h.res[me.pid] && h.res[me.pid] === h.res[pid]).length;
-      return `<article class="pair-record"><div class="pair-names">${ctag(me.c)} ${esc(me.n)} × ${ctag(o.c)} ${esc(o.n)}</div><div class="star-record" role="img" aria-label="${score} stars">${score ? "⭐".repeat(score) : '<span class="small muted">—</span>'}</div></article>`;
+    if (!others.length) return "";
+    let anyRed = false;
+    const cols = others.map(([pid, o]) => {
+      const n = (st.history || []).filter(h => h.res[me.pid] && h.res[me.pid] === h.res[pid]).length;
+      const red = Math.floor(n / 5), gold = n % 5; if (red) anyRed = true;
+      const stars = '<i class="sg">★</i>'.repeat(gold) + '<i class="sr">★</i>'.repeat(red);
+      return `<div class="sc" aria-label="${esc(o.n)}: ${n}"><div class="sc-stars">${stars}</div><div class="sc-nm ${me.c}">${esc(me.n)}</div><div class="sc-nm ${o.c}">${esc(o.n)}</div></div>`;
     }).join("");
-    return `<section class="card group-stars"><h2>${tri({en:"My telepathy stars", zh:"我的默契星星", ko:"나의 텔레파시 별"})}</h2><p class="small muted">${tri({en:"One star each time you and a teammate choose the same answer.", zh:"每和一位同學選一樣，就得一顆星。", ko:"친구와 같은 답을 고를 때마다 별 하나!"})}</p>${rows || tri({en:"Waiting for teammates", zh:"等待同組朋友加入", ko:"모둠 친구들을 기다려요"})}</section>`;
+    return `<section class="card group-stars"><div class="sc-head"><b>${tri({en:"My telepathy stars", zh:"我的默契星星", ko:"나의 텔레파시 별"}, "inline")}</b>${anyRed ? '<span class="sc-key"><i class="sr">★</i> = <i class="sg">★</i>×5</span>' : ""}</div><div class="sc-row">${cols}</div></section>`;
   }
   function leadBar(html) { return isLeader ? `<div class="leadbar"><div class="who">👑 LEADER · 組長 · 조장</div>${html}</div>` : ""; }
   function waitLeader(msg) {
@@ -3004,7 +3019,6 @@ function startRoom() {
           <div class="qhead" style="margin-bottom:8px">Answered · 已作答 · 답변 완료 ${done} / ${r.length}</div>
           ${chipsFor(r, { check: pid => ans.has(pid) })}
         </div>
-        ${leadBar(`<div class="small">全部人作答後會自動揭曉</div><div class="small">離線仍保留答案與星星；請等同學重連。<br>Offline players keep their answers and stars.</div>`)}
       </div></div>`;
     app.querySelectorAll(".choice").forEach(b => b.onclick = () => {
       if (myAnswer()) return;
