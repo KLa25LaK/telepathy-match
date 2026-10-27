@@ -335,6 +335,14 @@ body{background:#fff4f8;background-image:radial-gradient(ellipse at 0% 0%,#ffe0e
 .final-ranking h1 .zh{font-size:26px}.final-ranking h1 .ko{font-size:15px}.ranking-celebration{font-size:35px;line-height:1.2;margin-bottom:7px}.ranking-intro .zh{font-size:14px}.ranking-intro .ko{font-size:12px}.ranking-rule{background:#f6effa;border-radius:10px;padding:9px 11px;margin:12px 0}.ranking-rule .zh{font-size:12px;font-weight:500}.ranking-rule .ko{font-size:11px}.ranking-list{list-style:none;padding:0;margin:12px 0;display:flex;flex-direction:column;gap:8px}.ranking-row{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #ead6ed;border-radius:13px;background:#fffafd}.ranking-row:first-child{background:#fff3d5;border-color:#ecd69c}.ranking-position{width:30px;flex:none;text-align:center;font-size:22px;font-weight:750;color:#946a9a}.ranking-person{flex:1;min-width:0;overflow-wrap:anywhere}.ranking-person>b{font-size:16px}.ranking-person .tri .zh{font-size:11px;font-weight:450;margin-top:4px}.ranking-person .tri .ko{font-size:10px}.ranking-score{font-size:26px;font-weight:800;color:#895a95;text-align:right;flex:none}.ranking-score>span{display:block}.ranking-score .tri .zh{font-size:11px;color:#79577e}.ranking-score .tri .ko{font-size:10px}.ranking-disclaimer{background:#fff0f6;border:1px dashed #dca9c7;border-radius:11px;padding:11px;margin-top:14px}.ranking-disclaimer .zh{font-size:12px;font-weight:650;color:#74405e}.ranking-disclaimer .ko{font-size:11px;color:#775570;margin-top:6px}.ranking-empty,.ranking-pending{padding:10px 0}.ranking-empty .zh,.ranking-pending .zh{font-size:12px}.ranking-empty .ko,.ranking-pending .ko{font-size:11px}
 @media(min-width:1024px){.final-ranking{max-width:760px;margin:auto}.final-ranking h1 .zh{font-size:30px}.ranking-row{padding:14px 18px}}
 </style>
+<style id="purple-match-notice-test24">
+.match-notice,.reveal-layout .match-notice{background:#65377d;border:1px solid #542668;border-left:1px solid #542668;box-shadow:0 3px 0 #dfcbea}
+.match-notice .zh,.match-notice .ko,.reveal-layout .match-notice .zh,.reveal-layout .match-notice .ko{color:#fff}
+.match-notice .zh::before,.reveal-layout .match-notice .zh::before{color:#fff}
+</style>
+<style id="compact-star-badges-test25">
+.star-count-badge{display:inline-flex;align-items:center;justify-content:center;gap:5px;width:88px;min-height:34px;box-sizing:border-box;border:1px solid #dfd0e7;border-radius:999px;padding:5px 8px;background:#f3eaf9;color:#775b86;font-size:15px;line-height:1.2}.star-count-badge>b{font-size:19px;font-variant-numeric:tabular-nums}.star-count-badge.stars-medium{background:#d9c2ec;border-color:#c2a4d9;color:#604176}.star-count-badge.stars-many{background:#65377d;border-color:#542668;color:#fff}.star-count-badge.stars-zero{background:#f6f1f8;border-color:#e6dfea;color:#8b7a92}.badge-crown{font-size:13px;line-height:1}.record-score{font-size:15px}.record-expand{font-size:10px;margin-top:4px;white-space:nowrap}.record-choices>.record-progress{padding:6px 2px 8px;margin:0}.star-record>summary{padding:11px 0}.record-score .star-count-badge>span:not(.badge-crown){color:#e3ac35}.record-score .stars-many>span:not(.badge-crown){color:#ffe39a}
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -2980,6 +2988,7 @@ function startRoom() {
     const others = Object.entries(st.names || {}).filter(([pid]) => pid !== me.pid);
     if (!others.length) return "";
     const valid = a => a === "A" || a === "B";
+    const highest = Math.max(0, ...others.map(([pid]) => (st.history || []).filter(h => h.res && valid(h.res[me.pid]) && h.res[me.pid] === h.res[pid]).length));
     const rows = others.map(([pid, o]) => {
       const together = (st.history || []).filter(h => h.res && valid(h.res[me.pid]) && valid(h.res[pid]));
       const shared = together.filter(h => h.res[me.pid] === h.res[pid]);
@@ -2992,7 +3001,7 @@ function startRoom() {
       }).join("");
       const progress = total ? {zh:"一起答了 " + total + " 題，其中 " + n + " 題相同", ko:"함께 답한 " + total + "문제 중 " + n + "문제의 답이 같아요"} : {zh:"還沒有一起完成的題目",ko:"아직 함께 완료한 문제가 없어요"};
       const empty = total ? {zh:"目前還沒有共同答案，下一題再發現！",ko:"아직 같은 답이 없어요. 다음 문제에서 찾아봐요!"} : {zh:"一起完成題目後，共同點會記在這裡。",ko:"함께 문제를 풀면 공통점이 여기에 기록돼요."};
-      return `<details class="star-record"><summary><div class="pair-label">${tri({zh:"我和" + o.n, ko:"나와 " + o.n})}<div class="record-progress">${tri(progress)}</div></div><span class="record-score">★ ${n}<span class="record-expand">查看 ›<br>보기</span></span></summary><div class="record-choices">${choices || `<div class="record-empty">${tri(empty)}</div>`}</div></details>`;
+      return `<details class="star-record"><summary><div class="pair-label">${tri({zh:"我和" + o.n, ko:"나와 " + o.n})}</div><span class="record-score"><span class="star-count-badge ${n >= 10 ? "stars-many" : n >= 5 ? "stars-medium" : n ? "stars-few" : "stars-zero"}" aria-label="${n} 顆星${n > 0 && n === highest ? '，目前最多' : ''} · 별 ${n}개${n > 0 && n === highest ? ', 현재 최다' : ''}">${n > 0 && n === highest ? '<span class="badge-crown" aria-hidden="true">👑</span>' : ''}<span aria-hidden="true">★</span><b>${n}</b></span><span class="record-expand">查看 › · 보기</span></span></summary><div class="record-choices"><div class="record-progress">${tri(progress)}</div>${choices || `<div class="record-empty">${tri(empty)}</div>`}</div></details>`;
     }).join("");
     return `<details class="stars-widget" ${starsPanelOpen ? "open" : ""}><summary>★ <span>我和別人的默契星星 <small>친구들과의 텔레파시 별</small></span></summary><section class="stars-panel" aria-label="你和其他人的默契星星"><div class="stars-panel-head"><b>${tri({zh:"我們的共同點紀錄",ko:"우리의 공통점 기록"})}</b><button type="button" class="stars-close" aria-label="關閉 · 닫기">×</button></div><div class="record-help">${tri({zh:"每個相同答案＝1 顆星。點人名，看看相同的是哪些題！",ko:"같은 답 하나마다 별 1개! 이름을 눌러 어떤 답이 같았는지 확인해요."})}</div><div class="star-pairs">${rows}</div></section></details>`;
   }
@@ -3114,7 +3123,7 @@ function startRoom() {
     app.innerHTML = `<div class="wrap">
       <div class="topbar"><span class="roomtag">${TESTR ? "🧪 測試房間 · 테스트 방" : "房間 · 방 " + LBL}</span><button class="linkbtn" id="leave">← 換房間 · 방 선택</button></div>
       <div class="card">
-        <h1 class="join-brand">默契大挑戰 <span class="brand-version">test 23</span><span class="brand-ko" lang="ko">텔레파시 게임</span></h1>
+        <h1 class="join-brand">默契大挑戰 <span class="brand-version">test 25</span><span class="brand-ko" lang="ko">텔레파시 게임</span></h1>
         <div class="muted">${tri({zh:"你們的默契有多好？一起來試試！", ko:"우리 얼마나 잘 통할까요? 같이 알아봐요!"})}</div>
         <label class="field"><span class="lbl">${tri({zh:"你的名字", ko:"이름"}, "inline")}</span>
           <input id="nm" type="text" maxlength="16" autocomplete="off" placeholder="例如：小安／민지" value="${esc(me ? me.n : "")}"></label>
@@ -3328,7 +3337,7 @@ function startLanding() {
   };
   function render() {
     app.innerHTML = `<div class="wrap">
-      <div class="topbar"><span class="landing-brand"><strong>默契大挑戰</strong><span class="brand-version">test 23</span><span class="brand-ko" lang="ko">텔레파시 게임</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
+      <div class="topbar"><span class="landing-brand"><strong>默契大挑戰</strong><span class="brand-version">test 25</span><span class="brand-ko" lang="ko">텔레파시 게임</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
       <div class="card">
         <h1 class="room-choice-title">${tri({zh:"選擇你的房間", ko:"방을 선택하세요"}, "inline")}</h1>
       </div>
