@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Telepathy Match · 默契大考驗 · 텔레파시 게임</title>
+<title>默契大考驗 · 텔레파시 게임</title>
 <style>
 :root{
   --bg:#fff8ef; --ink:#1f2a44; --muted:#6b7280; --card:#ffffff; --line:#eadfce;
@@ -183,6 +183,108 @@ body.spec .minicards{grid-template-columns:1fr 1fr}
 .sr{color:#e5352b;text-shadow:0 1px 0 #a5211a}
 .sc-nm{font-size:14px;font-weight:700;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sc-nm.TW{color:var(--tw)} .sc-nm.KR{color:var(--kr)}
+</style>
+<style id="visual-refresh">
+/* Visual refresh — presentation only; original game logic is preserved. */
+:root{--bg:#f5f4ee;--ink:#203d36;--muted:#727f77;--card:#fffefa;--line:#e1e5da;--a:#df8065;--a-soft:#faeee7;--a-ink:#9e4e36;--b:#43816f;--b-soft:#e8f2eb;--b-ink:#2e6755;--gold:#d4a743;--gold-soft:#faf1d9;--tw:#4668a3;--kr:#af627b;--shadow:0 6px 28px #203d3605}
+body{background:var(--bg);background-image:radial-gradient(ellipse at 5% 0%,#e4ecdf80,transparent 45%);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;padding:28px 24px 56px}.hostwrap{padding:28px 24px 56px}
+.topbar{margin-bottom:24px;gap:14px;min-height:36px}.roomtag{background:var(--ink);padding:7px 14px;font-size:11px;letter-spacing:1.8px;border-radius:8px}.topbar .linkbtn{margin-left:auto;font-size:12px;text-decoration:none}.conn{padding:8px}.dot{width:7px;height:7px}
+.card{padding:28px;border-radius:22px;border-color:var(--line);box-shadow:var(--shadow)}
+h1{font-size:30px;letter-spacing:-.8px;margin:2px 0 14px;line-height:1.25}h2{font-size:17px;letter-spacing:-.25px;line-height:1.5;margin:24px 0 14px}
+.tri .en{font-weight:650}.tri .zh,.tri .ko{font-size:.78em;font-weight:450;line-height:1.65}.tri.inline{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}.tri.inline .zh::before,.tri.inline .ko::before{content:none}
+h1 .tri .zh{margin-top:9px;font-size:19px;color:var(--ink)}h1 .tri .ko{font-size:15px;margin-top:3px}
+h2 .tri{display:block}h2 .tri .en{font-size:12px;color:var(--muted);letter-spacing:.7px}h2 .tri .zh{font-size:18px;color:var(--ink);font-weight:650;margin-top:3px}h2 .tri .ko{font-size:12px}
+.btn{border-radius:12px;padding:13px 20px;font-size:14px;font-weight:650;min-height:46px;transition:background .18s,transform .18s,box-shadow .18s}.btn.teal{background:var(--ink)}.btn.gold{background:var(--ink);color:#fff}.btn.ghost{border:1px solid #d9dfd4;background:#ffffff60}.btn.sm{font-size:12px;min-height:38px}.btn:not(:disabled):hover{filter:brightness(1.06);box-shadow:0 4px 14px #203d3614}.btn:disabled{opacity:.5}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #80ac96;outline-offset:4px}
+.field{margin:22px 0}.field>.lbl{font-size:13px;margin-bottom:9px}.field input[type=text]{font-size:16px;padding:14px 16px;background:#fafbf7;border-width:1px;border-radius:12px}.cpick,.rolepick{gap:12px}.cpick button,.rolepick button{border-width:1px;border-radius:12px;padding:15px 12px;font-size:14px;line-height:1.6;transition:background .18s,border-color .18s}.rolepick button.on{background:var(--b-soft);border-color:var(--b)}.cpick button.on.tw{background:#eef2fa}.cpick button.on.kr{background:#faf0f3}
+.qhead{font-size:10px;letter-spacing:1.7px;font-weight:650;color:var(--b)}.question{font-size:29px;letter-spacing:-.7px;line-height:1.3;margin:14px 0 26px}.question .zh{font-size:19px;margin-top:11px;color:var(--ink)}.question .ko{font-size:15px;margin-top:3px}
+.choices{gap:16px}.choice{position:relative;border-width:2px;border-radius:18px;padding:25px 16px;min-height:230px;gap:14px;font-size:19px}.choice .letter{position:absolute;top:14px;left:14px}.choice .emo{font-size:48px;margin:10px 0 5px}.choice .tri .zh,.choice .tri .ko{font-size:13px;margin-top:4px}.choice.sel.A{box-shadow:0 5px 18px #df806520}.choice.sel.B{box-shadow:0 5px 18px #43816f20}.letter{font-size:11px;padding:2px 9px}
+.hint{margin-top:20px;font-size:12px}.status{border-top:1px solid var(--line);padding-top:20px;margin-top:24px}.chips{gap:7px}.chip{border:1px solid #dce2d7;border-radius:8px;padding:6px 9px;font-size:12px;gap:6px;line-height:1.3;background:#fffefa}.chip.me{border-color:var(--b);box-shadow:none;background:#fff}.chip.off{opacity:.6}.ctag{font-size:9px;padding:3px 4px;border-radius:4px;letter-spacing:.4px}.crown{font-size:12px}
+.cols{gap:16px}.col{padding:20px;border-radius:16px;min-width:0}.col .hd{display:grid;grid-template-columns:26px 1fr auto;gap:10px;margin:0 0 18px;align-items:center}.col .hd .letter{grid-column:1;grid-row:1;justify-self:start}.col .hd .emo{grid-column:2;grid-row:1;font-size:32px}.col .cnt{grid-column:3;grid-row:1;font-size:23px;line-height:1;color:var(--ink);margin:0}.col .hd>.tri{grid-column:1/-1;grid-row:2;font-size:17px;letter-spacing:-.3px;min-height:92px}.col .hd>.tri .zh{font-size:13px;margin-top:6px;color:var(--ink)}.col .hd>.tri .ko{font-size:12px;margin-top:3px}.col .chips{gap:6px;padding-top:15px;border-top:1px solid #203d3610}
+.group-stars{margin-top:18px}.sc-head{margin-bottom:18px}.sc-head>b>.tri.inline{display:flex;gap:2px 8px}.sc-head .en{width:100%;font-size:17px;letter-spacing:-.3px}.sc-head .zh,.sc-head .ko{font-size:12px;color:var(--muted)!important}.sc-row{border:0;border-radius:0;gap:10px;align-items:stretch;padding-bottom:4px}.sc{flex:1 0 125px;max-width:none;min-width:125px;border:1px solid var(--line);background:#f7f8f2;border-radius:12px;padding:16px 12px;gap:4px}.sc:last-child{border-right:1px solid var(--line)}.sc-stars{flex:none;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:3px;min-height:30px;font-size:21px;line-height:1.3;margin:0 0 6px}.sc-nm{font-size:13px;line-height:1.5}.sg{color:#d5a53c;text-shadow:none}.sr{color:#bc6457;text-shadow:none}
+.discussion{margin-top:18px;padding:20px 28px;background:#eef1e7}.leadbar{margin:0;padding:0;border:0;background:transparent;gap:10px;border-radius:0;text-align:left}.leadbar .who{font-size:10px;letter-spacing:1.4px;color:#76806c;margin-bottom:4px}.leadbar .btn{width:100%}.leadbar .btn.ghost{font-size:12px;color:var(--muted);min-height:38px;background:transparent;border:0;padding:6px}.card:not(.discussion)>.leadbar{border-top:1px solid var(--line);margin-top:24px;padding-top:20px}.waiting{font-size:12px;padding:12px 0;line-height:1.7}.spinner{width:14px;height:14px;border-width:2px}.modal{background:#172f29a6;backdrop-filter:blur(6px)}.modal .box{border-radius:22px;padding:28px}.toast{background:var(--ink);box-shadow:0 8px 30px #203d3630}
+body.spec .wrap{max-width:1040px}body.spec .question{font-size:38px}body.spec .choice{min-height:260px}
+@media(min-width:850px){.wrap{padding-top:40px}.card{padding:32px}.question{font-size:32px}.col{padding:24px}.col .hd>.tri{font-size:19px}.discussion{padding:22px 32px}.leadbar{display:grid;grid-template-columns:1fr 1fr;align-items:center}.leadbar .who{grid-column:1/-1}.leadbar .btn.ghost{text-align:center;border:1px solid #d9dfd4;min-height:46px}.leadbar>.small{grid-column:1/-1}}
+@media(max-width:520px){.wrap{padding:18px 16px 36px}.topbar{margin-bottom:18px}.card{padding:22px 18px;border-radius:18px}h1{font-size:25px}.question{font-size:25px}.question .zh{font-size:18px}.question .ko{font-size:13px}.choices,.cols{gap:10px}.choice{min-height:215px;padding:22px 12px 18px;font-size:17px;border-radius:14px}.choice .emo{font-size:42px}.col{padding:15px 12px;border-radius:14px}.col .hd{gap:8px 5px;grid-template-columns:24px 1fr auto}.col .hd .emo{font-size:27px}.col .hd>.tri{font-size:16px;min-height:114px}.col .hd>.tri .zh{font-size:12px}.col .hd>.tri .ko{font-size:11px}.col .cnt{font-size:20px}.chip{font-size:11px;padding:6px}.group-stars,.discussion{margin-top:14px}.sc{min-width:115px;flex-basis:115px}.sc-head .en{font-size:16px}.discussion{padding:18px}.roomtag{font-size:10px}.topbar .linkbtn{font-size:11px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+<style id="compact-refresh">
+/* Compact layout and on-demand personal stars. */
+.wrap{max-width:700px;padding:20px 20px 90px}.topbar{margin-bottom:14px;min-height:30px}.card{padding:22px;border-radius:17px}h1{font-size:26px;margin-bottom:10px}h2{margin:16px 0 10px}.question{font-size:28px;margin:10px 0 18px}.question .zh{margin-top:7px;font-size:18px}.question .ko{margin-top:1px;font-size:13px}.qhead{letter-spacing:1.3px}.choices,.cols{gap:12px}.choice{min-height:185px;padding:18px 14px;gap:10px}.choice .emo{font-size:42px;margin:6px 0 0}.col{padding:17px}.col .hd{margin-bottom:12px;gap:8px}.col .hd>.tri{min-height:80px;font-size:17px}.col .hd>.tri .zh{margin-top:3px}.col .hd>.tri .ko{margin-top:1px}.col .chips{padding-top:11px}.status{margin-top:18px;padding-top:16px}.hint{margin-top:14px}.discussion{margin-top:12px;padding:16px 22px}.leadbar{gap:8px}.leadbar .who{margin:0}.field{margin:16px 0}.cpick button,.rolepick button{padding:11px 10px}.waiting{margin-top:10px;padding:8px 0}
+.stars-widget{position:fixed;right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:35;font-size:13px}.stars-widget>summary{display:flex;align-items:center;gap:8px;list-style:none;cursor:pointer;background:var(--ink);color:#fff;border:1px solid #ffffff30;border-radius:999px;padding:10px 16px;box-shadow:0 4px 18px #203d3625;user-select:none}.stars-widget>summary::-webkit-details-marker{display:none}.stars-widget>summary>span{font-weight:650}.stars-widget summary small{font-size:10px;font-weight:400;color:#d0dfd6;margin-left:5px}.stars-widget summary:focus-visible{outline:3px solid #80ac96;outline-offset:4px}.stars-panel{position:absolute;right:0;bottom:calc(100% + 10px);width:340px;max-width:calc(100vw - 32px);border:1px solid var(--line);border-radius:18px;background:var(--card);box-shadow:0 12px 48px #203d3626;padding:18px;max-height:min(65dvh,520px);overflow:auto;overscroll-behavior:contain}.stars-panel-head{display:flex;align-items:flex-start;gap:10px;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--line)}.stars-panel-head .en{font-size:14px}.stars-panel-head .zh{font-size:12px;color:var(--ink);margin-top:2px}.stars-panel-head .ko{font-size:10px}.stars-close{background:#edf1e9;border:0;border-radius:50%;width:32px;height:32px;flex:none;color:var(--ink);font-size:23px;line-height:1}.star-pair{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line)}.star-pair:last-child{border-bottom:0}.pair-label{min-width:0;overflow-wrap:anywhere}.pair-label .en{font-size:12px}.pair-label .zh{font-size:13px;font-weight:650;color:var(--ink)}.pair-label .ko{font-size:10px}.pair-result{display:flex;flex-direction:column;align-items:flex-end;gap:3px;max-width:45%;flex-shrink:0}.pair-icons{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px;font-size:19px;line-height:1.1}.pair-icons i{font-style:normal}.pair-total{font-size:11px;color:var(--muted);white-space:nowrap}.stars-panel .sc-key{margin-top:10px;font-size:11px}
+@media(min-width:850px){.wrap{padding-top:26px}.card{padding:24px}.col{padding:18px}.discussion{padding:16px 24px}.leadbar .btn.ghost{min-height:42px}.btn{min-height:42px;padding:10px 16px}}
+@media(max-width:520px){.wrap{padding:14px 12px 85px}.topbar{margin-bottom:12px}.card{padding:18px 14px;border-radius:16px}.question{font-size:23px;margin:9px 0 15px}.question .zh{font-size:17px;margin-top:7px}.question .ko{font-size:12px}h2{margin:14px 0 10px}.choices,.cols{gap:8px}.col{padding:13px 10px}.col .hd{gap:7px 4px;margin-bottom:10px}.col .hd>.tri{min-height:102px;font-size:15px}.col .hd>.tri .zh{font-size:12px}.col .hd>.tri .ko{font-size:11px}.col .chips{padding-top:9px}.choice{min-height:185px;font-size:16px;padding:18px 10px 14px}.choice .emo{font-size:38px}.discussion{padding:14px;margin-top:10px}.leadbar{gap:6px}.leadbar .btn{min-height:42px;padding:10px}.leadbar .btn.ghost{min-height:32px;padding:4px}.stars-widget{right:14px;bottom:max(14px,env(safe-area-inset-bottom))}.stars-widget>summary{padding:10px 14px}.stars-panel{padding:16px;width:328px}}
+</style>
+<style id="bilingual-refresh">
+/* Chinese and Korean only; Chinese carries the primary visual hierarchy. */
+.tri .zh{color:var(--ink);font-size:1em;font-weight:650;line-height:1.5}.tri .ko{font-size:.8em;font-weight:450;margin-top:3px;color:var(--muted);line-height:1.5}.tri.inline .ko{margin-top:0}h1 .tri .zh{font-size:26px;margin-top:0}h1 .tri .ko{font-size:15px}h2 .tri .zh{font-size:17px;margin-top:0}h2 .tri .ko{font-size:12px}.question .zh{font-size:26px;margin-top:0}.question .ko{font-size:15px;margin-top:7px}.choice .tri .zh{font-size:17px;font-weight:650;margin-top:2px}.choice .tri .ko{font-size:13px}.col .hd>.tri{min-height:67px}.col .hd>.tri .zh{font-size:17px;font-weight:650;margin-top:0}.col .hd>.tri .ko{font-size:12px;margin-top:6px}.stars-panel-head .zh{font-size:15px;margin-top:0}.stars-panel-head .ko{font-size:11px}.pair-label .zh{font-size:14px}.pair-label .ko{font-size:11px}.roomtag{letter-spacing:.4px}.cpick .ctag{display:none}
+@media(max-width:520px){.question .zh{font-size:23px}.question .ko{font-size:13px}.col .hd>.tri{min-height:78px}.col .hd>.tri .zh{font-size:15px}.col .hd>.tri .ko{font-size:11px}.choice .tri .zh{font-size:16px}h1 .tri .zh{font-size:24px}}
+</style>
+<style id="simple-stars-refresh">
+.stars-widget>summary>span{display:flex;flex-direction:column;gap:1px}.stars-widget summary small{margin-left:0;font-size:10px}.stars-panel-head{justify-content:flex-end;padding-bottom:4px;border-bottom:0}.pair-label{font-size:15px;font-weight:650}.star-pair{padding:14px 0}.stars-panel{padding-top:10px}.pair-result{justify-content:center}
+</style>
+<style id="dense-layout">
+/* Dense layout: let text determine height instead of reserving blank rows. */
+body{line-height:1.4}.wrap{padding:14px 16px 82px}.topbar{min-height:26px;margin-bottom:10px}.card{padding:16px;border-radius:15px}h1{margin:0 0 8px}h2{margin:12px 0 8px}.question{margin:7px 0 12px;line-height:1.3}.question .ko{margin-top:4px}.tri .zh,.tri .ko{line-height:1.4}.tri .ko{margin-top:2px}.qhead{line-height:1.4}.cols,.choices{gap:9px}.col{padding:12px}.col .hd{margin-bottom:8px;gap:6px}.col .hd>.tri{min-height:0;font-size:16px}.col .hd>.tri .zh{font-size:16px;line-height:1.4}.col .hd>.tri .ko{margin-top:4px;line-height:1.4}.col .chips{padding-top:8px;margin-top:auto}.col{display:flex;flex-direction:column}.col .hd .emo{font-size:28px}.col .cnt{font-size:20px}.chip{padding:5px 7px}.choice{min-height:155px;padding:14px 10px;gap:8px}.choice .emo{font-size:36px;margin:7px 0 0}.choice .letter{top:10px;left:10px}.hint{margin-top:10px;font-size:12px}.status{margin-top:12px;padding-top:12px}.discussion{margin-top:9px;padding:12px 16px}.leadbar{gap:6px}.leadbar .who{line-height:1.3}.btn{padding:9px 13px;min-height:38px}.btn.sm{min-height:32px;padding:6px 10px}.leadbar .btn.ghost{min-height:30px;padding:5px 8px}.field{margin:12px 0}.field>.lbl{margin-bottom:5px}.field input[type=text]{padding:11px 12px}.cpick button,.rolepick button{padding:9px 10px;line-height:1.4}.waiting{margin-top:8px;padding:4px 0}.card p{margin:8px 0}.card:not(.discussion)>.leadbar{margin-top:14px;padding-top:12px}.stars-panel{padding:8px 14px 10px}.star-pair{padding:9px 0}.stars-panel-head{padding-bottom:0}.stars-close{height:28px;width:28px;font-size:21px}.pair-label .zh{font-size:14px}.pair-label .ko{font-size:11px;margin-top:2px}.stars-widget>summary{padding:8px 13px}
+@media(min-width:850px){.wrap{padding-top:20px}.card{padding:18px}.discussion{padding:12px 18px}.leadbar .btn.ghost{min-height:38px}}
+@media(max-width:520px){.wrap{padding:10px 10px 82px}.topbar{margin-bottom:8px}.card{padding:13px 12px;border-radius:14px}.question{margin:6px 0 10px}.question .zh{font-size:22px}.question .ko{font-size:12px;margin-top:4px}h2{margin:10px 0 8px}h2 .tri .zh{font-size:16px}h2 .tri .ko{font-size:11px}.col{padding:10px;min-height:0}.col .hd{gap:5px 4px;margin-bottom:8px}.col .hd>.tri{min-height:0}.col .hd>.tri .zh{font-size:14px}.col .hd>.tri .ko{font-size:11px;margin-top:4px}.col .hd .emo{font-size:26px}.col .chips{padding-top:7px}.chip{font-size:11px;padding:5px 6px}.choice{min-height:150px;padding:14px 9px 12px}.choice .tri .zh{font-size:15px}.choice .tri .ko{font-size:12px}.choice .emo{font-size:34px}.discussion{margin-top:8px;padding:11px 12px}.leadbar .btn{min-height:38px;padding:8px 10px}.leadbar .btn.ghost{min-height:28px;padding:4px}.leadbar{gap:5px}.topbar .linkbtn{padding:2px}.roomtag{padding:6px 10px}.stars-panel{padding:8px 14px 10px}.star-pair{padding:9px 0}}
+</style>
+<style id="match-discoveries">
+.match-notice{border-left:3px solid var(--b);padding:7px 9px;background:#edf4e9;border-radius:0 8px 8px 0;margin:10px 0}.match-notice .zh{font-size:14px;font-weight:700}.match-notice .ko{font-size:11px;margin-top:3px}.match-milestone{margin-top:10px;padding:10px;background:#faf2dc;border:1px solid #eadcb6;border-radius:11px}.milestone-title{display:flex;gap:6px;align-items:flex-start}.milestone-title>.tri{min-width:0}.milestone-title .zh{font-size:14px;font-weight:700}.milestone-title .ko{font-size:11px;margin-top:3px}.common-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:8px}.common-choice{min-width:0;padding:7px;background:#fffdf7;border-radius:7px;display:flex;flex-direction:column;gap:3px}.common-choice>span:first-child{font-size:19px;line-height:1.1}.common-choice .zh{font-size:12px;font-weight:600;overflow-wrap:anywhere}.common-choice .ko{font-size:10px;margin-top:3px;overflow-wrap:anywhere}
+@media(max-width:350px){.common-choices{grid-template-columns:1fr}.common-choice{flex-direction:row;gap:7px;align-items:flex-start}}
+</style>
+<style id="single-milestone">
+.milestone-picker{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid #e9dfc7;padding-bottom:7px;margin-bottom:8px}.milestone-picker label{font-size:11px;font-weight:600;min-width:0}.milestone-picker label span{font-weight:400;color:var(--muted);margin-left:5px}.milestone-picker select{max-width:48%;min-width:90px;border:1px solid #dfd4b6;background:#fffdf7;color:var(--ink);padding:6px 8px;border-radius:7px;font-size:13px}.milestone-person{max-height:210px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}.milestone-title{min-height:40px}.common-choices{grid-template-columns:repeat(3,minmax(0,1fr))}.common-choice{flex-direction:column;align-items:stretch;gap:3px}.common-choice .tri{min-width:0}.match-milestone{max-width:100%}
+</style>
+<style id="milestone-name-buttons">
+.milestone-picker{gap:8px;padding-bottom:7px;margin-bottom:8px}.milestone-picker-label{font-size:11px;font-weight:600;flex:none}.milestone-people{display:flex;gap:5px;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;align-items:center;padding:3px;max-width:70%}.milestone-people button{flex:none;border:1px solid #dfd4b6;border-radius:7px;padding:6px 11px;min-height:32px;font-size:13px;line-height:1.3;background:#fffdf7;color:var(--ink);font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.milestone-people button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}.milestone-people button:focus-visible{outline:2px solid var(--b);outline-offset:1px}.milestone-people button:hover{border-color:var(--b)}
+</style>
+<style id="playful-palette">
+/* Cream, peach, mint and little yellow stars. */
+:root{--bg:#fff9ed;--card:#fffefa;--ink:#35473f;--muted:#7b8275;--line:#eee4d1;--a:#ed8f8c;--a-soft:#ffe5e0;--a-ink:#95534c;--b:#68b49e;--b-soft:#dcf3e8;--b-ink:#387562;--gold:#efc35c;--gold-soft:#fff2bf;--tw:#6889bd;--kr:#ca7f96;--shadow:0 3px 0 #f0e7d7}
+body{background-color:var(--bg);background-image:radial-gradient(circle,#eddfc57a 1px,transparent 1px);background-size:22px 22px;font-family:"Arial Rounded MT Bold","Nunito","Segoe UI",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei","Apple SD Gothic Neo","Malgun Gothic",sans-serif}.card{border:1px solid var(--line);box-shadow:var(--shadow);border-radius:18px}.topbar .roomtag{background:#e0f1e7;color:#416451;border:1px solid #c5dfcf;border-radius:9px;box-shadow:0 2px 0 #cfe3d5;font-weight:800}.topbar .roomtag::before{content:"✦ ";color:#dda74c}.qhead{color:#8a8b78;font-weight:700;letter-spacing:.5px}.question .zh{font-weight:800;letter-spacing:.2px}.question .ko{color:#7c8577}.col{border:1px solid #f4cfca;border-radius:15px;background:var(--a-soft)}.col.B{border-color:#c2e3d4;background:var(--b-soft)}.col .hd .letter{background:#fffaf0;color:var(--a-ink);border:1px solid #f1bdb5;border-radius:8px;font-size:12px;padding:2px 6px;box-shadow:0 2px 0 #efc4bc;transform:rotate(-5deg)}.col.B .hd .letter{color:var(--b-ink);border-color:#aad5c3;box-shadow:0 2px 0 #b8ddcd;transform:rotate(5deg)}.col .hd .emo{filter:drop-shadow(0 2px 0 #ffffffa0)}.col .hd>.tri .zh{font-weight:750}.col .chips{border-color:#ffffffb3}.chip{border:1px solid #e4ddce;background:#fffefa;border-radius:9px}.chip.me{border-color:#6ca68c;box-shadow:0 2px 0 #b7d7c3}.ctag{border-radius:5px}.match-notice{background:#f2f6db;border-left:0;border:1px solid #e0e8bd;border-radius:11px;padding:8px 10px}.match-notice .zh:before{content:"✦ ";color:#b69832}.match-notice .zh{color:#556c42}.match-notice .ko{color:#7a8667}.match-milestone{background:#fff1bd;border:1px solid #eed58a;border-radius:13px;box-shadow:0 2px 0 #f3e5b9}.milestone-picker{border-color:#e8d799}.milestone-picker-label{color:#89733e}.milestone-people button{background:#fffdf2;border-color:#e5d6a2;color:#8b7441;border-radius:999px;box-shadow:0 2px 0 #e8dba9;padding:6px 10px}.milestone-people button[aria-pressed="true"]{background:#f6d873;color:#695025;border-color:#d9b54f;box-shadow:0 2px 0 #d9b54f}.milestone-people button[aria-pressed="true"]::before{content:"★ ";font-size:10px}.milestone-people button:hover{border-color:#c5a044}.milestone-title .zh{color:#786030}.milestone-title .ko{color:#8a7b56}.common-choice{border:1px solid #f2e1aa;background:#fffdf4;border-radius:9px}.common-choice:nth-child(2){background:#fff4e9;border-color:#f3dfc8}.common-choice:nth-child(3){background:#eef8ea;border-color:#dceacd}.common-choice .zh{color:#586446}.common-choice .ko{color:#85866e}.discussion{background:#f4f5df;border-color:#e4e7c8}.leadbar .who{color:#94904f}.btn.teal,.btn.gold{background:#72b49c;color:#183e31;border:1px solid #5d9f89;box-shadow:0 3px 0 #58957f;border-radius:12px;font-weight:750}.btn.teal:hover,.btn.gold:hover{background:#83c3ad;box-shadow:0 3px 0 #58957f}.btn:active{transform:translateY(2px);box-shadow:none}.btn.ghost{background:#fffdf4;border-color:#e5decb}.leadbar .btn.ghost{color:#8e8a6a;background:transparent;box-shadow:none}.rolepick button.on{background:#fff0b8;border-color:#e1bf65}.choice.A{background:var(--a-soft);border-color:#f5ccc4}.choice.B{background:var(--b-soft);border-color:#bce0cf}.choice{box-shadow:0 3px 0 #e8e0cf;border-radius:16px}.choice .letter{background:#fffdf3!important;color:var(--ink);border:1px solid #ddd5bb;border-radius:7px;transform:rotate(-5deg)}.choice.sel.A{border-color:#e18f80;box-shadow:0 3px 0 #d59185}.choice.sel.B{border-color:#65aa91;box-shadow:0 3px 0 #5e9b84}.stars-widget>summary{background:#ffe599;color:#725727;border:1px solid #e6c261;box-shadow:0 3px 0 #dfbe67,0 5px 15px #bca77224}.stars-widget summary small{color:#9a8050}.stars-widget>summary::first-letter{color:#c39322}.stars-panel{background:#fffdf4;border:1px solid #ead79f;box-shadow:0 8px 28px #9d85572b}.stars-close{background:#fff0ba;color:#8b7039}.star-pair{border-color:#eee4c8}.pair-label .zh{color:#665b3d}.pair-label .ko{color:#96876b}.sg{color:#e3ad24;text-shadow:0 1px 0 #c58e23}.sr{color:#df8e83;text-shadow:0 1px 0 #b96f66}.field input[type=text]{background:#fffcf3;border-color:#e7dfce}.cpick button,.rolepick button{background:#fffdf7}.modal .box{background:#fffdf4;border:1px solid #eadfbd}.toast{background:#657e68}
+@media(max-width:520px){.card{border-radius:16px}.col{border-radius:13px}.match-milestone{border-radius:12px}}
+</style>
+<style id="device-responsive-layout">
+/* Fit phones, tablets, landscape displays and desktop windows. */
+.wrap{width:100%;max-width:700px}.reveal-content{min-width:0}.reveal-content>.match-milestone{margin:9px 0 0}.col,.choice,.card,.tri{min-width:0}.tri .zh,.tri .ko{overflow-wrap:anywhere}.topbar{flex-wrap:wrap}.topbar .linkbtn{white-space:normal}.chips{min-width:0}.chip{max-width:100%;overflow-wrap:anywhere}.chip .ctag{flex:none}.stars-widget{max-width:calc(100vw - 24px)}.stars-widget>summary>span{min-width:0}.milestone-people button{min-height:36px}.common-choice .tri{overflow-wrap:anywhere}
+@media(min-width:600px) and (max-width:1023px){.wrap{max-width:820px;padding:20px 24px 100px}.card{padding:20px}.question .zh{font-size:28px}.question .ko{font-size:15px}.cols,.choices{gap:14px}.col{padding:16px}.col .hd>.tri .zh{font-size:18px}.col .hd>.tri .ko{font-size:14px}.col .hd .emo{font-size:34px}.col .cnt{font-size:24px}.choice{min-height:185px;font-size:20px}.choice .tri .zh{font-size:19px}.choice .tri .ko{font-size:14px}.choice .emo{font-size:44px}.reveal-content>.match-milestone{padding:14px;margin-top:12px}.milestone-title .zh{font-size:16px}.milestone-title .ko{font-size:13px}.common-choice{padding:10px}.common-choice .zh{font-size:14px}.common-choice .ko{font-size:12px}.milestone-person{max-height:260px}.btn{min-height:44px}.discussion{padding:15px 20px}.leadbar{display:grid;grid-template-columns:1fr 1fr;gap:9px}.leadbar .who,.leadbar>.small{grid-column:1/-1}.leadbar .btn.ghost{min-height:44px;border:1px solid #dedfbe}.stars-widget{right:22px;bottom:max(20px,env(safe-area-inset-bottom))}}
+@media(min-width:1024px){.wrap{max-width:960px;padding:24px 32px 100px}.wrap.reveal-layout{max-width:1200px}.reveal-content{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);gap:18px;align-items:start}.reveal-question{grid-column:1}.reveal-content:not(:has(>.match-milestone)){grid-template-columns:minmax(0,1fr);max-width:820px;margin:0 auto}.reveal-content>.match-milestone{margin:0;padding:18px}.reveal-layout>.discussion{max-width:100%;margin-top:14px}.question .zh{font-size:30px}.question .ko{font-size:16px}.card{padding:22px}.col{padding:16px}.col .hd>.tri .zh{font-size:18px}.col .hd>.tri .ko{font-size:13px}.col .hd .emo{font-size:36px}.col .cnt{font-size:25px}.cols,.choices{gap:14px}.choice{min-height:210px}.choice .emo{font-size:48px}.choice .tri .zh{font-size:20px}.choice .tri .ko{font-size:15px}.common-choices{grid-template-columns:1fr;gap:8px}.common-choice{flex-direction:row;align-items:flex-start;gap:10px;padding:10px}.common-choice>span:first-child{font-size:25px;flex:none}.common-choice .zh{font-size:14px}.common-choice .ko{font-size:12px}.milestone-person{max-height:440px}.milestone-title .zh{font-size:16px}.milestone-title .ko{font-size:12px}.btn{min-height:44px}.leadbar .btn.ghost{min-height:44px}.stars-widget{right:28px;bottom:max(24px,env(safe-area-inset-bottom))}.stars-panel{width:360px}}
+@media(max-height:500px) and (min-width:600px){.wrap{padding-top:12px}.stars-panel{max-height:calc(100dvh - 95px)}.stars-widget{bottom:12px}.stars-widget>summary{padding:6px 12px}}
+@media(max-width:359px){.wrap{padding-left:8px;padding-right:8px}.card{padding:12px 10px}.cols,.choices{gap:7px}.col{padding:9px 8px}.milestone-picker{gap:5px}.milestone-picker-label{font-size:10px}.milestone-people{max-width:64%}.milestone-people button{padding:6px 9px}.stars-widget>summary{padding:8px 12px}}
+</style>
+<style id="desktop-composition">
+/* Desktop: keep actions with the discoveries instead of a full-width footer. */
+@media(min-width:1024px){
+ .wrap.reveal-layout{max-width:1320px;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(340px,1fr);gap:16px 22px;align-content:start;align-items:start;padding-top:32px}
+ .reveal-layout>.topbar{grid-column:1/-1;margin-bottom:4px}
+ .reveal-layout>.reveal-content{display:contents}
+ .reveal-content>.reveal-question{grid-column:1;grid-row:2/4;padding:28px;min-height:450px}
+ .reveal-content>.match-milestone{grid-column:2;grid-row:2;margin:0;padding:20px}
+ .reveal-layout>.discussion{grid-column:2;grid-row:3;margin:0;padding:16px 20px;width:100%}
+ .reveal-layout>.discussion .leadbar{display:flex;flex-direction:column;align-items:stretch;gap:9px}
+ .reveal-layout>.discussion .leadbar .btn{width:100%}
+ .reveal-layout>.discussion .leadbar .btn.ghost{border:0;min-height:30px;padding:4px}
+ .reveal-layout .question{margin:12px 0 20px}.reveal-layout .question .zh{font-size:34px}.reveal-layout .question .ko{font-size:17px}
+ .reveal-layout .match-notice{margin:14px 0 18px;padding:10px 12px}.reveal-layout .match-notice .zh{font-size:16px}.reveal-layout .match-notice .ko{font-size:13px}
+ .reveal-layout .col{padding:20px;min-height:230px}.reveal-layout .col .hd{gap:12px 8px;margin-bottom:18px}.reveal-layout .col .hd>.tri .zh{font-size:20px}.reveal-layout .col .hd>.tri .ko{font-size:14px}.reveal-layout .col .chips{padding-top:12px}.reveal-layout .chip{font-size:13px;padding:7px 9px}
+ .reveal-layout:not(:has(.match-milestone)){grid-template-columns:minmax(0,1fr);max-width:940px}.reveal-layout:not(:has(.match-milestone)) .reveal-question{grid-column:1;grid-row:2;min-height:0}.reveal-layout:not(:has(.match-milestone))>.discussion{grid-column:1;grid-row:3}
+ .reveal-layout>.card:not(.discussion){grid-column:1/-1}.reveal-layout>.center{grid-column:1/-1}
+}
+</style>
+<style id="desktop-stars-near-controls">
+/* Keep desktop stars beside the game controls. */
+@media(min-width:1024px){
+ .wrap.reveal-layout{padding-bottom:28px;row-gap:12px;grid-template-rows:auto auto auto auto}
+ .reveal-layout>.stars-widget{position:relative;grid-column:2;grid-row:4;right:auto;bottom:auto;justify-self:stretch;max-width:100%;width:100%;z-index:35;margin-top:0}
+ .reveal-layout>.stars-widget>summary{border-radius:13px;justify-content:center;padding:10px 14px;box-shadow:0 3px 0 #dfbe67}
+ .reveal-layout>.stars-widget>summary>span{flex-direction:row;align-items:baseline;justify-content:center;gap:8px;flex-wrap:wrap}
+ .reveal-layout>.stars-widget .stars-panel{right:0;bottom:calc(100% + 10px);width:100%;max-width:100%;max-height:min(65dvh,520px)}
+ .reveal-layout:not(:has(.match-milestone))>.stars-widget{grid-column:1;grid-row:4;justify-self:end;width:min(100%,420px)}
+ .reveal-content>.reveal-question{grid-row:2/5}
+ .reveal-layout:not(:has(.match-milestone)) .reveal-question{grid-row:2}
+}
 </style>
 </head>
 <body>
@@ -2520,8 +2622,8 @@ const LS = {
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 };
 function rid(n = 8) { const a = "abcdefghjkmnpqrstuvwxyz23456789"; let s = ""; const r = crypto.getRandomValues(new Uint8Array(n)); for (const x of r) s += a[x % a.length]; return s; }
-function tri(o, cls = "") { if (!o) return ""; return `<span class="tri ${cls}"><span class="en">${esc(o.en)}</span>${o.zh ? `<span class="zh">${esc(o.zh)}</span>` : ""}${o.ko ? `<span class="ko">${esc(o.ko)}</span>` : ""}</span>`; }
-function ctag(c) { return `<span class="ctag ${c === "TW" || c === "KR" ? c : "XX"}">${c === "TW" || c === "KR" ? c : "★"}</span>`; }
+function tri(o, cls = "") { if (!o) return ""; return `<span class="tri ${cls}">${o.zh ? `<span class="zh">${esc(o.zh)}</span>` : ""}${o.ko ? `<span class="ko" lang="ko">${esc(o.ko)}</span>` : ""}</span>`; }
+function ctag(c) { return `<span class="ctag ${c === "TW" || c === "KR" ? c : "XX"}">${c === "TW" ? "台" : c === "KR" ? "韓" : "★"}</span>`; }
 function toast(msg) { const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2400); }
 
 const BROKERS = {
@@ -2534,46 +2636,46 @@ const TOP = (S, r) => `kmatch2/${S}/r${r}`;
 
 /* ================= question bank (A / B only) ================= */
 const BANK = [
-  { id:"temp", en:"Drinks: iced all year, or warm?", zh:"飲料溫度：一年四季都要冰的，還是喜歡溫熱的？", ko:"음료: 사계절 내내 아이스 아니면 따뜻한 음료?",
-    a:{e:"🧊", en:"Iced, all year", zh:"一年四季都要冰的", ko:"사계절 내내 아이스"}, b:{e:"☕", en:"Warm drinks", zh:"喜歡溫熱的飲料", ko:"따뜻한 음료"} },
-  { id:"mint", en:"Mint chocolate?", zh:"薄荷巧克力？", ko:"민트 초코?",
-    a:{e:"🍫", en:"Love it!", zh:"超級喜歡", ko:"완전 좋아!"}, b:{e:"🪥", en:"Tastes like toothpaste", zh:"絕對是牙膏味", ko:"그건 치약 맛이야"} },
-  { id:"pineapple", en:"Pineapple on pizza (Hawaiian pizza)?", zh:"披薩加鳳梨（夏威夷披薩）？", ko:"피자에 파인애플 (하와이안 피자)?",
-    a:{e:"🍍", en:"Totally fine", zh:"完全可以接受", ko:"완전 괜찮아"}, b:{e:"🙅", en:"No way!", zh:"絕對不能接受", ko:"절대 안 돼"} },
-  { id:"spicy", en:"How spicy can you go?", zh:"吃辣程度？", ko:"매운 음식 얼마나 잘 먹어요?",
-    a:{e:"🌶️", en:"Love spicy food", zh:"愛吃辣（無辣不歡）", ko:"매운 게 최고"}, b:{e:"🥛", en:"No spice at all", zh:"完全不敢吃辣（微辣也不行）", ko:"조금 매운 것도 못 먹어"} },
-  { id:"chicken", en:"Fried chicken: which part?", zh:"炸雞部位？", ko:"치킨 부위는?",
-    a:{e:"🍗", en:"Juicy legs & wings", zh:"鮮嫩多汁的雞腿／雞翅", ko:"촉촉한 다리·날개"}, b:{e:"🐔", en:"Lean chicken breast", zh:"結實不油的雞胸肉", ko:"담백한 닭가슴살"} },
-  { id:"owl", en:"Morning person or night owl?", zh:"作息型態？", ko:"아침형 인간 아니면 올빼미형?",
-    a:{e:"🌅", en:"Morning person (study early)", zh:"晨型人（早起讀書）", ko:"아침형 (일찍 일어나 공부)"}, b:{e:"🦉", en:"Night owl (stay up late)", zh:"夜貓子（熬夜夜衝）", ko:"올빼미형 (밤늦게까지)"} },
-  { id:"notes", en:"How do you take notes?", zh:"寫筆記？", ko:"필기는 어떻게 해요?",
-    a:{e:"📓", en:"Paper notebook", zh:"手寫筆記本", ko:"손글씨 노트"}, b:{e:"📱", en:"Tablet / laptop", zh:"平板數位筆記（iPad／筆電）", ko:"태블릿·노트북 필기"} },
-  { id:"studyplace", en:"Best place to study?", zh:"唸書環境？", ko:"공부하기 좋은 곳은?",
-    a:{e:"🤫", en:"Silent library / study room", zh:"極度安靜的圖書館／K書中心", ko:"아주 조용한 도서관·독서실"}, b:{e:"☕", en:"Café with background noise", zh:"有背景白噪音的咖啡廳", ko:"적당히 소음 있는 카페"} },
-  { id:"exam", en:"The night before a test?", zh:"考試前一晚？", ko:"시험 전날 밤에는?",
-    a:{e:"📚", en:"Study all night", zh:"徹夜苦讀抱佛腳", ko:"밤새 벼락치기"}, b:{e:"😴", en:"Sleep early, trust my skills", zh:"早早去睡靠平常實力", ko:"일찍 자고 실력으로 승부"} },
-  { id:"wear", en:"What do you like to wear at school?", zh:"上課穿著？", ko:"학교에서 입고 싶은 옷은?",
-    a:{e:"👔", en:"School uniform", zh:"最愛正式制服", ko:"교복"}, b:{e:"🏃", en:"Comfy PE clothes", zh:"最愛舒適運動服（體育服）", ko:"편한 체육복"} },
-  { id:"after", en:"After school?", zh:"課後偏好？", ko:"방과 후에는?",
-    a:{e:"🛋️", en:"Rush home and relax", zh:"放學直接衝回家躺平", ko:"집에 가서 뒹굴기"}, b:{e:"🚶", en:"Out with friends: shopping, cram school, clubs", zh:"跟朋友去逛街／補習／練社團", ko:"친구랑 쇼핑·학원·동아리"} },
-  { id:"holistudy", en:"Studying on a day off?", zh:"放假讀書？", ko:"쉬는 날 공부는?",
-    a:{e:"🧘", en:"Alone and focused", zh:"一人獨自閉關專心", ko:"혼자 집중해서"}, b:{e:"👯", en:"With classmates at a café", zh:"跟同學約在咖啡廳一起刷題", ko:"친구들이랑 카페에서 같이"} },
-  { id:"mbti", en:"MBTI: E or I?", zh:"MBTI 傾向？", ko:"MBTI: E 아니면 I?",
-    a:{e:"🎉", en:"E: outgoing", zh:"外向社牛 E 人", ko:"외향적인 E"}, b:{e:"🔋", en:"I: recharge alone", zh:"內向充電 I 人", ko:"혼자 충전하는 I"} },
-  { id:"drama", en:"Watching a drama?", zh:"追劇習慣？", ko:"드라마 볼 때는?",
-    a:{e:"📺", en:"One new episode at a time", zh:"更新一集看一集", ko:"나올 때마다 한 편씩"}, b:{e:"🍿", en:"Wait, then binge-watch", zh:"等全季完結一次馬拉松追完", ko:"완결 후 한 번에 정주행"} },
-  { id:"trip", en:"Planning a trip?", zh:"放假出遊？", ko:"여행 갈 때는?",
-    a:{e:"📋", en:"Detailed plan (J)", zh:"事前做超詳細行程表（J 人）", ko:"꼼꼼한 계획 (J)"}, b:{e:"🎈", en:"Go with the flow (P)", zh:"當天看心情隨性走（P 人）", ko:"그날 기분대로 (P)"} },
-  { id:"music", en:"Your music taste?", zh:"聽歌取向？", ko:"음악 취향은?",
-    a:{e:"💃", en:"Upbeat K-pop / dance songs", zh:"節奏強烈的 K-POP／跳舞歌", ko:"신나는 K-POP·댄스곡"}, b:{e:"🎸", en:"Ballads / indie bands", zh:"抒情慢歌／樂團獨立音樂", ko:"발라드·밴드·인디 음악"} },
-  { id:"photo", en:"Before eating: take photos first, or dig in right away?", zh:"吃飯前：先拍照再吃，還是直接開動？", ko:"먹기 전에: 사진 먼저 vs 바로 먹기",
-    a:{e:"📸", en:"Photos first", zh:"先拍照再吃", ko:"사진 먼저"}, b:{e:"🍴", en:"Dig in right away", zh:"直接開動", ko:"바로 먹기"} },
-  { id:"hangout", en:"Hanging out with friends?", zh:"跟朋友去玩？", ko:"친구랑 놀 때는?",
-    a:{e:"🎤", en:"Sing at KTV / noraebang", zh:"在 KTV／練歌房（노래방）狂唱", ko:"노래방에서 열창"}, b:{e:"🏬", en:"Markets & shopping streets", zh:"逛文創市集／商圈", ko:"플리마켓·번화가 구경"} },
-  { id:"reply", en:"Replying to messages?", zh:"通訊聊天習慣？", ko:"메시지 답장은?",
-    a:{e:"⚡", en:"Read & reply right away", zh:"秒讀秒回", ko:"읽자마자 바로 답장"}, b:{e:"🐢", en:"Reply all at once later", zh:"累積一整天想到才一次回", ko:"모아 뒀다가 한 번에 답장"} },
-  { id:"gift", en:"Getting a gift: love surprises, or just ask for what I want?", zh:"收禮物：喜歡驚喜，還是直接說想要什麼？", ko:"선물 받을 때: 깜짝 선물이 좋아 vs 원하는 걸 직접 말할래",
-    a:{e:"🎁", en:"Love surprises", zh:"喜歡驚喜", ko:"깜짝 선물"}, b:{e:"📝", en:"Ask for what I want", zh:"直接說想要什麼", ko:"원하는 거 말하기"} }
+  { id:"temp", zh:"飲料溫度：一年四季都要冰的，還是喜歡溫熱的？", ko:"음료: 사계절 내내 아이스 아니면 따뜻한 음료?",
+    a:{e:"🧊", zh:"一年四季都要冰的", ko:"사계절 내내 아이스"}, b:{e:"☕", zh:"喜歡溫熱的飲料", ko:"따뜻한 음료"} },
+  { id:"mint", zh:"薄荷巧克力？", ko:"민트 초코?",
+    a:{e:"🍫", zh:"超級喜歡", ko:"완전 좋아!"}, b:{e:"🪥", zh:"絕對是牙膏味", ko:"그건 치약 맛이야"} },
+  { id:"pineapple", zh:"披薩加鳳梨（夏威夷披薩）？", ko:"피자에 파인애플 (하와이안 피자)?",
+    a:{e:"🍍", zh:"完全可以接受", ko:"완전 괜찮아"}, b:{e:"🙅", zh:"絕對不能接受", ko:"절대 안 돼"} },
+  { id:"spicy", zh:"吃辣程度？", ko:"매운 음식 얼마나 잘 먹어요?",
+    a:{e:"🌶️", zh:"愛吃辣（無辣不歡）", ko:"매운 게 최고"}, b:{e:"🥛", zh:"完全不敢吃辣（微辣也不行）", ko:"조금 매운 것도 못 먹어"} },
+  { id:"chicken", zh:"炸雞部位？", ko:"치킨 부위는?",
+    a:{e:"🍗", zh:"鮮嫩多汁的雞腿／雞翅", ko:"촉촉한 다리·날개"}, b:{e:"🐔", zh:"結實不油的雞胸肉", ko:"담백한 닭가슴살"} },
+  { id:"owl", zh:"作息型態？", ko:"아침형 인간 아니면 올빼미형?",
+    a:{e:"🌅", zh:"晨型人（早起讀書）", ko:"아침형 (일찍 일어나 공부)"}, b:{e:"🦉", zh:"夜貓子（熬夜夜衝）", ko:"올빼미형 (밤늦게까지)"} },
+  { id:"notes", zh:"寫筆記？", ko:"필기는 어떻게 해요?",
+    a:{e:"📓", zh:"手寫筆記本", ko:"손글씨 노트"}, b:{e:"📱", zh:"平板數位筆記（平板／筆電）", ko:"태블릿·노트북 필기"} },
+  { id:"studyplace", zh:"唸書環境？", ko:"공부하기 좋은 곳은?",
+    a:{e:"🤫", zh:"極度安靜的圖書館／自習中心", ko:"아주 조용한 도서관·독서실"}, b:{e:"☕", zh:"有背景白噪音的咖啡廳", ko:"적당히 소음 있는 카페"} },
+  { id:"exam", zh:"考試前一晚？", ko:"시험 전날 밤에는?",
+    a:{e:"📚", zh:"徹夜苦讀抱佛腳", ko:"밤새 벼락치기"}, b:{e:"😴", zh:"早早去睡靠平常實力", ko:"일찍 자고 실력으로 승부"} },
+  { id:"wear", zh:"上課穿著？", ko:"학교에서 입고 싶은 옷은?",
+    a:{e:"👔", zh:"最愛正式制服", ko:"교복"}, b:{e:"🏃", zh:"最愛舒適運動服（體育服）", ko:"편한 체육복"} },
+  { id:"after", zh:"課後偏好？", ko:"방과 후에는?",
+    a:{e:"🛋️", zh:"放學直接衝回家躺平", ko:"집에 가서 뒹굴기"}, b:{e:"🚶", zh:"跟朋友去逛街／補習／練社團", ko:"친구랑 쇼핑·학원·동아리"} },
+  { id:"holistudy", zh:"放假讀書？", ko:"쉬는 날 공부는?",
+    a:{e:"🧘", zh:"一人獨自閉關專心", ko:"혼자 집중해서"}, b:{e:"👯", zh:"跟同學約在咖啡廳一起刷題", ko:"친구들이랑 카페에서 같이"} },
+  { id:"mbti", zh:"人格傾向：外向還是內向？", ko:"성격: 외향적 아니면 내향적?",
+    a:{e:"🎉", zh:"外向、喜歡社交", ko:"외향적"}, b:{e:"🔋", zh:"內向、獨處充電", ko:"혼자 충전하기"} },
+  { id:"drama", zh:"追劇習慣？", ko:"드라마 볼 때는?",
+    a:{e:"📺", zh:"更新一集看一集", ko:"나올 때마다 한 편씩"}, b:{e:"🍿", zh:"等全季完結一次馬拉松追完", ko:"완결 후 한 번에 정주행"} },
+  { id:"trip", zh:"放假出遊？", ko:"여행 갈 때는?",
+    a:{e:"📋", zh:"事前做超詳細行程表（計畫型）", ko:"꼼꼼한 계획 (계획형)"}, b:{e:"🎈", zh:"當天看心情隨性走（隨性型）", ko:"그날 기분대로 (즉흥형)"} },
+  { id:"music", zh:"聽歌取向？", ko:"음악 취향은?",
+    a:{e:"💃", zh:"節奏強烈的 韓國流行音樂／跳舞歌", ko:"신나는 한국 대중음악·댄스곡"}, b:{e:"🎸", zh:"抒情慢歌／樂團獨立音樂", ko:"발라드·밴드·인디 음악"} },
+  { id:"photo", zh:"吃飯前：先拍照再吃，還是直接開動？", ko:"먹기 전에: 사진 먼저 아니면 바로 먹기",
+    a:{e:"📸", zh:"先拍照再吃", ko:"사진 먼저"}, b:{e:"🍴", zh:"直接開動", ko:"바로 먹기"} },
+  { id:"hangout", zh:"跟朋友去玩？", ko:"친구랑 놀 때는?",
+    a:{e:"🎤", zh:"在練歌房狂唱", ko:"노래방에서 열창"}, b:{e:"🏬", zh:"逛文創市集／商圈", ko:"플리마켓·번화가 구경"} },
+  { id:"reply", zh:"通訊聊天習慣？", ko:"메시지 답장은?",
+    a:{e:"⚡", zh:"秒讀秒回", ko:"읽자마자 바로 답장"}, b:{e:"🐢", zh:"累積一整天想到才一次回", ko:"모아 뒀다가 한 번에 답장"} },
+  { id:"gift", zh:"收禮物：喜歡驚喜，還是直接說想要什麼？", ko:"선물 받을 때: 깜짝 선물이 좋아 vs 원하는 걸 직접 말할래",
+    a:{e:"🎁", zh:"喜歡驚喜", ko:"깜짝 선물"}, b:{e:"📝", zh:"直接說想要什麼", ko:"원하는 거 말하기"} }
 ];
 const QBY = Object.fromEntries(BANK.map(q => [q.id, q]));
 const DEFAULT_SEL = BANK.map(q => q.id);
@@ -2614,7 +2716,7 @@ function readEpoch(r) {
 }
 const RESET_HASH = "eycr3b756y", LEAD_HASH = "29lyr04fql0";
 function cyrb53(str, seed = 7) { let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed; for (let i = 0, ch; i < str.length; i++) { ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); } h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507); h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507); h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909); return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36); }
-const roomLabel = r => r === 0 ? "TEST" : String(r);
+const roomLabel = r => r === 0 ? "測試" : String(r);
 const landingURL = () => location.pathname + (params.get("b") ? "?b=" + encodeURIComponent(params.get("b")) : "") + (params.get("s") ? (params.get("b") ? "&" : "?") + "s=" + encodeURIComponent(params.get("s")) : "");
 if (params.get("r")) startRoom(); else startLanding();
 
@@ -2679,7 +2781,7 @@ function startRoom() {
       if (!m) return; let s; try { s = JSON.parse(m); } catch (e) { return; }
       if (isLeader && L && s.seq > L.seq) L = fromState(s);
       st = s;
-      if (me && removedMe() && !isLeader) { const keep = { n: me.n, c: me.c }; forgetMe(); me = { pid: rid(10), n: keep.n, c: keep.c, lead: false, last: null, at: Date.now() }; save(); toast("組長已把你移出，請重新加入 · Please rejoin"); editing = true; connect(); }
+      if (me && removedMe() && !isLeader) { const keep = { n: me.n, c: me.c }; forgetMe(); me = { pid: rid(10), n: keep.n, c: keep.c, lead: false, last: null, at: Date.now() }; save(); toast("組長已把你移出，請重新加入 · 다시 입장해 주세요"); editing = true; connect(); }
       render();
     } else if (rest === "leader") {
       try { leaderInfo = m ? JSON.parse(m) : null; } catch (e) { leaderInfo = null; }
@@ -2703,7 +2805,7 @@ function startRoom() {
     if (dead || id === EP) return;
     dead = true; isLeader = false; clearTimeout(pubTimer);
     try { client.end(true); } catch (e) {}
-    alert(TESTR ? "TEST ROOM 的紀錄已被清除，請重新選擇房間。\nThe test room was cleared." : "老師已重置這個房間，請重新選擇房間。\nThe room was reset. Please choose your room again.\n방이 초기화되었어요. 다시 방을 선택해 주세요.");
+    alert(TESTR ? "測試房間的紀錄已被清除，請重新選擇房間。\n테스트 방이 초기화되었어요. 다시 방을 선택해 주세요." : "老師已重置這個房間，請重新選擇房間。\n방이 초기화되었어요. 다시 방을 선택해 주세요.");
     location.href = landingURL();
   }
 
@@ -2716,7 +2818,7 @@ function startRoom() {
     if (!me || me.c !== "TW" || isLeader) return;
     if (leaderInfo && leaderInfo.pid !== me.pid && !canTake()) {
       me.lead = false; save();
-      toast(leaderOnline() ? `這組已經有組長：${leaderInfo.n}｜Room already has a leader` : `組長剛離線，45 秒後才能接任｜Please wait for the leader`);
+      toast(leaderOnline() ? `這組已經有組長：${leaderInfo.n}｜이미 조장이 있어요` : `組長剛離線，45 秒後才能接任｜조장을 기다려 주세요`);
       render(); return;
     }
     becomeLeader();
@@ -2735,7 +2837,7 @@ function startRoom() {
   function stepDown(other) {
     isLeader = false; L = null; me.lead = false; save();
     try { client.unsubscribe(`${base}/p/+`); } catch (e) {}
-    toast(`${other} 現在是組長｜${other} is now the leader`); render();
+    toast(`${other} 現在是組長｜${other} 님이 조장이에요`); render();
   }
   const active = () => Object.keys(L.players).filter(pid => !L.removed[pid]);
   function intake(pid) {
@@ -2781,20 +2883,20 @@ function startRoom() {
   const act = {
     start() {
       if (L.phase !== "lobby") return;
-      if (active().length < 2 && !confirm("目前只有你一個人，確定要開始嗎？\nYou're the only one here. Start anyway?")) return;
+      if (active().length < 2 && !confirm("目前只有你一個人，確定要開始嗎？\n지금은 혼자예요. 시작할까요?")) return;
       startQ(0);
     },
     next() { if (L.phase !== "reveal") return; if (L.qi + 1 >= L.ql.length) { L.phase = "end"; schedulePub(0); } else startQ(L.qi + 1); },
-    finish() { if (L.phase === "reveal" && confirm("結束並查看交流紀錄？ / Finish and view our record?")) { L.phase = "end"; schedulePub(0); } },
-    reveal() { toast("請等待每位同學作答；離線同學可由組長移出。 / Wait for all answers."); },
+    finish() { if (L.phase === "reveal" && confirm("結束並查看交流紀錄？ · 종료하고 대화 기록을 볼까요?")) { L.phase = "end"; schedulePub(0); } },
+    reveal() { toast("請等待每位同學作答；離線同學可由組長移出。 · 모두의 답변을 기다려 주세요."); },
     again() { if (L.phase !== "end") return; L.g++; L.phase = "lobby"; L.qi = -1; L.results = null; L.history = []; L.pairScores = {}; L.cur = {}; for (const pid in P) intake(pid); schedulePub(0); },
-    remove(pid) { if (!L.players[pid] || pid === me.pid) return; if (!confirm("移出這位離線同學？未揭曉題目將不計入此同學的星星。 / Remove offline player?")) return; L.removed[pid] = true; checkAuto(); schedulePub(0); }
+    remove(pid) { if (!L.players[pid] || pid === me.pid) return; if (!confirm("移出這位離線同學？未揭曉題目將不計入此同學的星星。 · 오프라인인 친구를 내보낼까요?")) return; L.removed[pid] = true; checkAuto(); schedulePub(0); }
   };
 
   /* ---------- views ---------- */
   function header() {
-    return `<div class="topbar"><span class="roomtag">${TESTR ? "🧪 TEST ROOM" : "ROOM " + LBL}</span>
-      <button class="linkbtn" id="leave">← 換房間 · Rooms</button>
+    return `<div class="topbar"><span class="roomtag">${TESTR ? "🧪 測試房間 · 테스트 방" : "房間 · 방 " + LBL}</span>
+      <button class="linkbtn" id="leave">← 換房間 · 방 선택</button>
       <span class="conn"><span id="conndot" class="dot ${conn}"></span></span></div>`;
   }
   function chipsFor(list, opts = {}) {
@@ -2806,26 +2908,37 @@ function startRoom() {
     if (me && !n.find(([p]) => p === me.pid) && (!st || st.phase === "lobby")) n.push([me.pid, { n: me.n, c: me.c, on: true }]);
     return n;
   }
+  let starsPanelOpen = false;
+  document.addEventListener("pointerdown", e => {
+    const widget = app.querySelector(".stars-widget");
+    if (widget && !widget.contains(e.target)) { widget.open = false; starsPanelOpen = false; }
+  });
+  document.addEventListener("keydown", e => {
+    const widget = app.querySelector(".stars-widget");
+    if (e.key === "Escape" && widget && widget.open) {
+      widget.open = false; starsPanelOpen = false; widget.querySelector("summary").focus();
+    }
+  });
   function scoreCards() {
     if (!st || !me || !(st.names || {})[me.pid]) return "";
     const others = Object.entries(st.names || {}).filter(([pid]) => pid !== me.pid);
     if (!others.length) return "";
     let anyRed = false;
-    const cols = others.map(([pid, o]) => {
+    const rows = others.map(([pid, o]) => {
       const n = (st.history || []).filter(h => h.res[me.pid] && h.res[me.pid] === h.res[pid]).length;
       const red = Math.floor(n / 5), gold = n % 5; if (red) anyRed = true;
       const stars = '<i class="sg">★</i>'.repeat(gold) + '<i class="sr">★</i>'.repeat(red);
-      return `<div class="sc" aria-label="${esc(o.n)}: ${n}"><div class="sc-stars">${stars}</div><div class="sc-nm ${me.c}">${esc(me.n)}</div><div class="sc-nm ${o.c}">${esc(o.n)}</div></div>`;
+      return `<div class="star-pair"><div class="pair-label">${tri({zh:"我和" + o.n, ko:"나와 " + o.n})}</div><div class="pair-result"><span class="pair-icons" role="img" aria-label="${n} 顆星 · 별 ${n}개">${stars || '<span class="muted">☆</span>'}</span></div></div>`;
     }).join("");
-    return `<section class="card group-stars"><div class="sc-head"><b>${tri({en:"My telepathy stars", zh:"我的默契星星", ko:"나의 텔레파시 별"}, "inline")}</b>${anyRed ? '<span class="sc-key"><i class="sr">★</i> = <i class="sg">★</i>×5</span>' : ""}</div><div class="sc-row">${cols}</div></section>`;
+    return `<details class="stars-widget" ${starsPanelOpen ? "open" : ""}><summary>★ <span>我和別人的默契星星 <small>친구들과의 텔레파시 별</small></span></summary><section class="stars-panel" aria-label="你和其他人的默契星星"><div class="stars-panel-head"><button type="button" class="stars-close" aria-label="關閉 · 닫기">×</button></div><div class="star-pairs">${rows}</div></section></details>`;
   }
-  function leadBar(html) { return isLeader ? `<div class="leadbar"><div class="who">👑 LEADER · 組長 · 조장</div>${html}</div>` : ""; }
+  function leadBar(html) { return isLeader ? `<div class="leadbar"><div class="who">👑 組長 · 조장</div>${html}</div>` : ""; }
   function waitLeader(msg) {
     if (isLeader) return "";
     const nm = leaderInfo ? esc(leaderInfo.n) : "";
     let h = `<div class="waiting"><span class="spinner"></span>${tri(msg)}</div>`;
     if (me && me.c === "TW" && !leaderOnline()) {
-      if (canTake()) h += `<div class="leadbar"><div class="small">${leaderInfo ? `組長 ${nm} 目前離線 · Leader is offline` : "這組還沒有組長 · No leader yet"}</div><input id="takePw" type="password" inputmode="numeric" autocomplete="off" placeholder="🔑 組長密碼" style="padding:12px;border-radius:12px;border:1.5px solid var(--line);font-size:16px;text-align:center"><button class="btn gold" data-take>👑 我來當組長 · I'll be the leader</button><div id="takeMsg" class="small" style="color:var(--a-ink)"></div></div>`;
+      if (canTake()) h += `<div class="leadbar"><div class="small">${leaderInfo ? `組長 ${nm} 目前離線 · 조장이 오프라인이에요` : "這組還沒有組長 · 아직 조장이 없어요"}</div><input id="takePw" type="password" inputmode="numeric" autocomplete="off" placeholder="🔑 組長密碼" style="padding:12px;border-radius:12px;border:1.5px solid var(--line);font-size:16px;text-align:center"><button class="btn gold" data-take>👑 我來當組長 · 제가 조장을 할게요</button><div id="takeMsg" class="small" style="color:var(--a-ink)"></div></div>`;
       else h += `<div class="leadbar"><div class="small">組長 ${nm} 暫時離線，等待重新連線…<br>約 ${Math.ceil((GRACE - leaderOffFor()) / 1000)} 秒後可由其他臺灣同學接任</div></div>`;
     }
     return h;
@@ -2834,9 +2947,31 @@ function startRoom() {
     if (!isLeader || !st) return "";
     const off = Object.entries(st.names || {}).filter(([pid, p]) => pid !== me.pid && !p.on);
     if (!off.length) return "";
-    return `<div class="card" style="margin-top:14px"><p>離線同學 / Offline teammates</p>${off.map(([pid, p]) => `<button class="btn ghost sm" data-remove="${pid}">移出 ${esc(p.n)} / Remove</button>`).join(" ")}</div>`;
+    return `<div class="card" style="margin-top:14px"><p>離線同學 · 오프라인인 친구</p>${off.map(([pid, p]) => `<button class="btn ghost sm" data-remove="${pid}">移出 ${esc(p.n)} · 내보내기</button>`).join(" ")}</div>`;
   }
   function bind() {
+    app.querySelectorAll("[data-milestone-person]").forEach(button => {
+      button.onclick = () => {
+        const strip = button.closest(".milestone-people");
+        const scrollLeft = strip.scrollLeft;
+        milestoneSelection.pid = button.dataset.milestonePerson;
+        render();
+        const nextStrip = app.querySelector(".milestone-people");
+        if (nextStrip) {
+          nextStrip.scrollLeft = scrollLeft;
+          const selected = nextStrip.querySelector('[aria-pressed="true"]');
+          if (selected) selected.focus({ preventScroll: true });
+        }
+      };
+    });
+    const widget = app.querySelector(".stars-widget");
+    if (widget) {
+      widget.ontoggle = () => { if (widget.isConnected) starsPanelOpen = widget.open; };
+      widget.querySelector(".stars-close").onclick = () => {
+        widget.open = false; starsPanelOpen = false; widget.querySelector("summary").focus();
+      };
+    }
+
     app.querySelectorAll("[data-act]").forEach(b => b.onclick = () => act[b.dataset.act]());
     app.querySelectorAll("[data-remove]").forEach(b => b.onclick = () => act.remove(b.dataset.remove));
     const tpw = $("#takePw"); if (tpw) { const had = takePwVal; tpw.value = had; tpw.oninput = () => { takePwVal = tpw.value; }; tpw.onkeydown = e => { if (e.key === "Enter") $("[data-take]").click(); }; }
@@ -2851,17 +2986,17 @@ function startRoom() {
   }
   function clearTestRoom() {
     if (!TESTR) return;
-    if (!confirm("清除 TEST ROOM 的所有紀錄？房內所有人會回到選房間畫面。\nClear the test room for everyone?")) return;
+    if (!confirm("清除測試房間的所有紀錄？房內所有人會回到選房間畫面。\n테스트 방의 모든 기록을 지울까요? 모두 방 선택 화면으로 돌아가요.")) return;
     if (!client || !client.connected) { toast("尚未連線，請稍後再試"); return; }
     dead = true; isLeader = false; clearTimeout(pubTimer);
-    app.innerHTML = `<div class="wrap"><div class="card center"><div class="waiting"><span class="spinner"></span>正在清除 TEST ROOM… Clearing…</div></div></div>`;
+    app.innerHTML = `<div class="wrap"><div class="card center"><div class="waiting"><span class="spinner"></span>正在清除測試房間… · 테스트 방을 초기화하는 중…</div></div></div>`;
     let left = false; const away = () => { if (left) return; left = true; try { client.end(false); } catch (e) {} location.href = landingURL(); };
     client.publish(RTOP(RN), JSON.stringify({ id: rid(10), t: Date.now() }), { qos: 1, retain: true }, () => setTimeout(away, 300));
     setTimeout(away, 4000);
   }
-  function testBar() { return TESTR ? `<div class="center" style="margin-top:18px"><button class="btn ghost sm" id="clearTest">🧹 清除測試紀錄 · Clear test room</button><div class="small muted" style="margin-top:6px">測試用房間：同一個瀏覽器可以開多個分頁，用不同名字加入。</div></div>` : ""; }
+  function testBar() { return TESTR ? `<div class="center" style="margin-top:18px"><button class="btn ghost sm" id="clearTest">🧹 清除測試紀錄 · 테스트 기록 지우기</button><div class="small muted" style="margin-top:6px">測試用房間：同一個瀏覽器可以開多個分頁，用不同名字加入。</div></div>` : ""; }
   function leaveRoom() {
-    if (me && st && st.phase !== "lobby" && st.phase !== "end" && !confirm("離開本組？重新加入會建立新身分。\nLeave this room? · 방에서 나갈까요?")) return;
+    if (me && st && st.phase !== "lobby" && st.phase !== "end" && !confirm("離開本組？重新加入會建立新身分。\n방에서 나갈까요?")) return;
     try {
       if (client && client.connected && me) {
         publishMe({ left: true });
@@ -2886,17 +3021,17 @@ function startRoom() {
   }
   function renderLate() {
     app.innerHTML = `<div class="wrap">${header()}<div class="card">
-      <h1>${tri({en:"This round has started", zh:"本輪已開始", ko:"이번 라운드가 이미 시작됐어요"})}</h1>
-      <div class="waiting"><span class="spinner"></span>${tri({en:"Please wait for the leader to start the next round.", zh:"請等組長開下一輪再加入。", ko:"조장이 다음 라운드를 시작할 때까지 기다려 주세요."})}</div></div></div>`;
+      <h1>${tri({zh:"本輪已開始", ko:"이번 라운드가 이미 시작됐어요"})}</h1>
+      <div class="waiting"><span class="spinner"></span>${tri({zh:"請等組長開下一輪再加入。", ko:"조장이 다음 라운드를 시작할 때까지 기다려 주세요."})}</div></div></div>`;
     bind();
   }
   function renderNoState() {
     app.innerHTML = `<div class="wrap">${header()}<div class="card">
-      <h1>${tri({en:"Welcome!", zh:"歡迎！", ko:"환영해요!"}, "inline")} 👋</h1>
+      <h1>${tri({zh:"歡迎！", ko:"환영해요!"}, "inline")} 👋</h1>
       ${me ? chipsFor([[me.pid, { n: me.n, c: me.c, on: true }]]) : ""}
-      ${isLeader ? `<div class="waiting"><span class="spinner"></span>${tri({en:"Setting up your room…", zh:"正在準備房間…", ko:"방을 준비하는 중…"})}</div>`
-        : waitLeader({en:"Waiting for your group leader to join…", zh:"等待組長加入…", ko:"조장이 들어오기를 기다리는 중…"})}
-      <div class="center"><button class="linkbtn" id="edit">Change name · 修改資料 · 정보 수정</button></div>
+      ${isLeader ? `<div class="waiting"><span class="spinner"></span>${tri({zh:"正在準備房間…", ko:"방을 준비하는 중…"})}</div>`
+        : waitLeader({zh:"等待組長加入…", ko:"조장이 들어오기를 기다리는 중…"})}
+      <div class="center"><button class="linkbtn" id="edit">修改資料 · 정보 수정</button></div>
     </div>${testBar()}</div>`;
     bind();
   }
@@ -2904,25 +3039,25 @@ function startRoom() {
   function renderJoin() {
     let c = me ? me.c : null, lead = me ? !!me.lead : params.get("role") === "lead";
     app.innerHTML = `<div class="wrap">
-      <div class="topbar"><span class="roomtag">${TESTR ? "🧪 TEST ROOM" : "ROOM " + LBL}</span><button class="linkbtn" id="leave">← 換房間 · Rooms</button></div>
+      <div class="topbar"><span class="roomtag">${TESTR ? "🧪 測試房間 · 테스트 방" : "房間 · 방 " + LBL}</span><button class="linkbtn" id="leave">← 換房間 · 방 선택</button></div>
       <div class="card">
-        <h1>Telepathy Match ⭐</h1>
-        <div class="muted">${tri({en:"Do you think alike? Let's find out!", zh:"你們的默契有多好？一起來試試！", ko:"우리 얼마나 잘 통할까요? 같이 알아봐요!"})}</div>
-        <div class="field"><span class="lbl">${tri({en:"I'm from", zh:"我來自", ko:"저는 …에서 왔어요"}, "inline")}</span>
+        <h1>默契大考驗 · 텔레파시 게임 ⭐</h1>
+        <div class="muted">${tri({zh:"你們的默契有多好？一起來試試！", ko:"우리 얼마나 잘 통할까요? 같이 알아봐요!"})}</div>
+        <div class="field"><span class="lbl">${tri({zh:"我來自", ko:"저는 …에서 왔어요"}, "inline")}</span>
           <div class="cpick">
-            <button class="tw ${c === "TW" ? "on" : ""}" data-c="TW">${ctag("TW")} ${tri({en:"Taiwan", zh:"台灣", ko:"대만"})}</button>
-            <button class="kr ${c === "KR" ? "on" : ""}" data-c="KR">${ctag("KR")} ${tri({en:"Korea", zh:"韓國", ko:"한국"})}</button>
+            <button class="tw ${c === "TW" ? "on" : ""}" data-c="TW">${ctag("TW")} ${tri({zh:"台灣", ko:"대만"})}</button>
+            <button class="kr ${c === "KR" ? "on" : ""}" data-c="KR">${ctag("KR")} ${tri({zh:"韓國", ko:"한국"})}</button>
           </div></div>
-        <label class="field"><span class="lbl">${tri({en:"Your name", zh:"你的名字", ko:"이름"}, "inline")}</span>
-          <input id="nm" type="text" maxlength="16" autocomplete="off" placeholder="e.g. Minji / 小安" value="${esc(me ? me.n : "")}"></label>
+        <label class="field"><span class="lbl">${tri({zh:"你的名字", ko:"이름"}, "inline")}</span>
+          <input id="nm" type="text" maxlength="16" autocomplete="off" placeholder="例如：小安／민지" value="${esc(me ? me.n : "")}"></label>
         <div class="field" id="roleBox" style="${c === "TW" ? "" : "display:none"}"><span class="lbl">角色（每組只要一位組長）</span>
           <div class="rolepick">
-            <button class="${lead ? "" : "on"}" data-l="0">🙋 組員<br><span class="small muted">Member</span></button>
+            <button class="${lead ? "" : "on"}" data-l="0">🙋 組員<br><span class="small muted">조원</span></button>
             <button class="${lead ? "on" : ""}" data-l="1">👑 組長<br><span class="small muted">負責按「開始」「下一題」</span></button>
           </div>
           <label id="pwBox" style="display:${lead && !(me && me.lead) ? "block" : "none"};margin-top:12px"><span class="lbl">🔑 組長密碼（老師提供）</span>
             <input id="lpw" type="password" inputmode="numeric" autocomplete="off" placeholder="••••" style="width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--line);font-size:18px"></label></div>
-        <button id="go" class="btn" style="width:100%;margin-top:6px" disabled>${tri({en:"Join Room " + LBL, zh:"加入房間", ko:"입장하기"}, "inline")}</button>
+        <button id="go" class="btn" style="width:100%;margin-top:6px" disabled>${tri({zh:"加入房間", ko:"입장하기"}, "inline")}</button>
         <div id="goHint" class="small muted center" style="margin-top:8px"></div>
       </div>${prevIds()}${testBar()}</div>`;
     app.querySelectorAll(".cpick button").forEach(b => b.onclick = () => {
@@ -2935,7 +3070,7 @@ function startRoom() {
       const okC = !!c, okN = !!$("#nm").value.trim(), okP = !needPw() || !!$("#lpw").value.trim();
       $("#pwBox").style.display = needPw() ? "block" : "none";
       $("#go").disabled = !(okC && okN && okP);
-      $("#goHint").innerHTML = !okC ? "請先選國家 · Choose your country · 나라를 선택하세요" : !okN ? "請輸入名字 · Type your name · 이름을 입력하세요" : !okP ? "請輸入組長密碼；不是組長請選「組員」" : "";
+      $("#goHint").innerHTML = !okC ? "請先選國家 · 나라를 선택하세요" : !okN ? "請輸入名字 · 이름을 입력하세요" : !okP ? "請輸入組長密碼；不是組長請選「組員」" : "";
     }
     $("#nm").addEventListener("input", upd);
     $("#lpw").addEventListener("input", upd);
@@ -2944,8 +3079,8 @@ function startRoom() {
     app.querySelectorAll(".rolepick button").forEach(b => b.onclick = () => { lead = b.dataset.l === "1"; app.querySelectorAll(".rolepick button").forEach(x => x.classList.toggle("on", x === b)); upd(); if (needPw()) $("#lpw").focus(); });
     $("#go").onclick = () => {
       const n = $("#nm").value.trim().slice(0, 16);
-      if (!c) { toast("Choose Taiwan or Korea · 請選國家 · 나라를 선택하세요"); return; }
-      if (!n) { $("#nm").focus(); toast("Please type your name · 請輸入名字 · 이름을 입력하세요"); return; }
+      if (!c) { toast("請選國家 · 나라를 선택하세요"); return; }
+      if (!n) { $("#nm").focus(); toast("請輸入名字 · 이름을 입력하세요"); return; }
       const wantLead = c === "TW" && lead;
       if (needPw() && cyrb53($("#lpw").value.trim()) !== LEAD_HASH) {
         $("#lpw").value = ""; upd();
@@ -2969,7 +3104,7 @@ function startRoom() {
     app.querySelectorAll(".cpick button, .rolepick button, #nm").forEach(el => el.addEventListener(el.id === "nm" ? "input" : "click", () => { touched = true; }));
     app.querySelectorAll("[data-resume]").forEach(b => b.onclick = () => {
       const x = ids().find(i => i.pid === b.dataset.resume); if (!x) return;
-      if (ON[x.pid] === true) { toast("這個身分正在另一個分頁使用中 · In use in another tab"); return; }
+      if (ON[x.pid] === true) { toast("這個身分正在另一個分頁使用中 · 다른 탭에서 사용 중이에요"); return; }
       me = x; save(); editing = false; connect(); render();
     });
     const cl = $("#clearTest"); if (cl) cl.onclick = clearTestRoom;
@@ -2979,7 +3114,7 @@ function startRoom() {
     if (me) return "";
     const list = ids().filter(x => ON[x.pid] !== true);
     if (!list.length) return "";
-    return `<div class="card" style="margin-top:12px"><div class="qhead" style="margin-bottom:8px">${tri({en:"Continue as", zh:"回到之前的身分", ko:"이전 이름으로 계속하기"}, "inline")}</div>
+    return `<div class="card" style="margin-top:12px"><div class="qhead" style="margin-bottom:8px">${tri({zh:"回到之前的身分", ko:"이전 이름으로 계속하기"}, "inline")}</div>
       <div class="chips">${list.map(x => `<button class="chip" data-resume="${esc(x.pid)}" style="cursor:pointer">${ctag(x.c)} ${esc(x.n)}${x.lead ? " 👑" : ""}</button>`).join("")}</div>
       <div class="small muted" style="margin-top:8px">斷線或關掉分頁後，點自己的名字就能回到原本的畫面。</div></div>`;
   }
@@ -2988,20 +3123,20 @@ function startRoom() {
     const on = r.filter(([, p]) => p.on !== false).length;
     app.innerHTML = `<div class="wrap">${header()}
       <div class="card">
-        <h1>${tri({en:"Welcome!", zh:"歡迎！", ko:"환영해요!"}, "inline")} 👋</h1>
-        <p class="muted small">${tri({en:"Say hi to your teammates while we wait.", zh:"等待時先跟隊友打個招呼吧！", ko:"기다리는 동안 팀원들에게 인사해 봐요!"})}</p>
-        <div class="qhead" style="margin:10px 0 8px">Team · 隊友 · 팀원 (${on})</div>
+        <h1>${tri({zh:"歡迎！", ko:"환영해요!"}, "inline")} 👋</h1>
+        <p class="muted small">${tri({zh:"等待時先跟隊友打個招呼吧！", ko:"기다리는 동안 팀원들에게 인사해 봐요!"})}</p>
+        <div class="qhead" style="margin:10px 0 8px">隊友 · 팀원 (${on})</div>
         ${chipsFor(r)}
-        ${leadBar(`<div class="small">大家都進來了嗎？人數不限，確認後按開始（共 ${st.total} 題）</div><button class="btn gold" data-act="start">▶ 開始遊戲 · Start · 시작</button>`)}
-        ${waitLeader({en:"Waiting for the leader to start…", zh:"等待組長開始…", ko:"조장이 시작하기를 기다리는 중…"})}
-        <div class="center"><button class="linkbtn" id="edit">Change name · 修改資料 · 정보 수정</button></div>
+        ${leadBar(`<div class="small">大家都進來了嗎？人數不限，確認後按開始（共 ${st.total} 題）</div><button class="btn gold" data-act="start">▶ 開始遊戲 · 시작</button>`)}
+        ${waitLeader({zh:"等待組長開始…", ko:"조장이 시작하기를 기다리는 중…"})}
+        <div class="center"><button class="linkbtn" id="edit">修改資料 · 정보 수정</button></div>
       </div></div>`;
   }
 
   function choiceBtn(q, k) {
     const o = k === "A" ? q.a : q.b; const mine = myAnswer();
     return `<button class="choice ${k} ${mine === k ? "sel" : ""} ${mine && mine !== k ? "dim" : ""}" data-k="${k}" ${mine ? "disabled" : ""}>
-      <span class="letter">${k}</span><span class="emo">${esc(o.e)}</span>${tri(o)}</button>`;
+      <span class="letter">${k === "A" ? "①" : "②"}</span><span class="emo">${esc(o.e)}</span>${tri(o)}</button>`;
   }
   function renderQ() {
     const q = st.q; if (!q) return renderNoState();
@@ -3011,12 +3146,12 @@ function startRoom() {
     const done = r.filter(([pid]) => ans.has(pid)).length;
     app.innerHTML = `<div class="wrap">${header()}
       <div class="card">
-        <div class="qhead">Question ${st.qi + 1} / ${st.total}</div>
+        <div class="qhead">題目 · 문제 ${st.qi + 1} / ${st.total}</div>
         <div class="question">${tri(q)}</div>
         <div class="choices">${choiceBtn(q, "A")}${choiceBtn(q, "B")}</div>
-        <div class="hint">${mine ? tri({en:"Sent! Waiting for everyone…", zh:"已送出！等待大家作答…", ko:"보냈어요! 모두를 기다리는 중…"}) : tri({en:"Choose one! Your answer can't be changed after sending.", zh:"選一個！送出後不能更改。", ko:"하나를 골라요! 보낸 후에는 바꿀 수 없어요."})}</div>
+        <div class="hint">${mine ? tri({zh:"已送出！等待大家作答…", ko:"보냈어요! 모두를 기다리는 중…"}) : tri({zh:"選一個！送出後不能更改。", ko:"하나를 골라요! 보낸 후에는 바꿀 수 없어요."})}</div>
         <div class="status">
-          <div class="qhead" style="margin-bottom:8px">Answered · 已作答 · 답변 완료 ${done} / ${r.length}</div>
+          <div class="qhead" style="margin-bottom:8px">已作答 · 답변 완료 ${done} / ${r.length}</div>
           ${chipsFor(r, { check: pid => ans.has(pid) })}
         </div>
       </div></div>`;
@@ -3027,20 +3162,56 @@ function startRoom() {
     });
   }
 
+  function sharedAnswers(pid) {
+    if (!st || !me) return [];
+    return (st.history || []).filter(h => h.res && ["A", "B"].includes(h.res[me.pid]) && h.res[me.pid] === h.res[pid]);
+  }
+  let milestoneSelection = { round: "", pid: null };
+  function matchDiscoveries() {
+    if (!st || !me) return { notice: "", milestones: "" };
+    const res = st.results || {}, names = st.names || {}, mine = res[me.pid];
+    if (!["A", "B"].includes(mine)) return { notice: "", milestones: "" };
+    const matches = Object.entries(names).filter(([pid]) => pid !== me.pid && res[pid] === mine);
+    const notice = `<div class="match-notice">${tri(matches.length ? {
+      zh: matches.map(([, p]) => p.n).join("、") + "，這題和你選一樣！",
+      ko: matches.map(([, p]) => p.n).join(", ") + " 님도 나와 같은 답을 골랐어요!"
+    } : { zh: "這題只有你選這個答案，聊聊你的理由吧！", ko: "이번에는 나만 이 답을 골랐어요. 이유를 나눠 봐요!" })}</div>`;
+    const entries = matches.map(([pid, person]) => {
+      const shared = sharedAnswers(pid), n = shared.length;
+      if (!(n === 3 || (n >= 5 && n % 5 === 0)) || !shared.some(h => h.qi === st.qi)) return "";
+      const examples = shared.slice().reverse().map(h => {
+        const qid = (st.ql || DEFAULT_SEL)[h.qi], q = QBY[qid];
+        const answer = q && (h.res[me.pid] === "A" ? q.a : q.b);
+        return answer ? `<div class="common-choice"><span aria-hidden="true">${esc(answer.e)}</span>${tri(answer)}</div>` : "";
+      }).filter(Boolean).slice(0, 3).join("");
+      if (!examples) return "";
+      return { pid, name: person.n, html: `<div class="milestone-person"><div class="milestone-title"><span aria-hidden="true">✨</span>${tri({zh:"你和" + person.n + "，已經有 " + n + " 題選一樣！",ko:person.n + " 님과 벌써 " + n + "문제에서 같은 답을 골랐어요!"})}</div><div class="common-choices">${examples}</div></div>` };
+    }).filter(Boolean);
+    const round = String(st.g) + ":" + st.qi;
+    if (milestoneSelection.round !== round || !entries.some(e => e.pid === milestoneSelection.pid)) {
+      milestoneSelection = { round, pid: entries.length ? entries[0].pid : null };
+    }
+    const selected = entries.find(e => e.pid === milestoneSelection.pid);
+    const picker = entries.length > 1 ? `<div class="milestone-picker"><span class="milestone-picker-label">共同點 · 공통점</span><div class="milestone-people" role="group" aria-label="選擇朋友 · 친구 선택">${entries.map(e => `<button type="button" data-milestone-person="${esc(e.pid)}" aria-pressed="${e.pid === milestoneSelection.pid}">${esc(e.name)}</button>`).join("")}</div></div>` : "";
+    const milestones = selected ? `<section class="match-milestone">${picker}${selected.html}</section>` : "";
+    return { notice, milestones };
+  }
+
   function renderReveal() {
     const q = st.q; if (!q) return renderNoState();
     const res = st.results || {}, names = st.names || {};
     const listOf = k => Object.entries(res).filter(([, a]) => a === k).map(([pid]) => [pid, names[pid] || { n: "", c: "" }]);
-    const col = k => { const o = k === "A" ? q.a : q.b, list = listOf(k); return `<div class="col ${k}"><div class="hd"><span class="letter">${k}</span><span class="emo">${esc(o.e)}</span>${tri(o)}<span class="cnt">${list.length}</span></div>${chipsFor(list)}</div>`; };
+    const col = k => { const o = k === "A" ? q.a : q.b, list = listOf(k); return `<div class="col ${k}"><div class="hd"><span class="letter">${k === "A" ? "①" : "②"}</span><span class="emo">${esc(o.e)}</span>${tri(o)}<span class="cnt">${list.length}</span></div>${chipsFor(list)}</div>`; };
+    const discoveries = matchDiscoveries();
     const last = st.qi + 1 >= st.total;
-    app.innerHTML = `<div class="wrap">${header()}<div class="card"><div class="qhead">Question ${st.qi + 1} / ${st.total}</div><div class="question">${tri(q)}</div><h2>${tri({en:"Our choices this round", zh:"這一題，大家的選擇", ko:"이번 문제에서 우리가 고른 답"})}</h2><div class="cols">${col("A")}${col("B")}</div></div>${scoreCards()}<div class="card discussion">${leadBar(`<button class="btn teal" data-act="next">${last ? "查看交流紀錄 · Our record · 기록 보기" : "下一題 ▶ · Next · 다음 문제"}</button>${last ? "" : '<button class="btn ghost sm" data-act="finish">結束並查看交流紀錄 · Finish · 마치기</button>'}`)}${waitLeader({en:"The leader will start the next question.", zh:"等待組長按下一題。", ko:"조장이 곧 다음 문제를 시작해요."})}</div></div>`;
+    app.innerHTML = `<div class="wrap reveal-layout">${header()}<div class="reveal-content"><div class="card reveal-question"><div class="qhead">題目 · 문제 ${st.qi + 1} / ${st.total}</div><div class="question">${tri(q)}</div>${discoveries.notice}<div class="cols">${col("A")}${col("B")}</div></div>${discoveries.milestones}</div>${scoreCards()}<div class="card discussion">${leadBar(`<button class="btn teal" data-act="next">${last ? "查看交流紀錄 · 기록 보기" : "下一題 ▶ · 다음 문제"}</button>${last ? "" : '<button class="btn ghost sm" data-act="finish">結束並查看交流紀錄 · 마치기</button>'}`)}${waitLeader({zh:"等待組長按下一題。", ko:"조장이 곧 다음 문제를 시작해요."})}</div></div>`;
   }
   function renderEnd() {
     const n = (st.history || []).length;
-    app.innerHTML = `<div class="wrap">${header()}<section class="card"><h1>${tri({en:"Our conversation record", zh:"我們的交流紀錄", ko:"우리의 대화 기록"})}</h1><p>${tri({en:`We shared our choices on ${n} questions.`, zh:`我們分享了 ${n} 題的選擇。`, ko:`${n}개의 질문에 대한 선택을 나눴어요.`})}</p><p>${tri({en:"Which choice would you like to learn more about?", zh:"你還想多了解誰的哪個選擇？", ko:"누구의 어떤 선택을 더 알아보고 싶나요?"})}</p>${leadBar('<button class="btn ghost sm" data-act="again">再聊一輪 · Play again · 다시 하기</button>')}<p class="small muted">${tri({en:"You can save this record with a screenshot.", zh:"可以截圖保存這次的交流紀錄。", ko:"스크린샷으로 이 기록을 저장할 수 있어요."})}</p></section></div>`;
+    app.innerHTML = `<div class="wrap">${header()}<section class="card"><h1>${tri({zh:"我們的交流紀錄", ko:"우리의 대화 기록"})}</h1><p>${tri({zh:`我們分享了 ${n} 題的選擇。`, ko:`${n}개의 질문에 대한 선택을 나눴어요.`})}</p><p>${tri({zh:"你還想多了解誰的哪個選擇？", ko:"누구의 어떤 선택을 더 알아보고 싶나요?"})}</p>${leadBar('<button class="btn ghost sm" data-act="again">再聊一輪 · 다시 하기</button>')}<p class="small muted">${tri({zh:"可以截圖保存這次的交流紀錄。", ko:"스크린샷으로 이 기록을 저장할 수 있어요."})}</p></section></div>`;
   }
 
-  app.innerHTML = `<div class="wrap"><div class="card center"><div class="waiting"><span class="spinner"></span>${tri({en:"Connecting to your room…", zh:"正在連線到房間…", ko:"방에 연결하는 중…"})}</div></div></div>`;
+  app.innerHTML = `<div class="wrap"><div class="card center"><div class="waiting"><span class="spinner"></span>${tri({zh:"正在連線到房間…", ko:"방에 연결하는 중…"})}</div></div></div>`;
   (async () => {
     let e = null;
     while (e === null) e = await readEpoch(RN);
@@ -3069,33 +3240,33 @@ function startLanding() {
   };
   function render() {
     app.innerHTML = `<div class="wrap">
-      <div class="topbar"><span class="roomtag">⭐ Telepathy Match</span><span class="conn"><span class="dot ${conn}"></span></span></div>
+      <div class="topbar"><span class="roomtag">⭐ 默契大考驗 · 텔레파시 게임</span><span class="conn"><span class="dot ${conn}"></span></span></div>
       <div class="card">
-        <h1>${tri({en:"Choose your room", zh:"選擇你的房間", ko:"방을 선택하세요"})}</h1>
-        <p class="muted small" style="margin:6px 0 0">👥 ${tri({en:"Any number of TW / KR students", zh:"人數與臺韓比例不限", ko:"인원과 한·대만 비율 제한 없음"}, "inline")}<br>👑 ${tri({en:"Leader: one Taiwanese student per room", zh:"組長：每組一位台灣學生", ko:"조장: 방마다 대만 학생 한 명"}, "inline")}<br>🙋 ${tri({en:"Member: everyone else", zh:"組員：其他同學", ko:"조원: 나머지 모두"}, "inline")}</p>
+        <h1>${tri({zh:"選擇你的房間", ko:"방을 선택하세요"})}</h1>
+        <p class="muted small" style="margin:6px 0 0">👥 ${tri({zh:"人數與臺韓比例不限", ko:"인원과 한·대만 비율 제한 없음"}, "inline")}<br>👑 ${tri({zh:"組長：每組一位台灣學生", ko:"조장: 방마다 대만 학생 한 명"}, "inline")}<br>🙋 ${tri({zh:"組員：其他同學", ko:"조원: 나머지 모두"}, "inline")}</p>
       </div>
       ${Array.from({ length: ROOMS }, (_, i) => i + 1).map(r => {
         const I = info[r]; const people = Object.keys(I.on).filter(pid => I.on[pid]).length;
         const ldOn = I.lead && I.on[I.lead.pid];
         return `<div class="card" style="margin-top:12px">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-            <span class="roomtag">ROOM ${r}</span>
+            <span class="roomtag">房間 · 방 ${r}</span>
             <span class="small muted">${ldOn ? `👑 ${esc(I.lead.n)} · ` : ""}👥 ${people}</span>
           </div>
           <div class="rolepick" style="margin-top:12px">
-            <button data-r="${r}" data-role="lead" ${ldOn ? "disabled style=\"opacity:.45\"" : ""}>👑 組長<br><span class="small muted">${ldOn ? "已有組長" : "Leader · 조장"}</span></button>
-            <button data-r="${r}" data-role="member">🙋 組員<br><span class="small muted">Member · 조원</span></button>
+            <button data-r="${r}" data-role="lead" ${ldOn ? "disabled style=\"opacity:.45\"" : ""}>👑 組長<br><span class="small muted">${ldOn ? "已有組長" : "조장"}</span></button>
+            <button data-r="${r}" data-role="member">🙋 組員<br><span class="small muted">조원</span></button>
           </div></div>`;
       }).join("")}
       ${(() => { const I = info[0]; const people = Object.keys(I.on).filter(pid => I.on[pid]).length; const ldOn = I.lead && I.on[I.lead.pid];
         return `<div class="card" style="margin-top:22px;border:2px dashed #c9bfae;background:#fffdf8">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-            <span class="roomtag" style="background:#6b7280">🧪 TEST ROOM</span>
+            <span class="roomtag" style="background:#6b7280">🧪 測試房間 · 테스트 방</span>
             <span class="small muted">${ldOn ? `👑 ${esc(I.lead.n)} · ` : ""}👥 ${people}</span></div>
           <div class="small muted" style="margin-top:8px">測試用：同一個瀏覽器可開多個分頁、用不同名字加入；房內任何人都能清除紀錄。</div>
           <div class="rolepick" style="margin-top:12px">
-            <button data-r="test" data-role="lead" ${ldOn ? "disabled style=\"opacity:.45\"" : ""}>👑 組長<br><span class="small muted">${ldOn ? "已有組長" : "Leader · 조장"}</span></button>
-            <button data-r="test" data-role="member">🙋 組員<br><span class="small muted">Member · 조원</span></button>
+            <button data-r="test" data-role="lead" ${ldOn ? "disabled style=\"opacity:.45\"" : ""}>👑 組長<br><span class="small muted">${ldOn ? "已有組長" : "조장"}</span></button>
+            <button data-r="test" data-role="member">🙋 組員<br><span class="small muted">조원</span></button>
           </div></div>`; })()}
       <div class="center" style="margin-top:22px"><button class="linkbtn" id="resetBtn">🔒 老師重置房間</button></div>
     </div>`;
@@ -3108,7 +3279,7 @@ function startLanding() {
       <h1 style="font-size:22px">🔒 老師重置房間</h1>
       <p class="small muted">重置後，房間內所有人會被送回選房間畫面，進度與評語卡會清空，無法復原。</p>
       <label class="field"><span class="lbl">要重置哪一間？</span>
-        <select id="rsRoom" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line)"><option value="all">全部房間（Room 1–${ROOMS}）</option>${Array.from({ length: ROOMS }, (_, i) => `<option value="${i + 1}">Room ${i + 1}</option>`).join("")}</select></label>
+        <select id="rsRoom" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line)"><option value="all">全部房間（1–${ROOMS}）</option>${Array.from({ length: ROOMS }, (_, i) => `<option value="${i + 1}">房間 · 방 ${i + 1}</option>`).join("")}</select></label>
       <label class="field"><span class="lbl">密碼</span><input id="rsPw" type="password" autocomplete="off" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);font-size:16px"></label>
       <div id="rsMsg" class="small" style="color:var(--a-ink);min-height:18px"></div>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
@@ -3124,7 +3295,7 @@ function startLanding() {
       if (!client || !client.connected) { $("#rsMsg", m).textContent = "尚未連線，請稍後再試"; return; }
       const v = $("#rsRoom", m).value;
       const rooms = v === "all" ? Array.from({ length: ROOMS }, (_, i) => i + 1) : [+v];
-      if (!confirm(`確定要重置 ${v === "all" ? "全部房間" : "Room " + v}？`)) return;
+      if (!confirm(`確定要重置 ${v === "all" ? "全部房間" : "房間 " + v}？`)) return;
       close(); doReset(rooms);
     };
   }
@@ -3137,7 +3308,7 @@ function startLanding() {
   }
   function doReset(rooms) {
     rooms.forEach(r => { const id = rid(10); client.publish(RTOP(r), JSON.stringify({ id, t: Date.now() }), { qos: 1, retain: true }); setEp(r, id); });
-    render(); toast(`已重置 ${rooms.length === ROOMS ? "全部房間" : "Room " + rooms[0]}`);
+    render(); toast(`已重置 ${rooms.length === ROOMS ? "全部房間" : "房間 " + rooms[0]}`);
   }
   render();
   let t = null; const later = () => { clearTimeout(t); t = setTimeout(render, 200); };
