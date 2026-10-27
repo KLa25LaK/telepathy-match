@@ -286,6 +286,28 @@ body{background-color:var(--bg);background-image:radial-gradient(circle,#eddfc57
  .reveal-layout:not(:has(.match-milestone)) .reveal-question{grid-row:2}
 }
 </style>
+<style id="simple-room-entry">
+.room-enter{width:100%;margin-top:12px}.sc-nm.TW,.sc-nm.KR{color:var(--ink)}.rolepick button{min-height:48px}.rolepick button.on{background:#fff0b8;border-color:#d7b14d;box-shadow:0 2px 0 #e3c970}.rolepick button:focus-visible{outline:3px solid #80ac96;outline-offset:2px}#roleBox .lbl{margin-bottom:7px}#pwBox>.lbl{display:block;font-size:13px;margin-bottom:6px}
+</style>
+<style id="inline-room-entry">
+.room-entry-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:9px;padding:12px 14px}.room-entry-info{min-width:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.room-entry-row .room-enter{width:auto;margin:0;white-space:nowrap;padding:9px 12px;font-size:13px}.room-entry-info>.small{font-size:11px;overflow-wrap:anywhere}.room-entry-info .roomtag{max-width:100%;font-size:11px;padding:6px 9px}.test-entry-note{grid-column:1/-1;font-size:11px;margin-top:2px}.test-entry-row .room-entry-info .roomtag{font-size:10px;padding:6px 7px}.room-entry-info>.small:empty{display:none}
+@media(max-width:520px){.room-entry-row{padding:11px 12px;gap:7px}.room-entry-info{gap:5px}.room-entry-info>.small{font-size:10px}.room-entry-row .room-enter{font-size:12px;padding:8px 10px;min-height:36px}.room-entry-info .roomtag{font-size:10px}.test-entry-row .room-entry-info .roomtag{font-size:9px;padding:6px 5px}}
+</style>
+<style id="strawberry-milk-theme">
+/* Strawberry milk club: a consistent cute theme across all screens. */
+:root{--bg:#fff4f8;--card:#fff;--ink:#594664;--muted:#9b859f;--line:#f0dfea;--a:#ee8bae;--a-soft:#ffe8f1;--a-ink:#ac557c;--b:#a697e5;--b-soft:#f0eaff;--b-ink:#7f69b0;--gold:#efbb5d;--gold-soft:#fff2d8;--tw:#aa91cd;--kr:#df8db3;--shadow:0 4px 0 #f2e1ec}
+body{background:#fff4f8;background-image:radial-gradient(ellipse at 0% 0%,#ffe0ed99,transparent 48%),radial-gradient(ellipse at 100% 100%,#e9e0ff99,transparent 48%);background-size:auto;color:var(--ink);font-family:ui-rounded,"Hiragino Maru Gothic ProN","Arial Rounded MT Bold",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+.card{background:#fff;border:1.5px solid #f0dfea;border-radius:22px;box-shadow:0 4px 0 #f2e1ec}.topbar .roomtag,.roomtag{background:#fff;color:#b27198;border:1px solid #efd5e5;box-shadow:0 2px 0 #efdce8;border-radius:999px;font-weight:750}.topbar .roomtag::before{content:"♡ ";color:#e58ab0}.topbar .linkbtn{color:#ad8ba5}.dot.ok{background:#b2a0df}.dot.re{background:#efc5d8}.qhead{color:#b89abc;letter-spacing:.6px}.question .zh,h1 .tri .zh{color:#654a70}.question .ko{color:#a48ba8}.tri .ko{color:#a48ba8}.btn{border-radius:13px}.btn.teal,.btn.gold,.room-entry-row .btn.teal{background:#f5bdd5;color:#84516d;border:1.5px solid #e9a6c4;box-shadow:0 3px 0 #dfa0bd;font-weight:750}.btn.teal:hover,.btn.gold:hover{background:#facce0;box-shadow:0 3px 0 #dfa0bd}.btn:active{transform:translateY(2px);box-shadow:none}.btn.ghost{background:#fff;color:#a07ba0;border-color:#e9d9ed}.leadbar .btn.ghost{color:#b18da9;background:transparent;box-shadow:none}.leadbar .who{color:#b694b0}.discussion{background:#fff7fb;border-color:#efdeeb}.rolepick button,.cpick button{border:1.5px solid #eeddeb;background:#fffafd;border-radius:15px;color:#987e9e}.rolepick button.on{background:#fce2ef;border-color:#e8a4c7;box-shadow:0 3px 0 #efbfd7;color:#9b517c}.rolepick button.on::after{content:" ♡";color:#dc7faa}.field input[type=text],input[type=password]{background:#fffafd!important;color:#715675;border:1.5px solid #ecdaeb!important;border-radius:13px!important}.field input::placeholder{color:#bba6bc}.field>.lbl{color:#806186}.small.muted,.muted{color:var(--muted)}
+.col,.col.A{background:#ffe8f1;border:1.5px solid #f4c9db;border-radius:18px}.col.B{background:#f0eaff;border:1.5px solid #ddd0f4;border-radius:18px}.col .hd .letter,.choice .letter{background:#fff!important;border-color:#f0bcd2;color:#cb80a0;box-shadow:0 2px 0 #f3cddd;border-radius:8px;transform:rotate(-7deg)}.col.B .hd .letter{color:#a18ac5;border-color:#d9c9ef;box-shadow:0 2px 0 #dfd4f0;transform:rotate(7deg)}.col .hd .emo{filter:drop-shadow(0 3px 0 #ffffffaa)}.col .cnt{color:#b48aa6}.col.B .cnt{color:#a18abf}.col .hd>.tri .zh{color:#8e5a76}.col.B .hd>.tri .zh{color:#80639f}.col .hd>.tri .ko{color:#b28b9f}.col.B .hd>.tri .ko{color:#a18db5}.col .chips{border-top:1px dashed #eec5d8}.col.B .chips{border-color:#d8c9ec}.chip{background:#fff;border:1px solid #ead6e7;border-radius:999px;color:#947395}.chip.me{border:1.5px solid #df9cbd;box-shadow:0 2px 0 #f0d2e2;background:#fff}.chip.me::before{content:"♡";font-size:11px;color:#d884a9}.chip .ck{color:#ae97d2}.chip .wait{color:#e6d7e7}.choice.A{background:#ffe8f1;border-color:#f2c5d8;color:#a75f81}.choice.B{background:#f0eaff;border-color:#daccf1;color:#8970ae}.choice{border-radius:20px;box-shadow:0 4px 0 #ecd5e6}.choice.sel.A{border-color:#e997bc;box-shadow:0 4px 0 #dfa0bd}.choice.sel.B{border-color:#b39cdb;box-shadow:0 4px 0 #b6a2d6}.choice .tri .zh{color:inherit}.choice.A .ko{color:#b4879d}.choice.B .ko{color:#a08db5}
+.match-notice{background:#fff0f7;border:1px dashed #eab9d4;border-radius:13px;padding:9px 11px}.match-notice .zh{color:#b16991}.match-notice .zh:before{content:"♡ ";color:#e08ab3}.match-notice .ko{color:#bb93ac}.match-milestone{background:#fff8e9;border:1.5px solid #f0dfb7;border-radius:18px;box-shadow:0 3px 0 #f2e5c9}.milestone-picker{border-bottom:1px dashed #ead9b9}.milestone-picker-label{color:#b19a75}.milestone-people button{background:#fff;border:1px solid #ead5e5;color:#b38ba8;box-shadow:0 2px 0 #eedfea;border-radius:999px}.milestone-people button[aria-pressed="true"]{background:#e9dcfa;color:#8c6daf;border-color:#cfb6e5;box-shadow:0 2px 0 #d8c3e8}.milestone-people button[aria-pressed="true"]::before{content:"♡ ";font-size:12px}.milestone-title .zh{color:#a28a5e}.milestone-title .ko{color:#baa783}.common-choice{background:#fff;border:1px solid #eddfcd;border-radius:12px}.common-choice:nth-child(2){background:#fff0f6;border-color:#f2d5e3}.common-choice:nth-child(3){background:#f3edff;border-color:#e2d7f3}.common-choice .zh{color:#8f7889}.common-choice .ko{color:#b09aab}.stars-widget>summary{background:#eadcfa;color:#8d69aa;border:1.5px solid #d7bfe9;box-shadow:0 3px 0 #cfb7e2,0 5px 15px #cba7d522;border-radius:999px}.stars-widget summary small{color:#ad92c0}.stars-panel{background:#fffbfe;border:1.5px solid #ead5e9;border-radius:22px;box-shadow:0 8px 28px #ba8bb82b}.stars-close{background:#f6e6f1;color:#ba87a9}.pair-label .zh{color:#9c7296}.pair-label .ko{color:#ba9bb6}.star-pair{border-bottom:1px dashed #ecd9e9}.sg{color:#efc36b;text-shadow:0 1px 0 #d8a858}.sr{color:#ec9fbf;text-shadow:0 1px 0 #cd80a2}.spinner{border-color:#f0e1ed;border-top-color:#d1afd7}.toast{background:#ad8bb0}.modal{background:#74557970;backdrop-filter:blur(6px)}.modal .box{background:#fffafd;border:1px solid #ead5e8;border-radius:24px}.room-entry-row{border-radius:18px;background:#fff;box-shadow:0 3px 0 #f1dfeb}.room-entry-row .roomtag{background:#faedf7;border:1px solid #efd7e9;box-shadow:none;color:#b078a1;border-radius:10px}.room-entry-info>.small{color:#c1a7be}.room-entry-row .room-enter{border-radius:999px;padding-left:15px;padding-right:15px}.test-entry-row{background:#fffafd!important;border:1.5px dashed #dfc4df!important}.test-entry-row .roomtag{background:#f0e8fb!important;color:#a087b3!important;border:0}.test-entry-note{color:#b59db4}#resetBtn{color:#b59bb3}.warn{background:#fff0f6;border-color:#efc5d9;color:#b27094}
+@media(max-width:520px){.card{border-radius:19px}.room-entry-row{border-radius:16px}.col,.col.B{border-radius:15px}.match-milestone{border-radius:16px}.stars-panel{border-radius:20px}}
+@media(min-width:1024px){.reveal-layout>.stars-widget>summary{border-radius:15px;box-shadow:0 3px 0 #cfb7e2}.reveal-layout>.discussion{border-radius:20px}}
+</style>
+<style id="readable-pastel-text">
+/* Clearer type on the same strawberry and lavender surfaces. */
+:root{--ink:#49334f;--muted:#765c7c;--a-ink:#813c5d;--b-ink:#63478a}
+.tri .zh{color:var(--ink)}.tri .ko{color:#715577}.muted,.small.muted{color:#765c7c}.question .zh,h1 .tri .zh{color:#49334f}.question .ko{color:#715577}.qhead{color:#76537f}.topbar .roomtag,.roomtag{color:#874268}.topbar .linkbtn,.linkbtn{color:#78557b}.field>.lbl{color:#593c62}.field input[type=text],input[type=password]{color:#503756!important}.field input::placeholder{color:#85718a}.rolepick button{color:#65436c}.rolepick button.on{color:#79345e}.rolepick .small{color:#74517a}.btn.teal,.btn.gold,.room-entry-row .btn.teal{color:#69344f}.btn.ghost,.leadbar .btn.ghost{color:#745078}.leadbar .who{color:#79577e}.col .cnt{color:#8c4b6f}.col.B .cnt{color:#71528f}.col .hd>.tri .zh{color:#793b59}.col.B .hd>.tri .zh{color:#604383}.col .hd>.tri .ko{color:#81526b}.col.B .hd>.tri .ko{color:#77608d}.chip{color:#65446c}.col .hd .letter,.choice .letter{color:#914c6d}.col.B .hd .letter{color:#735094}.choice.A,.choice.A .tri .zh{color:#793b59}.choice.B,.choice.B .tri .zh{color:#604383}.choice.A .ko{color:#81526b}.choice.B .ko{color:#77608d}.match-notice .zh{color:#873c65}.match-notice .ko{color:#82566f}.milestone-picker-label{color:#7c633e}.milestone-people button{color:#7a4d70}.milestone-people button[aria-pressed="true"]{color:#634180}.milestone-title .zh{color:#786031}.milestone-title .ko{color:#826d46}.common-choice .zh{color:#66475f}.common-choice .ko{color:#7b6076}.stars-widget>summary{color:#634080}.stars-widget summary small{color:#76558d}.pair-label .zh{color:#6e4267}.pair-label .ko{color:#7b5c77}.pair-total,.sc-key{color:#765c7c}.room-entry-row .roomtag{color:#86436e}.room-entry-info>.small{color:#79597b}.test-entry-row .roomtag{color:#71518b!important}.test-entry-note{color:#7e6280}#resetBtn{color:#7c5c7e}.stars-close{color:#865471}.toast{background:#84638a}
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -2623,7 +2645,7 @@ const LS = {
 };
 function rid(n = 8) { const a = "abcdefghjkmnpqrstuvwxyz23456789"; let s = ""; const r = crypto.getRandomValues(new Uint8Array(n)); for (const x of r) s += a[x % a.length]; return s; }
 function tri(o, cls = "") { if (!o) return ""; return `<span class="tri ${cls}">${o.zh ? `<span class="zh">${esc(o.zh)}</span>` : ""}${o.ko ? `<span class="ko" lang="ko">${esc(o.ko)}</span>` : ""}</span>`; }
-function ctag(c) { return `<span class="ctag ${c === "TW" || c === "KR" ? c : "XX"}">${c === "TW" ? "台" : c === "KR" ? "韓" : "★"}</span>`; }
+function ctag(c) { return ""; }
 function toast(msg) { const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2400); }
 
 const BROKERS = {
@@ -2815,7 +2837,7 @@ function startRoom() {
     players: Object.fromEntries(Object.entries(s.names || {}).map(([pid, p]) => [pid, { n: p.n, c: p.c }])), removed: Object.fromEntries((s.removed || []).map(p => [p, true])), cur: {}, revealId: s.revealId || 0 });
   function claimTopic() { if (client && client.connected && me) client.publish(`${base}/leader`, JSON.stringify({ pid: me.pid, n: me.n }), { qos: 1, retain: true }); }
   function tryLead() {
-    if (!me || me.c !== "TW" || isLeader) return;
+    if (!me || isLeader) return;
     if (leaderInfo && leaderInfo.pid !== me.pid && !canTake()) {
       me.lead = false; save();
       toast(leaderOnline() ? `這組已經有組長：${leaderInfo.n}｜이미 조장이 있어요` : `組長剛離線，45 秒後才能接任｜조장을 기다려 주세요`);
@@ -2872,9 +2894,12 @@ function startRoom() {
   function doReveal() {
     if (!isLeader || L.phase !== "q") return;
     const act = active(); const res = {}; for (const pid of act) res[pid] = L.cur[pid];
-    const tw = act.filter(p => L.players[p].c === "TW"), kr = act.filter(p => L.players[p].c === "KR");
     let pts = 0;
-    for (const t of tw) for (const k of kr) { const key = [t, k].sort().join(":"); if (res[t] === res[k]) { L.pairScores[key] = (L.pairScores[key] || 0) + 1; pts++; } else if (!(key in L.pairScores)) L.pairScores[key] = 0; }
+    for (let i = 0; i < act.length; i++) for (let j = i + 1; j < act.length; j++) {
+      const t = act[i], k = act[j], key = [t, k].sort().join(":");
+      if (res[t] === res[k]) { L.pairScores[key] = (L.pairScores[key] || 0) + 1; pts++; }
+      else if (!(key in L.pairScores)) L.pairScores[key] = 0;
+    }
     L.history.push({ qi: L.qi, res, pts, perfect: new Set(Object.values(res)).size === 1 });
     L.results = res; L.phase = "reveal"; L.revealId++;
     schedulePub(0);
@@ -2937,9 +2962,9 @@ function startRoom() {
     if (isLeader) return "";
     const nm = leaderInfo ? esc(leaderInfo.n) : "";
     let h = `<div class="waiting"><span class="spinner"></span>${tri(msg)}</div>`;
-    if (me && me.c === "TW" && !leaderOnline()) {
+    if (me && !leaderOnline()) {
       if (canTake()) h += `<div class="leadbar"><div class="small">${leaderInfo ? `組長 ${nm} 目前離線 · 조장이 오프라인이에요` : "這組還沒有組長 · 아직 조장이 없어요"}</div><input id="takePw" type="password" inputmode="numeric" autocomplete="off" placeholder="🔑 組長密碼" style="padding:12px;border-radius:12px;border:1.5px solid var(--line);font-size:16px;text-align:center"><button class="btn gold" data-take>👑 我來當組長 · 제가 조장을 할게요</button><div id="takeMsg" class="small" style="color:var(--a-ink)"></div></div>`;
-      else h += `<div class="leadbar"><div class="small">組長 ${nm} 暫時離線，等待重新連線…<br>約 ${Math.ceil((GRACE - leaderOffFor()) / 1000)} 秒後可由其他臺灣同學接任</div></div>`;
+      else h += `<div class="leadbar"><div class="small">組長 ${nm} 暫時離線，等待重新連線…<br>約 ${Math.ceil((GRACE - leaderOffFor()) / 1000)} 秒後可由其他同學接任</div></div>`;
     }
     return h;
   }
@@ -3037,54 +3062,45 @@ function startRoom() {
   }
 
   function renderJoin() {
-    let c = me ? me.c : null, lead = me ? !!me.lead : params.get("role") === "lead";
+    const c = "XX";
+    let lead = me ? !!me.lead : null;
     app.innerHTML = `<div class="wrap">
       <div class="topbar"><span class="roomtag">${TESTR ? "🧪 測試房間 · 테스트 방" : "房間 · 방 " + LBL}</span><button class="linkbtn" id="leave">← 換房間 · 방 선택</button></div>
       <div class="card">
         <h1>默契大考驗 · 텔레파시 게임 ⭐</h1>
         <div class="muted">${tri({zh:"你們的默契有多好？一起來試試！", ko:"우리 얼마나 잘 통할까요? 같이 알아봐요!"})}</div>
-        <div class="field"><span class="lbl">${tri({zh:"我來自", ko:"저는 …에서 왔어요"}, "inline")}</span>
-          <div class="cpick">
-            <button class="tw ${c === "TW" ? "on" : ""}" data-c="TW">${ctag("TW")} ${tri({zh:"台灣", ko:"대만"})}</button>
-            <button class="kr ${c === "KR" ? "on" : ""}" data-c="KR">${ctag("KR")} ${tri({zh:"韓國", ko:"한국"})}</button>
-          </div></div>
         <label class="field"><span class="lbl">${tri({zh:"你的名字", ko:"이름"}, "inline")}</span>
           <input id="nm" type="text" maxlength="16" autocomplete="off" placeholder="例如：小安／민지" value="${esc(me ? me.n : "")}"></label>
-        <div class="field" id="roleBox" style="${c === "TW" ? "" : "display:none"}"><span class="lbl">角色（每組只要一位組長）</span>
+        <div class="field" id="roleBox"><span class="lbl">${tri({zh:"選擇角色（每組一位組長）", ko:"역할 선택 (모둠마다 조장 한 명)"}, "inline")}</span>
           <div class="rolepick">
-            <button class="${lead ? "" : "on"}" data-l="0">🙋 組員<br><span class="small muted">조원</span></button>
-            <button class="${lead ? "on" : ""}" data-l="1">👑 組長<br><span class="small muted">負責按「開始」「下一題」</span></button>
+            <button class="${lead === false ? "on" : ""}" data-l="0" aria-pressed="${lead === false}">🙋 組員<br><span class="small muted">조원</span></button>
+            <button class="${lead === true ? "on" : ""}" data-l="1" aria-pressed="${lead === true}">👑 組長<br><span class="small muted">조장</span></button>
           </div>
-          <label id="pwBox" style="display:${lead && !(me && me.lead) ? "block" : "none"};margin-top:12px"><span class="lbl">🔑 組長密碼（老師提供）</span>
+          <label id="pwBox" style="display:${lead && !(me && me.lead) ? "block" : "none"};margin-top:12px"><span class="lbl">${tri({zh:"🔑 組長密碼（老師提供）", ko:"🔑 조장 비밀번호 (선생님 안내)"}, "inline")}</span>
             <input id="lpw" type="password" inputmode="numeric" autocomplete="off" placeholder="••••" style="width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--line);font-size:18px"></label></div>
         <button id="go" class="btn" style="width:100%;margin-top:6px" disabled>${tri({zh:"加入房間", ko:"입장하기"}, "inline")}</button>
         <div id="goHint" class="small muted center" style="margin-top:8px"></div>
       </div>${prevIds()}${testBar()}</div>`;
-    app.querySelectorAll(".cpick button").forEach(b => b.onclick = () => {
-      c = b.dataset.c; app.querySelectorAll(".cpick button").forEach(x => x.classList.toggle("on", x === b));
-      $("#roleBox").style.display = c === "TW" ? "" : "none"; if (c !== "TW") lead = false;
-      upd();
-    });
-    const needPw = () => c === "TW" && lead && !(me && me.lead);
+    const needPw = () => lead === true && !(me && me.lead);
     function upd() {
-      const okC = !!c, okN = !!$("#nm").value.trim(), okP = !needPw() || !!$("#lpw").value.trim();
+      const okN = !!$("#nm").value.trim(), okR = lead !== null, okP = !needPw() || !!$("#lpw").value.trim();
       $("#pwBox").style.display = needPw() ? "block" : "none";
-      $("#go").disabled = !(okC && okN && okP);
-      $("#goHint").innerHTML = !okC ? "請先選國家 · 나라를 선택하세요" : !okN ? "請輸入名字 · 이름을 입력하세요" : !okP ? "請輸入組長密碼；不是組長請選「組員」" : "";
+      $("#go").disabled = !(okN && okR && okP);
+      $("#goHint").textContent = !okN ? "請輸入名字 · 이름을 입력하세요" : !okR ? "請選擇組員或組長 · 조원 또는 조장을 선택하세요" : !okP ? "請輸入組長密碼 · 조장 비밀번호를 입력하세요" : "";
     }
     $("#nm").addEventListener("input", upd);
     $("#lpw").addEventListener("input", upd);
     $("#lpw").onkeydown = e => { if (e.key === "Enter" && !$("#go").disabled) $("#go").click(); };
     upd();
-    app.querySelectorAll(".rolepick button").forEach(b => b.onclick = () => { lead = b.dataset.l === "1"; app.querySelectorAll(".rolepick button").forEach(x => x.classList.toggle("on", x === b)); upd(); if (needPw()) $("#lpw").focus(); });
+    app.querySelectorAll(".rolepick button").forEach(b => b.onclick = () => { lead = b.dataset.l === "1"; app.querySelectorAll(".rolepick button").forEach(x => { x.classList.toggle("on", x === b); x.setAttribute("aria-pressed", String(x === b)); }); if (!lead) $("#lpw").value = ""; upd(); if (needPw()) $("#lpw").focus(); });
     $("#go").onclick = () => {
       const n = $("#nm").value.trim().slice(0, 16);
-      if (!c) { toast("請選國家 · 나라를 선택하세요"); return; }
+      if (lead === null) { toast("請選擇角色 · 역할을 선택하세요"); return; }
       if (!n) { $("#nm").focus(); toast("請輸入名字 · 이름을 입력하세요"); return; }
-      const wantLead = c === "TW" && lead;
+      const wantLead = lead === true;
       if (needPw() && cyrb53($("#lpw").value.trim()) !== LEAD_HASH) {
         $("#lpw").value = ""; upd();
-        $("#goHint").innerHTML = '<span style="color:var(--a-ink);font-weight:700">組長密碼錯誤。不是組長請改選「🙋 組員」。</span>';
+        $("#goHint").innerHTML = '<span style="color:var(--a-ink);font-weight:700">組長密碼錯誤，請重試或改選組員。 · 비밀번호가 틀렸어요. 다시 입력하거나 조원을 선택하세요.</span>';
         $("#lpw").focus(); return;
       }
       const first = !client || willPid === null;
@@ -3101,7 +3117,7 @@ function startRoom() {
     };
     $("#nm").onkeydown = e => { if (e.key === "Enter") $("#go").click(); };
     $("#leave").onclick = leaveRoom;
-    app.querySelectorAll(".cpick button, .rolepick button, #nm").forEach(el => el.addEventListener(el.id === "nm" ? "input" : "click", () => { touched = true; }));
+    app.querySelectorAll(".rolepick button, #nm").forEach(el => el.addEventListener(el.id === "nm" ? "input" : "click", () => { touched = true; }));
     app.querySelectorAll("[data-resume]").forEach(b => b.onclick = () => {
       const x = ids().find(i => i.pid === b.dataset.resume); if (!x) return;
       if (ON[x.pid] === true) { toast("這個身分正在另一個分頁使用中 · 다른 탭에서 사용 중이에요"); return; }
@@ -3220,7 +3236,7 @@ function startRoom() {
     me = SS.get(SKEY, null);
     render(); connect();
   })();
-  setInterval(() => { if (!dead && !isLeader && leaderInfo && !leaderOnline() && me && me.c === "TW" && !editing && !(document.activeElement && document.activeElement.id === "takePw")) render(); }, 5000);
+  setInterval(() => { if (!dead && !isLeader && leaderInfo && !leaderOnline() && me && !editing && !(document.activeElement && document.activeElement.id === "takePw")) render(); }, 5000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden && client && client.connected) { publishMe(); if (isLeader) schedulePub(); } });
 }
 
@@ -3234,8 +3250,8 @@ function startLanding() {
   const info = {}; for (let r = 0; r <= ROOMS; r++) info[r] = { lead: null, on: {} };
   let conn = "re", client = null;
   const ep = {};
-  const go = (r, role) => {
-    const p = new URLSearchParams(location.search); p.set("r", r); p.set("role", role);
+  const go = r => {
+    const p = new URLSearchParams(location.search); p.set("r", r); p.delete("role");
     location.href = location.pathname + "?" + p.toString();
   };
   function render() {
@@ -3243,34 +3259,26 @@ function startLanding() {
       <div class="topbar"><span class="roomtag">⭐ 默契大考驗 · 텔레파시 게임</span><span class="conn"><span class="dot ${conn}"></span></span></div>
       <div class="card">
         <h1>${tri({zh:"選擇你的房間", ko:"방을 선택하세요"})}</h1>
-        <p class="muted small" style="margin:6px 0 0">👥 ${tri({zh:"人數與臺韓比例不限", ko:"인원과 한·대만 비율 제한 없음"}, "inline")}<br>👑 ${tri({zh:"組長：每組一位台灣學生", ko:"조장: 방마다 대만 학생 한 명"}, "inline")}<br>🙋 ${tri({zh:"組員：其他同學", ko:"조원: 나머지 모두"}, "inline")}</p>
       </div>
       ${Array.from({ length: ROOMS }, (_, i) => i + 1).map(r => {
         const I = info[r]; const people = Object.keys(I.on).filter(pid => I.on[pid]).length;
         const ldOn = I.lead && I.on[I.lead.pid];
-        return `<div class="card" style="margin-top:12px">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-            <span class="roomtag">房間 · 방 ${r}</span>
+        return `<div class="card room-entry-row" style="margin-top:8px">
+          <div class="room-entry-info">
+            <span class="roomtag">第 ${r} 組 · ${r}모둠</span>
             <span class="small muted">${ldOn ? `👑 ${esc(I.lead.n)} · ` : ""}👥 ${people}</span>
           </div>
-          <div class="rolepick" style="margin-top:12px">
-            <button data-r="${r}" data-role="lead" ${ldOn ? "disabled style=\"opacity:.45\"" : ""}>👑 組長<br><span class="small muted">${ldOn ? "已有組長" : "조장"}</span></button>
-            <button data-r="${r}" data-role="member">🙋 組員<br><span class="small muted">조원</span></button>
-          </div></div>`;
+          <button class="btn teal room-enter" data-r="${r}">按此登入 · 입장하기 →</button></div>`;
       }).join("")}
       ${(() => { const I = info[0]; const people = Object.keys(I.on).filter(pid => I.on[pid]).length; const ldOn = I.lead && I.on[I.lead.pid];
-        return `<div class="card" style="margin-top:22px;border:2px dashed #c9bfae;background:#fffdf8">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        return `<div class="card room-entry-row test-entry-row" style="margin-top:12px;border:2px dashed #c9bfae;background:#fffdf8">
+          <div class="room-entry-info">
             <span class="roomtag" style="background:#6b7280">🧪 測試房間 · 테스트 방</span>
             <span class="small muted">${ldOn ? `👑 ${esc(I.lead.n)} · ` : ""}👥 ${people}</span></div>
-          <div class="small muted" style="margin-top:8px">測試用：同一個瀏覽器可開多個分頁、用不同名字加入；房內任何人都能清除紀錄。</div>
-          <div class="rolepick" style="margin-top:12px">
-            <button data-r="test" data-role="lead" ${ldOn ? "disabled style=\"opacity:.45\"" : ""}>👑 組長<br><span class="small muted">${ldOn ? "已有組長" : "조장"}</span></button>
-            <button data-r="test" data-role="member">🙋 組員<br><span class="small muted">조원</span></button>
-          </div></div>`; })()}
+          <button class="btn teal room-enter" data-r="test">按此登入 · 입장하기 →</button><div class="small muted test-entry-note">測試用：同一個瀏覽器可開多個分頁、用不同名字加入；房內任何人都能清除紀錄。</div></div>`; })()}
       <div class="center" style="margin-top:22px"><button class="linkbtn" id="resetBtn">🔒 老師重置房間</button></div>
     </div>`;
-    app.querySelectorAll("[data-role]").forEach(b => b.onclick = () => go(b.dataset.r, b.dataset.role));
+    app.querySelectorAll(".room-enter").forEach(b => b.onclick = () => go(b.dataset.r));
     $("#resetBtn").onclick = openReset;
   }
   function openReset() {
