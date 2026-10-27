@@ -3266,7 +3266,7 @@ function readEpoch(r) {
     setTimeout(() => fin(null), 15000);
   });
 }
-const RESET_HASH = "eycr3b756y", LEAD_HASH = "29lyr04fql0";
+const RESET_HASH = "29lyr04fql0", LEAD_HASH = "29lyr04fql0";
 function cyrb53(str, seed = 7) { let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed; for (let i = 0, ch; i < str.length; i++) { ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); } h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507); h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507); h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909); return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36); }
 const roomLabel = r => r === 0 ? "測試" : String(r);
 const landingURL = () => location.pathname + (params.get("b") ? "?b=" + encodeURIComponent(params.get("b")) : "") + (params.get("s") ? (params.get("b") ? "&" : "?") + "s=" + encodeURIComponent(params.get("s")) : "");
@@ -3617,7 +3617,7 @@ function startRoom() {
     app.innerHTML = `<div class="wrap">
       <div class="topbar"><span class="roomtag">${TESTR ? "🧪 測試房間 · 테스트 방" : "房間 · 방 " + LBL}</span><button class="linkbtn" id="leave">← 換房間 · 방 선택</button></div>
       <div class="card">
-        <h1 class="join-brand">默契二選一 <span class="brand-version">test 28</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></h1>
+        <h1 class="join-brand">默契二選一 <span class="brand-version">test 29</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></h1>
         <div class="muted">${tri({zh:"你們的默契有多好？一起來試試！", ko:"우리 얼마나 잘 통할까요? 같이 알아봐요!"})}</div>
         <label class="field"><span class="lbl">${tri({zh:"你的名字", ko:"이름"}, "inline")}</span>
           <input id="nm" type="text" maxlength="16" autocomplete="off" placeholder="例如：小安／민지" value="${esc(me ? me.n : "")}"></label>
@@ -3830,7 +3830,7 @@ function startLanding() {
   };
   function render() {
     app.innerHTML = `<div class="wrap">
-      <div class="topbar"><span class="landing-brand"><strong>默契二選一</strong><span class="brand-version">test 28</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
+      <div class="topbar"><span class="landing-brand"><strong>默契二選一</strong><span class="brand-version">test 29</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
       <div class="card">
         <h1 class="room-choice-title">${tri({zh:"選擇你的房間", ko:"방을 선택하세요"}, "inline")}</h1>
       </div>
