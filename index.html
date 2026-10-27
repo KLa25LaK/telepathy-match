@@ -2588,7 +2588,7 @@ const TODAY = new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10).repla
 const S = (params.get("s") || ("tk" + TODAY)).replace(/[^a-z0-9]/gi, "").slice(0, 16);
 const URLB = brokerUrl(params.get("b") || "hivemq");
 const RESET_TOPIC = `kmatch2/${S}/reset`, SEENKEY = `kmatch2_seen_${S}`;
-const RESET_HASH = "eycr3b756y";
+const RESET_HASH = "eycr3b756y", LEAD_HASH = "29lyr04fql0";
 function cyrb53(str, seed = 7) { let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed; for (let i = 0, ch; i < str.length; i++) { ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); } h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507); h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507); h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909); return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36); }
 function wipeRoomData(r) { try { localStorage.removeItem(`kmatch2_p_${S}_${r}`); localStorage.removeItem(`kmatch2_r_${S}_${r}`); localStorage.removeItem(`kmatch2_ids_${S}_${r}`); sessionStorage.removeItem(`kmatch2_me_${S}_${r}`); } catch (e) {} }
 const roomLabel = r => r === 0 ? "TEST" : String(r);
@@ -2675,7 +2675,7 @@ function startRoom() {
       intake(pid); schedulePub();
     }
   }
-  let touched = false;
+  let touched = false, takePwVal = "";
   function onReset(m) {
     let R; try { R = JSON.parse(m); } catch (e) { return; } if (!R || !R.id) return;
     if (SS.get("kmatch2_ignore", null) === R.id) return;
@@ -2792,15 +2792,13 @@ function startRoom() {
     return n;
   }
   function scoreCards() {
-    if (!st || !me) return "";
-    const people = Object.entries(st.names || {}), tw = people.filter(([, p]) => p.c === "TW"), kr = people.filter(([, p]) => p.c === "KR");
-    const rows = tw.flatMap(([tid, t]) => kr.map(([kid, k]) => {
-      const key = [tid, kid].sort().join(":"), score = (st.pairScores || {})[key] || 0;
-      const shared = (st.history || []).filter(h => h.res[tid] && h.res[kid]).length;
-      const own = tid === me.pid || kid === me.pid;
-      return `<article class="pair-record ${own ? "includes-me" : ""}"><div class="pair-names">${ctag("TW")} ${esc(t.n)} × ${ctag("KR")} ${esc(k.n)}${own ? '<span class="small muted"> · 我 / Me / 나</span>' : ""}</div><div class="pair-count">${tri({en:`Same answers: ${score} / ${shared}`, zh:`相同答案：${score}／${shared} 題`, ko:`같은 답: ${shared}개 중 ${score}개`})}</div><div class="star-record" role="img" aria-label="${score} stars">${score ? "⭐".repeat(score) : '<span class="small muted">—</span>'}</div></article>`;
-    })).join("");
-    return `<section class="card group-stars"><h2>${tri({en:"Our shared answers", zh:"全組默契星星", ko:"우리 모둠의 같은 답"})}</h2><p class="small muted">${tri({en:"Each TW–KR pair records one star for each same answer. Stars describe shared choices, with no ranking.", zh:"每一對臺韓朋友，每有一題答案相同就記一顆星。星星只記錄相同選擇，不排名。", ko:"한·대만 짝마다 같은 답 하나에 별 하나를 기록해요. 별은 같은 선택을 나타내며 순위는 없어요."})}</p>${rows || tri({en:"Waiting for teammates", zh:"等待同組朋友加入", ko:"모둠 친구들을 기다려요"})}</section>`;
+    if (!st || !me || !(st.names || {})[me.pid]) return "";
+    const others = Object.entries(st.names || {}).filter(([pid]) => pid !== me.pid);
+    const rows = others.map(([pid, o]) => {
+      const score = (st.history || []).filter(h => h.res[me.pid] && h.res[me.pid] === h.res[pid]).length;
+      return `<article class="pair-record"><div class="pair-names">${ctag(me.c)} ${esc(me.n)} × ${ctag(o.c)} ${esc(o.n)}</div><div class="star-record" role="img" aria-label="${score} stars">${score ? "⭐".repeat(score) : '<span class="small muted">—</span>'}</div></article>`;
+    }).join("");
+    return `<section class="card group-stars"><h2>${tri({en:"My telepathy stars", zh:"我的默契星星", ko:"나의 텔레파시 별"})}</h2><p class="small muted">${tri({en:"One star each time you and a teammate choose the same answer.", zh:"每和一位同學選一樣，就得一顆星。", ko:"친구와 같은 답을 고를 때마다 별 하나!"})}</p>${rows || tri({en:"Waiting for teammates", zh:"等待同組朋友加入", ko:"모둠 친구들을 기다려요"})}</section>`;
   }
   function leadBar(html) { return isLeader ? `<div class="leadbar"><div class="who">👑 LEADER · 組長 · 조장</div>${html}</div>` : ""; }
   function waitLeader(msg) {
@@ -2808,7 +2806,7 @@ function startRoom() {
     const nm = leaderInfo ? esc(leaderInfo.n) : "";
     let h = `<div class="waiting"><span class="spinner"></span>${tri(msg)}</div>`;
     if (me && me.c === "TW" && !leaderOnline()) {
-      if (canTake()) h += `<div class="leadbar"><div class="small">${leaderInfo ? `組長 ${nm} 目前離線 · Leader is offline` : "這組還沒有組長 · No leader yet"}</div><button class="btn gold" data-take>👑 我來當組長 · I'll be the leader</button></div>`;
+      if (canTake()) h += `<div class="leadbar"><div class="small">${leaderInfo ? `組長 ${nm} 目前離線 · Leader is offline` : "這組還沒有組長 · No leader yet"}</div><input id="takePw" type="password" inputmode="numeric" autocomplete="off" placeholder="🔑 組長密碼" style="padding:12px;border-radius:12px;border:1.5px solid var(--line);font-size:16px;text-align:center"><button class="btn gold" data-take>👑 我來當組長 · I'll be the leader</button><div id="takeMsg" class="small" style="color:var(--a-ink)"></div></div>`;
       else h += `<div class="leadbar"><div class="small">組長 ${nm} 暫時離線，等待重新連線…<br>約 ${Math.ceil((GRACE - leaderOffFor()) / 1000)} 秒後可由其他臺灣同學接任</div></div>`;
     }
     return h;
@@ -2822,7 +2820,12 @@ function startRoom() {
   function bind() {
     app.querySelectorAll("[data-act]").forEach(b => b.onclick = () => act[b.dataset.act]());
     app.querySelectorAll("[data-remove]").forEach(b => b.onclick = () => act.remove(b.dataset.remove));
-    const tk = $("[data-take]"); if (tk) tk.onclick = () => tryLead();
+    const tpw = $("#takePw"); if (tpw) { const had = takePwVal; tpw.value = had; tpw.oninput = () => { takePwVal = tpw.value; }; tpw.onkeydown = e => { if (e.key === "Enter") $("[data-take]").click(); }; }
+    const tk = $("[data-take]"); if (tk) tk.onclick = () => {
+      const f = $("#takePw");
+      if (cyrb53((f && f.value || "").trim()) !== LEAD_HASH) { if (f) { f.value = ""; f.focus(); } const mm = $("#takeMsg"); if (mm) mm.textContent = "組長密碼錯誤"; return; }
+      tryLead();
+    };
     const e = $("#edit"); if (e) e.onclick = () => { editing = true; render(); };
     const lv = $("#leave"); if (lv) lv.onclick = leaveRoom;
     const cl = $("#clearTest"); if (cl) cl.onclick = clearTestRoom;
@@ -2902,19 +2905,39 @@ function startRoom() {
           <div class="rolepick">
             <button class="${lead ? "" : "on"}" data-l="0">🙋 組員<br><span class="small muted">Member</span></button>
             <button class="${lead ? "on" : ""}" data-l="1">👑 組長<br><span class="small muted">負責按「開始」「下一題」</span></button>
-          </div></div>
-        <button id="go" class="btn" style="width:100%;margin-top:6px">${tri({en:"Join Room " + LBL, zh:"加入房間", ko:"입장하기"}, "inline")}</button>
+          </div>
+          <label id="pwBox" style="display:${lead && !(me && me.lead) ? "block" : "none"};margin-top:12px"><span class="lbl">🔑 組長密碼（老師提供）</span>
+            <input id="lpw" type="password" inputmode="numeric" autocomplete="off" placeholder="••••" style="width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--line);font-size:18px"></label></div>
+        <button id="go" class="btn" style="width:100%;margin-top:6px" disabled>${tri({en:"Join Room " + LBL, zh:"加入房間", ko:"입장하기"}, "inline")}</button>
+        <div id="goHint" class="small muted center" style="margin-top:8px"></div>
       </div>${prevIds()}${testBar()}</div>`;
     app.querySelectorAll(".cpick button").forEach(b => b.onclick = () => {
       c = b.dataset.c; app.querySelectorAll(".cpick button").forEach(x => x.classList.toggle("on", x === b));
       $("#roleBox").style.display = c === "TW" ? "" : "none"; if (c !== "TW") lead = false;
+      upd();
     });
-    app.querySelectorAll(".rolepick button").forEach(b => b.onclick = () => { lead = b.dataset.l === "1"; app.querySelectorAll(".rolepick button").forEach(x => x.classList.toggle("on", x === b)); });
+    const needPw = () => c === "TW" && lead && !(me && me.lead);
+    function upd() {
+      const okC = !!c, okN = !!$("#nm").value.trim(), okP = !needPw() || !!$("#lpw").value.trim();
+      $("#pwBox").style.display = needPw() ? "block" : "none";
+      $("#go").disabled = !(okC && okN && okP);
+      $("#goHint").innerHTML = !okC ? "請先選國家 · Choose your country · 나라를 선택하세요" : !okN ? "請輸入名字 · Type your name · 이름을 입력하세요" : !okP ? "請輸入組長密碼；不是組長請選「組員」" : "";
+    }
+    $("#nm").addEventListener("input", upd);
+    $("#lpw").addEventListener("input", upd);
+    $("#lpw").onkeydown = e => { if (e.key === "Enter" && !$("#go").disabled) $("#go").click(); };
+    upd();
+    app.querySelectorAll(".rolepick button").forEach(b => b.onclick = () => { lead = b.dataset.l === "1"; app.querySelectorAll(".rolepick button").forEach(x => x.classList.toggle("on", x === b)); upd(); if (needPw()) $("#lpw").focus(); });
     $("#go").onclick = () => {
       const n = $("#nm").value.trim().slice(0, 16);
       if (!c) { toast("Choose Taiwan or Korea · 請選國家 · 나라를 선택하세요"); return; }
       if (!n) { $("#nm").focus(); toast("Please type your name · 請輸入名字 · 이름을 입력하세요"); return; }
       const wantLead = c === "TW" && lead;
+      if (needPw() && cyrb53($("#lpw").value.trim()) !== LEAD_HASH) {
+        $("#lpw").value = ""; upd();
+        $("#goHint").innerHTML = '<span style="color:var(--a-ink);font-weight:700">組長密碼錯誤。不是組長請改選「🙋 組員」。</span>';
+        $("#lpw").focus(); return;
+      }
       const first = !client || willPid === null;
       me = me ? { ...me, n, c, lead: wantLead } : { pid: rid(10), n, c, lead: wantLead, last: null, at: Date.now() };
       save(); editing = false;
@@ -3006,7 +3029,7 @@ function startRoom() {
 
   render();
   connect();
-  setInterval(() => { if (!dead && !isLeader && leaderInfo && !leaderOnline() && me && me.c === "TW" && !editing) render(); }, 5000);
+  setInterval(() => { if (!dead && !isLeader && leaderInfo && !leaderOnline() && me && me.c === "TW" && !editing && !(document.activeElement && document.activeElement.id === "takePw")) render(); }, 5000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden && client && client.connected) { publishMe(); if (isLeader) schedulePub(); } });
 }
 
