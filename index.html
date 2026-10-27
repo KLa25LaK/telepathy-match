@@ -2499,6 +2499,11 @@ var qrcode = function() {
 /* ================= helpers ================= */
 const $ = (s, el = document) => el.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const SS = {
+  get(k, d) { try { const v = sessionStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
+};
 const LS = {
   get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
@@ -2585,7 +2590,8 @@ const URLB = brokerUrl(params.get("b") || "hivemq");
 const RESET_TOPIC = `kmatch2/${S}/reset`, SEENKEY = `kmatch2_seen_${S}`;
 const RESET_HASH = "eycr3b756y";
 function cyrb53(str, seed = 7) { let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed; for (let i = 0, ch; i < str.length; i++) { ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); } h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507); h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507); h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909); return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36); }
-function wipeRoomData(r) { try { localStorage.removeItem(`kmatch2_p_${S}_${r}`); localStorage.removeItem(`kmatch2_r_${S}_${r}`); } catch (e) {} }
+function wipeRoomData(r) { try { localStorage.removeItem(`kmatch2_p_${S}_${r}`); localStorage.removeItem(`kmatch2_r_${S}_${r}`); localStorage.removeItem(`kmatch2_ids_${S}_${r}`); sessionStorage.removeItem(`kmatch2_me_${S}_${r}`); } catch (e) {} }
+const roomLabel = r => r === 0 ? "TEST" : String(r);
 const landingURL = () => location.pathname + (params.get("b") ? "?b=" + encodeURIComponent(params.get("b")) : "") + (params.get("s") ? (params.get("b") ? "&" : "?") + "s=" + encodeURIComponent(params.get("s")) : "");
 if (params.get("r")) startRoom(); else startLanding();
 
@@ -2595,17 +2601,25 @@ if (params.get("r")) startRoom(); else startLanding();
    ====================================================================== */
 const GRACE = 45000; // leader must be offline this long before someone can take over
 function startRoom() {
-  const RN = Math.max(1, Math.min(ROOMS, parseInt(params.get("r"), 10) || 1));
+  const rp = params.get("r");
+  const TESTR = rp === "test" || rp === "0";
+  const RN = TESTR ? 0 : Math.max(1, Math.min(ROOMS, parseInt(rp, 10) || 1));
+  const LBL = roomLabel(RN);
   const QL = DEFAULT_SEL.slice();
   const base = TOP(S, RN);
-  const KEY = `kmatch2_p_${S}_${RN}`, RKEY = `kmatch2_r_${S}_${RN}`;
-  let me = LS.get(KEY, null); // {pid,n,c,lead,last:{g,qi,a},at}
-  let st = null, leaderInfo = null, conn = "re", client = null, editing = false, dead = false;
+  const SKEY = `kmatch2_me_${S}_${RN}`, IDS = `kmatch2_ids_${S}_${RN}`, RKEY = `kmatch2_r_${S}_${RN}`;
+  let me = SS.get(SKEY, null); // this tab's identity {pid,n,c,lead,last:{g,qi,a},at}
+  let st = null, leaderInfo = null, conn = "re", client = null, editing = false, dead = false, willPid = null, clearing = null;
   const ON = {}, P = {}, offSince = {};
   let isLeader = false, L = null, pubTimer = null, revealTimer = null;
   const app = $("#app");
 
-  const save = () => LS.set(KEY, me);
+  const ids = () => LS.get(IDS, []);
+  function save() {
+    SS.set(SKEY, me);
+    const list = ids().filter(x => x.pid !== me.pid); list.unshift(me); LS.set(IDS, list.slice(0, 12));
+  }
+  function forgetMe() { if (me) LS.set(IDS, ids().filter(x => x.pid !== me.pid)); SS.del(SKEY); }
   const myAnswer = () => (!me || !me.last || !st) ? null : (me.last.g === st.g && me.last.qi === st.qi ? me.last.a : null);
   const leaderOnline = () => !!(leaderInfo && ON[leaderInfo.pid] === true);
   const leaderOffFor = () => leaderInfo && !leaderOnline() ? Date.now() - (offSince[leaderInfo.pid] || Date.now()) : 0;
@@ -2622,6 +2636,7 @@ function startRoom() {
   }
   function connect() {
     if (client) { try { client.end(true); } catch (e) {} client = null; }
+    willPid = me ? me.pid : null;
     client = connectMQTT(URLB, {
       will: me ? { topic: `${base}/on/${me.pid}`, payload: "0", qos: 1, retain: true } : undefined,
       status: s => { conn = s; const d = $("#conndot"); if (d) d.className = "dot " + s; },
@@ -2635,6 +2650,7 @@ function startRoom() {
     });
   }
   function onMessage(t, m) {
+    if (clearing && m && (t.startsWith(`${base}/p/`) || t.startsWith(`${base}/on/`))) clearing.add(t);
     if (t === RESET_TOPIC) return onReset(m);
     if (dead) return;
     const rest = t.slice(base.length + 1);
@@ -2642,7 +2658,7 @@ function startRoom() {
       if (!m) return; let s; try { s = JSON.parse(m); } catch (e) { return; }
       if (isLeader && L && s.seq > L.seq) L = fromState(s);
       st = s;
-      if (me && removedMe() && !isLeader) { const keep = { n: me.n, c: me.c }; me = { pid: rid(10), n: keep.n, c: keep.c, lead: false, last: null, at: Date.now() }; save(); toast("組長已把你移出，請重新加入 · Please rejoin"); editing = true; connect(); }
+      if (me && removedMe() && !isLeader) { const keep = { n: me.n, c: me.c }; forgetMe(); me = { pid: rid(10), n: keep.n, c: keep.c, lead: false, last: null, at: Date.now() }; save(); toast("組長已把你移出，請重新加入 · Please rejoin"); editing = true; connect(); }
       render();
     } else if (rest === "leader") {
       try { leaderInfo = m ? JSON.parse(m) : null; } catch (e) { leaderInfo = null; }
@@ -2652,16 +2668,19 @@ function startRoom() {
     } else if (rest.startsWith("on/")) {
       const pid = rest.slice(3); setOn(pid, m === "1");
       if (isLeader) schedulePub();
-      if ((leaderInfo && pid === leaderInfo.pid) || isLeader || (st && st.phase === "lobby")) render();
+      if ((leaderInfo && pid === leaderInfo.pid) || isLeader || (st && st.phase === "lobby") || (!me && !touched)) render();
     } else if (rest.startsWith("p/") && isLeader) {
       const pid = rest.slice(2);
       if (!m) delete P[pid]; else { try { const o = JSON.parse(m); o.n = String(o.n || "").slice(0, 16); P[pid] = o; } catch (e) { return; } }
       intake(pid); schedulePub();
     }
   }
+  let touched = false;
   function onReset(m) {
     let R; try { R = JSON.parse(m); } catch (e) { return; } if (!R || !R.id) return;
-    const seen = LS.get(SEENKEY, null); if (seen === R.id) return;
+    if (SS.get("kmatch2_ignore", null) === R.id) return;
+    const seen = LS.get(SEENKEY, null);
+    if (seen === R.id && !(me && (me.at || 0) < R.t && (R.rooms || []).includes(RN))) return;
     if (!(R.rooms || []).includes(RN)) { LS.set(SEENKEY, R.id); return; }
     const affected = seen ? true : !!(me && (me.at || 0) < R.t);
     LS.set(SEENKEY, R.id);
@@ -2669,7 +2688,7 @@ function startRoom() {
     dead = true; isLeader = false; clearTimeout(pubTimer);
     wipeRoomData(RN);
     try { client.end(true); } catch (e) {}
-    alert("老師已重置這個房間，請重新選擇房間。\nThe room was reset. Please choose your room again.\n방이 초기화되었어요. 다시 방을 선택해 주세요.");
+    alert(TESTR ? "TEST ROOM 的紀錄已被清除。\nThe test room was cleared." : "老師已重置這個房間，請重新選擇房間。\nThe room was reset. Please choose your room again.\n방이 초기화되었어요. 다시 방을 선택해 주세요.");
     location.href = landingURL();
   }
 
@@ -2759,7 +2778,7 @@ function startRoom() {
 
   /* ---------- views ---------- */
   function header() {
-    return `<div class="topbar"><span class="roomtag">ROOM ${RN}</span>
+    return `<div class="topbar"><span class="roomtag">${TESTR ? "🧪 TEST ROOM" : "ROOM " + LBL}</span>
       <button class="linkbtn" id="leave">← 換房間 · Rooms</button>
       <span class="conn"><span id="conndot" class="dot ${conn}"></span></span></div>`;
   }
@@ -2806,7 +2825,24 @@ function startRoom() {
     const tk = $("[data-take]"); if (tk) tk.onclick = () => tryLead();
     const e = $("#edit"); if (e) e.onclick = () => { editing = true; render(); };
     const lv = $("#leave"); if (lv) lv.onclick = leaveRoom;
+    const cl = $("#clearTest"); if (cl) cl.onclick = clearTestRoom;
   }
+  function clearTestRoom() {
+    if (!TESTR) return;
+    if (!confirm("清除 TEST ROOM 的所有紀錄？房內所有人會回到選房間畫面。\nClear the test room for everyone?")) return;
+    if (!client || !client.connected) { toast("尚未連線，請稍後再試"); return; }
+    const id = rid(8); SS.set("kmatch2_ignore", id);
+    clearing = new Set([`${base}/state`, `${base}/leader`]);
+    for (const pid in ON) clearing.add(`${base}/on/${pid}`);
+    dead = true; isLeader = false; clearTimeout(pubTimer);
+    client.publish(RESET_TOPIC, JSON.stringify({ id, t: Date.now(), rooms: [0] }), { qos: 1, retain: true });
+    client.subscribe(`${base}/p/+`, { qos: 1 });
+    app.innerHTML = `<div class="wrap"><div class="card center"><div class="waiting"><span class="spinner"></span>正在清除 TEST ROOM… Clearing…</div></div></div>`;
+    const wipe = () => { for (const t of clearing) client.publish(t, "", { qos: 1, retain: true }); };
+    setTimeout(wipe, 1500);
+    setTimeout(() => { wipe(); wipeRoomData(RN); try { client.end(false); } catch (e) {} location.href = landingURL(); }, 3000);
+  }
+  function testBar() { return TESTR ? `<div class="center" style="margin-top:18px"><button class="btn ghost sm" id="clearTest">🧹 清除測試紀錄 · Clear test room</button><div class="small muted" style="margin-top:6px">測試用房間：同一個瀏覽器可以開多個分頁，用不同名字加入。</div></div>` : ""; }
   function leaveRoom() {
     if (me && st && st.phase !== "lobby" && st.phase !== "end" && !confirm("離開本組？重新加入會建立新身分。\nLeave this room? · 방에서 나갈까요?")) return;
     try {
@@ -2816,7 +2852,7 @@ function startRoom() {
         if (isLeader) client.publish(`${base}/leader`, "", { qos: 1, retain: true });
       }
     } catch (e) {}
-    if (me) { wipeRoomData(RN); }
+    if (me) { forgetMe(); if (isLeader) { try { localStorage.removeItem(RKEY); } catch (e) {} } }
     dead = true;
     setTimeout(() => { location.href = landingURL(); }, 400);
   }
@@ -2828,6 +2864,7 @@ function startRoom() {
     ({ lobby: renderLobby, q: renderQ, reveal: renderReveal, end: renderEnd }[st.phase] || renderNoState)();
     if (["q", "end"].includes(st.phase)) app.querySelector(".wrap").insertAdjacentHTML("beforeend", scoreCards());
     if (st.phase !== "end") app.querySelector(".wrap").insertAdjacentHTML("beforeend", offlineCard());
+    app.querySelector(".wrap").insertAdjacentHTML("beforeend", testBar());
     bind();
   }
   function renderLate() {
@@ -2843,14 +2880,14 @@ function startRoom() {
       ${isLeader ? `<div class="waiting"><span class="spinner"></span>${tri({en:"Setting up your room…", zh:"正在準備房間…", ko:"방을 준비하는 중…"})}</div>`
         : waitLeader({en:"Waiting for your group leader to join…", zh:"等待組長加入…", ko:"조장이 들어오기를 기다리는 중…"})}
       <div class="center"><button class="linkbtn" id="edit">Change name · 修改資料 · 정보 수정</button></div>
-    </div></div>`;
+    </div>${testBar()}</div>`;
     bind();
   }
 
   function renderJoin() {
     let c = me ? me.c : null, lead = me ? !!me.lead : params.get("role") === "lead";
     app.innerHTML = `<div class="wrap">
-      <div class="topbar"><span class="roomtag">ROOM ${RN}</span><button class="linkbtn" id="leave">← 換房間 · Rooms</button></div>
+      <div class="topbar"><span class="roomtag">${TESTR ? "🧪 TEST ROOM" : "ROOM " + LBL}</span><button class="linkbtn" id="leave">← 換房間 · Rooms</button></div>
       <div class="card">
         <h1>Telepathy Match ⭐</h1>
         <div class="muted">${tri({en:"Do you think alike? Let's find out!", zh:"你們的默契有多好？一起來試試！", ko:"우리 얼마나 잘 통할까요? 같이 알아봐요!"})}</div>
@@ -2866,8 +2903,8 @@ function startRoom() {
             <button class="${lead ? "" : "on"}" data-l="0">🙋 組員<br><span class="small muted">Member</span></button>
             <button class="${lead ? "on" : ""}" data-l="1">👑 組長<br><span class="small muted">負責按「開始」「下一題」</span></button>
           </div></div>
-        <button id="go" class="btn" style="width:100%;margin-top:6px">${tri({en:"Join Room " + RN, zh:"加入房間", ko:"입장하기"}, "inline")}</button>
-      </div></div>`;
+        <button id="go" class="btn" style="width:100%;margin-top:6px">${tri({en:"Join Room " + LBL, zh:"加入房間", ko:"입장하기"}, "inline")}</button>
+      </div>${prevIds()}${testBar()}</div>`;
     app.querySelectorAll(".cpick button").forEach(b => b.onclick = () => {
       c = b.dataset.c; app.querySelectorAll(".cpick button").forEach(x => x.classList.toggle("on", x === b));
       $("#roleBox").style.display = c === "TW" ? "" : "none"; if (c !== "TW") lead = false;
@@ -2878,10 +2915,10 @@ function startRoom() {
       if (!c) { toast("Choose Taiwan or Korea · 請選國家 · 나라를 선택하세요"); return; }
       if (!n) { $("#nm").focus(); toast("Please type your name · 請輸入名字 · 이름을 입력하세요"); return; }
       const wantLead = c === "TW" && lead;
-      const first = !client;
+      const first = !client || willPid === null;
       me = me ? { ...me, n, c, lead: wantLead } : { pid: rid(10), n, c, lead: wantLead, last: null, at: Date.now() };
       save(); editing = false;
-      if (first) connect();
+      if (first || (me && willPid !== me.pid)) connect();
       else {
         publishMe();
         if (isLeader && !wantLead) { isLeader = false; L = null; try { client.unsubscribe(`${base}/p/+`); } catch (e) {} if (client.connected) client.publish(`${base}/leader`, "", { qos: 1, retain: true }); }
@@ -2892,8 +2929,23 @@ function startRoom() {
     };
     $("#nm").onkeydown = e => { if (e.key === "Enter") $("#go").click(); };
     $("#leave").onclick = leaveRoom;
+    app.querySelectorAll(".cpick button, .rolepick button, #nm").forEach(el => el.addEventListener(el.id === "nm" ? "input" : "click", () => { touched = true; }));
+    app.querySelectorAll("[data-resume]").forEach(b => b.onclick = () => {
+      const x = ids().find(i => i.pid === b.dataset.resume); if (!x) return;
+      if (ON[x.pid] === true) { toast("這個身分正在另一個分頁使用中 · In use in another tab"); return; }
+      me = x; save(); editing = false; connect(); render();
+    });
+    const cl = $("#clearTest"); if (cl) cl.onclick = clearTestRoom;
   }
 
+  function prevIds() {
+    if (me) return "";
+    const list = ids().filter(x => ON[x.pid] !== true);
+    if (!list.length) return "";
+    return `<div class="card" style="margin-top:12px"><div class="qhead" style="margin-bottom:8px">${tri({en:"Continue as", zh:"回到之前的身分", ko:"이전 이름으로 계속하기"}, "inline")}</div>
+      <div class="chips">${list.map(x => `<button class="chip" data-resume="${esc(x.pid)}" style="cursor:pointer">${ctag(x.c)} ${esc(x.n)}${x.lead ? " 👑" : ""}</button>`).join("")}</div>
+      <div class="small muted" style="margin-top:8px">斷線或關掉分頁後，點自己的名字就能回到原本的畫面。</div></div>`;
+  }
   function renderLobby() {
     const r = roster();
     const on = r.filter(([, p]) => p.on !== false).length;
@@ -2953,7 +3005,7 @@ function startRoom() {
   }
 
   render();
-  if (me) connect();
+  connect();
   setInterval(() => { if (!dead && !isLeader && leaderInfo && !leaderOnline() && me && me.c === "TW" && !editing) render(); }, 5000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden && client && client.connected) { publishMe(); if (isLeader) schedulePub(); } });
 }
@@ -2965,7 +3017,7 @@ function startRoom() {
    ====================================================================== */
 function startLanding() {
   const app = $("#app");
-  const info = {}; for (let r = 1; r <= ROOMS; r++) info[r] = { lead: null, on: {} };
+  const info = {}; for (let r = 0; r <= ROOMS; r++) info[r] = { lead: null, on: {} };
   let conn = "re", client = null;
   const clearing = new Set(); let clearMode = null;
   const go = (r, role) => {
@@ -2992,9 +3044,19 @@ function startLanding() {
             <button data-r="${r}" data-role="member">🙋 組員<br><span class="small muted">Member · 조원</span></button>
           </div></div>`;
       }).join("")}
+      ${(() => { const I = info[0]; const people = Object.keys(I.on).filter(pid => I.on[pid]).length; const ldOn = I.lead && I.on[I.lead.pid];
+        return `<div class="card" style="margin-top:22px;border:2px dashed #c9bfae;background:#fffdf8">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <span class="roomtag" style="background:#6b7280">🧪 TEST ROOM</span>
+            <span class="small muted">${ldOn ? `👑 ${esc(I.lead.n)} · ` : ""}👥 ${people}</span></div>
+          <div class="small muted" style="margin-top:8px">測試用：同一個瀏覽器可開多個分頁、用不同名字加入；房內任何人都能清除紀錄。</div>
+          <div class="rolepick" style="margin-top:12px">
+            <button data-r="test" data-role="lead" ${ldOn ? "disabled style=\"opacity:.45\"" : ""}>👑 組長<br><span class="small muted">${ldOn ? "已有組長" : "Leader · 조장"}</span></button>
+            <button data-r="test" data-role="member">🙋 組員<br><span class="small muted">Member · 조원</span></button>
+          </div></div>`; })()}
       <div class="center" style="margin-top:22px"><button class="linkbtn" id="resetBtn">🔒 老師重置房間</button></div>
     </div>`;
-    app.querySelectorAll("[data-role]").forEach(b => b.onclick = () => go(+b.dataset.r, b.dataset.role));
+    app.querySelectorAll("[data-role]").forEach(b => b.onclick = () => go(b.dataset.r, b.dataset.role));
     $("#resetBtn").onclick = openReset;
   }
   function openReset() {
@@ -3025,7 +3087,7 @@ function startLanding() {
   }
   function doReset(rooms) {
     const id = rid(8);
-    LS.set(SEENKEY, id);
+    SS.set("kmatch2_ignore", id);
     rooms.forEach(wipeRoomData);
     client.publish(RESET_TOPIC, JSON.stringify({ id, t: Date.now(), rooms }), { qos: 1, retain: true });
     clearMode = new Set(rooms);
@@ -3043,7 +3105,7 @@ function startLanding() {
   let t = null; const later = () => { clearTimeout(t); t = setTimeout(render, 200); };
   client = connectMQTT(URLB, {
     status: s => { conn = s; later(); },
-    onConnect: c => { c.subscribe(RESET_TOPIC, { qos: 1 }); for (let r = 1; r <= ROOMS; r++) c.subscribe([`${TOP(S, r)}/leader`, `${TOP(S, r)}/on/+`], { qos: 1 }); },
+    onConnect: c => { c.subscribe(RESET_TOPIC, { qos: 1 }); for (let r = 0; r <= ROOMS; r++) c.subscribe([`${TOP(S, r)}/leader`, `${TOP(S, r)}/on/+`], { qos: 1 }); },
     onMessage: (tp, m) => {
       if (tp === RESET_TOPIC) { try { const R = JSON.parse(m); if (R && R.id) { if (LS.get(SEENKEY, null) !== R.id) (R.rooms || []).forEach(wipeRoomData); LS.set(SEENKEY, R.id); } } catch (e) {} return; }
       const parts = tp.split("/"); const r = parseInt(parts[2].slice(1), 10); if (!info[r]) return;
