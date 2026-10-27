@@ -2690,7 +2690,7 @@ const BROKERS = {
   mosq:   { name: "Mosquitto（備用 2）", url: "wss://test.mosquitto.org:8081" }
 };
 function brokerUrl(id) { if (/^wss?:\/\//.test(id || "")) return id; return (BROKERS[id] || BROKERS.hivemq).url; }
-const TOP = (S, r) => `kmatch26/${S}/r${r}`;
+const TOP = (S, r) => `kmatch28/${S}/r${r}`;
 
 /* ================= question bank (A / B only) ================= */
 const BANK = [
@@ -2888,10 +2888,349 @@ const BANK = [
       "zh": "右撇子",
       "ko": "오른손잡이"
     }
+  },
+  {
+    "id": "reading",
+    "zh": "漫畫／小說",
+    "ko": "만화 / 소설",
+    "a": {
+      "e": "📚",
+      "zh": "漫畫",
+      "ko": "만화"
+    },
+    "b": {
+      "e": "📖",
+      "zh": "小說",
+      "ko": "소설"
+    }
+  },
+  {
+    "id": "palette",
+    "zh": "亮色系／暗色系",
+    "ko": "밝은 색 계열 / 어두운 색 계열",
+    "a": {
+      "e": "🌈",
+      "zh": "亮色系",
+      "ko": "밝은 색 계열"
+    },
+    "b": {
+      "e": "🌑",
+      "zh": "暗色系",
+      "ko": "어두운 색 계열"
+    }
+  },
+  {
+    "id": "fastfood",
+    "zh": "麥當勞／肯德基",
+    "ko": "맥도날드 / 케이에프씨",
+    "a": {
+      "e": "🍟",
+      "zh": "麥當勞",
+      "ko": "맥도날드"
+    },
+    "b": {
+      "e": "🍗",
+      "zh": "肯德基",
+      "ko": "케이에프씨"
+    }
+  },
+  {
+    "id": "phonebrand",
+    "zh": "三星／蘋果",
+    "ko": "삼성 / 애플",
+    "a": {
+      "e": "📱",
+      "zh": "三星",
+      "ko": "삼성"
+    },
+    "b": {
+      "e": "🍎",
+      "zh": "蘋果",
+      "ko": "애플"
+    }
+  },
+  {
+    "id": "energy",
+    "zh": "一直都很累／睡一下就飽",
+    "ko": "늘 피곤해요 / 잠깐 자도 개운해요",
+    "a": {
+      "e": "🥱",
+      "zh": "一直都很累",
+      "ko": "늘 피곤해요"
+    },
+    "b": {
+      "e": "😴",
+      "zh": "睡一下就飽",
+      "ko": "잠깐 자도 개운해요"
+    }
+  },
+  {
+    "id": "device",
+    "zh": "手機／電腦",
+    "ko": "휴대폰 / 컴퓨터",
+    "a": {
+      "e": "📱",
+      "zh": "手機",
+      "ko": "휴대폰"
+    },
+    "b": {
+      "e": "💻",
+      "zh": "電腦",
+      "ko": "컴퓨터"
+    }
+  },
+  {
+    "id": "sociallife",
+    "zh": "團體生活／個人生活",
+    "ko": "단체 생활 / 혼자 생활",
+    "a": {
+      "e": "👥",
+      "zh": "團體生活",
+      "ko": "단체 생활"
+    },
+    "b": {
+      "e": "🧍",
+      "zh": "個人生活",
+      "ko": "혼자 생활"
+    }
+  },
+  {
+    "id": "flavor",
+    "zh": "甜食／鹹食",
+    "ko": "단 음식 / 짭짤한 음식",
+    "a": {
+      "e": "🍰",
+      "zh": "甜食",
+      "ko": "단 음식"
+    },
+    "b": {
+      "e": "🥨",
+      "zh": "鹹食",
+      "ko": "짭짤한 음식"
+    }
+  },
+  {
+    "id": "breakfast",
+    "zh": "早餐吃飯／早餐吃麵包",
+    "ko": "아침에 밥 / 아침에 빵",
+    "a": {
+      "e": "🍚",
+      "zh": "早餐吃飯",
+      "ko": "아침에 밥"
+    },
+    "b": {
+      "e": "🍞",
+      "zh": "早餐吃麵包",
+      "ko": "아침에 빵"
+    }
+  },
+  {
+    "id": "schedule",
+    "zh": "早起／熬夜",
+    "ko": "일찍 일어나기 / 늦게까지 깨어 있기",
+    "a": {
+      "e": "🌅",
+      "zh": "早起",
+      "ko": "일찍 일어나기"
+    },
+    "b": {
+      "e": "🌙",
+      "zh": "熬夜",
+      "ko": "늦게까지 깨어 있기"
+    }
+  },
+  {
+    "id": "contact",
+    "zh": "訊息聊天／打電話",
+    "ko": "메시지로 대화 / 전화하기",
+    "a": {
+      "e": "💬",
+      "zh": "訊息聊天",
+      "ko": "메시지로 대화"
+    },
+    "b": {
+      "e": "☎️",
+      "zh": "打電話",
+      "ko": "전화하기"
+    }
+  },
+  {
+    "id": "camera",
+    "zh": "拍照／被拍",
+    "ko": "사진 찍기 / 사진 찍히기",
+    "a": {
+      "e": "📸",
+      "zh": "拍照",
+      "ko": "사진 찍기"
+    },
+    "b": {
+      "e": "🤳",
+      "zh": "被拍",
+      "ko": "사진 찍히기"
+    }
+  },
+  {
+    "id": "perform",
+    "zh": "唱歌／跳舞",
+    "ko": "노래하기 / 춤추기",
+    "a": {
+      "e": "🎤",
+      "zh": "唱歌",
+      "ko": "노래하기"
+    },
+    "b": {
+      "e": "💃",
+      "zh": "跳舞",
+      "ko": "춤추기"
+    }
+  },
+  {
+    "id": "screen",
+    "zh": "電影／影集",
+    "ko": "영화 / 드라마 시리즈",
+    "a": {
+      "e": "🎬",
+      "zh": "電影",
+      "ko": "영화"
+    },
+    "b": {
+      "e": "📺",
+      "zh": "影集",
+      "ko": "드라마 시리즈"
+    }
+  },
+  {
+    "id": "animation",
+    "zh": "動畫／真人戲劇",
+    "ko": "애니메이션 / 실사 드라마",
+    "a": {
+      "e": "🎨",
+      "zh": "動畫",
+      "ko": "애니메이션"
+    },
+    "b": {
+      "e": "🎭",
+      "zh": "真人戲劇",
+      "ko": "실사 드라마"
+    }
+  },
+  {
+    "id": "activity",
+    "zh": "運動／打電動",
+    "ko": "운동 / 게임",
+    "a": {
+      "e": "🏀",
+      "zh": "運動",
+      "ko": "운동"
+    },
+    "b": {
+      "e": "🎮",
+      "zh": "打電動",
+      "ko": "게임"
+    }
+  },
+  {
+    "id": "planning",
+    "zh": "計畫好再出發／想到就出發",
+    "ko": "계획한 뒤 출발 / 생각나면 바로 출발",
+    "a": {
+      "e": "🗓️",
+      "zh": "計畫好再出發",
+      "ko": "계획한 뒤 출발"
+    },
+    "b": {
+      "e": "🚀",
+      "zh": "想到就出發",
+      "ko": "생각나면 바로 출발"
+    }
+  },
+  {
+    "id": "punctual",
+    "zh": "提早到／準時到",
+    "ko": "일찍 도착 / 제시간에 도착",
+    "a": {
+      "e": "⏰",
+      "zh": "提早到",
+      "ko": "일찍 도착"
+    },
+    "b": {
+      "e": "⌚",
+      "zh": "準時到",
+      "ko": "제시간에 도착"
+    }
+  },
+  {
+    "id": "homework",
+    "zh": "先做功課／最後一刻再做",
+    "ko": "숙제 먼저 / 마지막 순간에 하기",
+    "a": {
+      "e": "📝",
+      "zh": "先做功課",
+      "ko": "숙제 먼저"
+    },
+    "b": {
+      "e": "⏳",
+      "zh": "最後一刻再做",
+      "ko": "마지막 순간에 하기"
+    }
+  },
+  {
+    "id": "money",
+    "zh": "錢存起來／錢花在喜歡的東西上",
+    "ko": "저축하기 / 좋아하는 것에 쓰기",
+    "a": {
+      "e": "🐷",
+      "zh": "錢存起來",
+      "ko": "저축하기"
+    },
+    "b": {
+      "e": "🛍️",
+      "zh": "錢花在喜歡的東西上",
+      "ko": "좋아하는 것에 쓰기"
+    }
+  },
+  {
+    "id": "attraction",
+    "zh": "遊樂園／水族館",
+    "ko": "놀이공원 / 수족관",
+    "a": {
+      "e": "🎡",
+      "zh": "遊樂園",
+      "ko": "놀이공원"
+    },
+    "b": {
+      "e": "🐠",
+      "zh": "水族館",
+      "ko": "수족관"
+    }
+  },
+  {
+    "id": "timetravel",
+    "zh": "回到過去／前往未來",
+    "ko": "과거로 가기 / 미래로 가기",
+    "a": {
+      "e": "🕰️",
+      "zh": "回到過去",
+      "ko": "과거로 가기"
+    },
+    "b": {
+      "e": "🛸",
+      "zh": "前往未來",
+      "ko": "미래로 가기"
+    }
   }
 ];
 const QBY = Object.fromEntries(BANK.map(q => [q.id, q]));
 const DEFAULT_SEL = BANK.map(q => q.id);
+function drawRoundQuestions(pool = DEFAULT_SEL, count = 20) {
+  const ids = [...new Set(pool)];
+  for (let i = ids.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [ids[i], ids[j]] = [ids[j], ids[i]];
+  }
+  return ids.slice(0, Math.min(count, ids.length));
+}
+
 const encodeSel = sel => sel.map(id => BANK.findIndex(q => q.id === id)).filter(i => i >= 0).join(".");
 const decodeSel = s => { const ids = String(s || "").split(".").map(x => BANK[parseInt(x, 10)]).filter(Boolean).map(q => q.id); return ids.length ? ids : DEFAULT_SEL.slice(); };
 
@@ -2915,7 +3254,7 @@ const S = (params.get("s") || ("tk" + TODAY)).replace(/[^a-z0-9]/gi, "").slice(0
 const URLB = brokerUrl(params.get("b") || "hivemq");
 // Every room has an "epoch". A reset or a test-room clear starts a new epoch, so anything an old
 // device sends afterwards lands in the old epoch and can never show up in the room again.
-const RTOP = r => `kmatch26/${S}/r${r}/reset`;
+const RTOP = r => `kmatch28/${S}/r${r}/reset`;
 function readEpoch(r) {
   return new Promise(res => {
     let done = false;
@@ -2943,7 +3282,6 @@ function startRoom() {
   const TESTR = rp === "test" || rp === "0";
   const RN = TESTR ? 0 : Math.max(1, Math.min(ROOMS, parseInt(rp, 10) || 1));
   const LBL = roomLabel(RN);
-  const QL = DEFAULT_SEL.slice();
   let base = null, EP = null, SKEY = null, IDS = null, RKEY = null; // set once the room's epoch is known
   let me = null; // this tab's identity {pid,n,c,lead,last:{g,qi,a},at}
   let st = null, leaderInfo = null, conn = "re", client = null, editing = false, dead = false, willPid = null, clearing = null;
@@ -3023,8 +3361,8 @@ function startRoom() {
   }
 
   /* ---------- leader engine ---------- */
-  const blank = () => ({ seq: 0, g: 1, phase: "lobby", qi: -1, ql: QL, results: null, history: [], pairScores: {}, players: {}, removed: {}, cur: {}, revealId: 0 });
-  const fromState = s => ({ seq: s.seq || 0, g: s.g || 1, phase: s.phase, qi: s.qi, ql: (s.ql && s.ql.length ? s.ql : QL), results: s.results, history: s.history || [], pairScores: s.pairScores || {},
+  const blank = () => ({ seq: 0, g: 1, phase: "lobby", qi: -1, ql: drawRoundQuestions(), results: null, history: [], pairScores: {}, players: {}, removed: {}, cur: {}, revealId: 0 });
+  const fromState = s => ({ seq: s.seq || 0, g: s.g || 1, phase: s.phase, qi: s.qi, ql: (s.ql && s.ql.length ? s.ql.slice() : drawRoundQuestions()), results: s.results, history: s.history || [], pairScores: s.pairScores || {},
     players: Object.fromEntries(Object.entries(s.names || {}).map(([pid, p]) => [pid, { n: p.n, c: p.c }])), removed: Object.fromEntries((s.removed || []).map(p => [p, true])), cur: {}, revealId: s.revealId || 0 });
   function claimTopic() { if (client && client.connected && me) client.publish(`${base}/leader`, JSON.stringify({ pid: me.pid, n: me.n }), { qos: 1, retain: true }); }
   function tryLead() {
@@ -3109,7 +3447,7 @@ function startRoom() {
     next() { if (L.phase !== "reveal") return; if (L.qi + 1 >= L.ql.length) { L.phase = "end"; schedulePub(0); } else startQ(L.qi + 1); },
     finish() { if (L.phase === "reveal" && confirm("結束並查看交流紀錄？ · 종료하고 대화 기록을 볼까요?")) { L.phase = "end"; schedulePub(0); } },
     reveal() { toast("請等待每位同學作答；離線同學可由組長移出。 · 모두의 답변을 기다려 주세요."); },
-    again() { if (L.phase !== "end") return; L.g++; L.phase = "lobby"; L.qi = -1; L.results = null; L.history = []; L.pairScores = {}; L.cur = {}; for (const pid in P) intake(pid); schedulePub(0); },
+    again() { if (L.phase !== "end") return; L.g++; L.ql = drawRoundQuestions(); L.phase = "lobby"; L.qi = -1; L.results = null; L.history = []; L.pairScores = {}; L.cur = {}; for (const pid in P) intake(pid); schedulePub(0); },
     remove(pid) { if (!L.players[pid] || pid === me.pid) return; if (!confirm("移出這位離線同學？未揭曉題目將不計入此同學的星星。 · 오프라인인 친구를 내보낼까요?")) return; L.removed[pid] = true; checkAuto(); schedulePub(0); }
   };
 
@@ -3279,7 +3617,7 @@ function startRoom() {
     app.innerHTML = `<div class="wrap">
       <div class="topbar"><span class="roomtag">${TESTR ? "🧪 測試房間 · 테스트 방" : "房間 · 방 " + LBL}</span><button class="linkbtn" id="leave">← 換房間 · 방 선택</button></div>
       <div class="card">
-        <h1 class="join-brand">默契二選一 <span class="brand-version">test 26</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></h1>
+        <h1 class="join-brand">默契二選一 <span class="brand-version">test 28</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></h1>
         <div class="muted">${tri({zh:"你們的默契有多好？一起來試試！", ko:"우리 얼마나 잘 통할까요? 같이 알아봐요!"})}</div>
         <label class="field"><span class="lbl">${tri({zh:"你的名字", ko:"이름"}, "inline")}</span>
           <input id="nm" type="text" maxlength="16" autocomplete="off" placeholder="例如：小安／민지" value="${esc(me ? me.n : "")}"></label>
@@ -3394,7 +3732,7 @@ function startRoom() {
     return (st.history || []).filter(h => h.res && ["A", "B"].includes(h.res[me.pid]) && h.res[me.pid] === h.res[pid]);
   }
   function sharedChoiceDescription(q, key) {
-    const descriptions = {"pets": [["喜歡貓", "고양이를 좋아해요"], ["喜歡狗", "강아지를 좋아해요"]], "landscape": [["喜歡去海邊", "바다에 가는 걸 좋아해요"], ["喜歡去山上", "산에 가는 걸 좋아해요"]], "outing": [["放假喜歡旅遊", "쉬는 날 여행하는 걸 좋아해요"], ["放假喜歡宅在家", "쉬는 날 집에 있는 걸 좋아해요"]], "drink": [["喜歡喝冰飲", "차가운 음료를 좋아해요"], ["喜歡喝熱飲", "따뜻한 음료를 좋아해요"]], "place": [["喜歡待在家鄉", "고향에 있는 걸 좋아해요"], ["喜歡到國外", "해외에 가는 걸 좋아해요"]], "personality": [["個性偏外向", "외향적인 편이에요"], ["個性偏內向", "내향적인 편이에요"]], "season": [["喜歡夏天", "여름을 좋아해요"], ["喜歡冬天", "겨울을 좋아해요"]], "living": [["喜歡城市", "도시를 좋아해요"], ["喜歡鄉村", "시골을 좋아해요"]], "weather": [["喜歡晴天", "맑은 날을 좋아해요"], ["喜歡雨天", "비 오는 날을 좋아해요"]], "color": [["喜歡黑色", "검은색을 좋아해요"], ["喜歡白色", "흰색을 좋아해요"]], "staple": [["主食偏好飯", "밥을 더 좋아해요"], ["主食偏好麵", "면을 더 좋아해요"]], "curry": [["吃咖哩飯會拌勻", "카레라이스를 비벼 먹어요"], ["吃咖哩飯不拌勻", "카레라이스를 비비지 않고 먹어요"]], "hand": [["慣用左手", "왼손잡이예요"], ["慣用右手", "오른손잡이예요"]]};
+    const descriptions = {"pets": [["喜歡貓", "고양이를 좋아해요"], ["喜歡狗", "강아지를 좋아해요"]], "landscape": [["喜歡去海邊", "바다에 가는 걸 좋아해요"], ["喜歡去山上", "산에 가는 걸 좋아해요"]], "outing": [["放假喜歡旅遊", "쉬는 날 여행하는 걸 좋아해요"], ["放假喜歡宅在家", "쉬는 날 집에 있는 걸 좋아해요"]], "drink": [["喜歡喝冰飲", "차가운 음료를 좋아해요"], ["喜歡喝熱飲", "따뜻한 음료를 좋아해요"]], "place": [["喜歡待在家鄉", "고향에 있는 걸 좋아해요"], ["喜歡到國外", "해외에 가는 걸 좋아해요"]], "personality": [["個性偏外向", "외향적인 편이에요"], ["個性偏內向", "내향적인 편이에요"]], "season": [["喜歡夏天", "여름을 좋아해요"], ["喜歡冬天", "겨울을 좋아해요"]], "living": [["喜歡城市", "도시를 좋아해요"], ["喜歡鄉村", "시골을 좋아해요"]], "weather": [["喜歡晴天", "맑은 날을 좋아해요"], ["喜歡雨天", "비 오는 날을 좋아해요"]], "color": [["喜歡黑色", "검은색을 좋아해요"], ["喜歡白色", "흰색을 좋아해요"]], "staple": [["主食偏好飯", "밥을 더 좋아해요"], ["主食偏好麵", "면을 더 좋아해요"]], "curry": [["吃咖哩飯會拌勻", "카레라이스를 비벼 먹어요"], ["吃咖哩飯不拌勻", "카레라이스를 비비지 않고 먹어요"]], "hand": [["慣用左手", "왼손잡이예요"], ["慣用右手", "오른손잡이예요"]], "reading": [["喜歡看漫畫", "만화 읽기를 좋아해요"], ["喜歡看小說", "소설 읽기를 좋아해요"]], "palette": [["喜歡亮色系", "밝은 색 계열을 좋아해요"], ["喜歡暗色系", "어두운 색 계열을 좋아해요"]], "fastfood": [["速食偏好麥當勞", "패스트푸드는 맥도날드를 더 좋아해요"], ["速食偏好肯德基", "패스트푸드는 케이에프씨를 더 좋아해요"]], "phonebrand": [["手機品牌偏好三星", "휴대폰 브랜드는 삼성을 더 좋아해요"], ["手機品牌偏好蘋果", "휴대폰 브랜드는 애플을 더 좋아해요"]], "energy": [["平常一直覺得很累", "평소에 늘 피곤한 편이에요"], ["睡一下就覺得睡飽了", "잠깐 자도 개운한 편이에요"]], "device": [["偏好使用手機", "휴대폰 사용을 더 좋아해요"], ["偏好使用電腦", "컴퓨터 사용을 더 좋아해요"]], "sociallife": [["喜歡團體生活", "함께 생활하는 걸 좋아해요"], ["喜歡個人生活", "혼자 생활하는 걸 좋아해요"]], "flavor": [["喜歡甜食", "단 음식을 좋아해요"], ["喜歡鹹食", "짭짤한 음식을 좋아해요"]], "breakfast": [["早餐喜歡吃飯", "아침으로 밥을 좋아해요"], ["早餐喜歡吃麵包", "아침으로 빵을 좋아해요"]], "schedule": [["喜歡早起", "일찍 일어나는 걸 좋아해요"], ["喜歡熬夜", "늦게까지 깨어 있는 걸 좋아해요"]], "contact": [["聊天偏好傳訊息", "대화는 메시지로 하는 걸 더 좋아해요"], ["聊天偏好打電話", "대화는 전화로 하는 걸 더 좋아해요"]], "camera": [["喜歡幫別人拍照", "다른 사람의 사진을 찍어 주는 걸 좋아해요"], ["喜歡被拍照", "사진 찍히는 걸 좋아해요"]], "perform": [["喜歡唱歌", "노래하는 걸 좋아해요"], ["喜歡跳舞", "춤추는 걸 좋아해요"]], "screen": [["喜歡看電影", "영화 보는 걸 좋아해요"], ["喜歡看影集", "드라마 시리즈 보는 걸 좋아해요"]], "animation": [["喜歡看動畫", "애니메이션 보는 걸 좋아해요"], ["喜歡看真人戲劇", "실사 드라마 보는 걸 좋아해요"]], "activity": [["喜歡運動", "운동하는 걸 좋아해요"], ["喜歡打電動", "게임하는 걸 좋아해요"]], "planning": [["出門前喜歡先計畫", "외출 전에 계획 세우는 걸 좋아해요"], ["喜歡想到就出發", "생각나면 바로 떠나는 걸 좋아해요"]], "punctual": [["習慣提早到", "약속 시간보다 일찍 도착하는 편이에요"], ["習慣準時到", "약속 시간에 맞춰 도착하는 편이에요"]], "homework": [["功課喜歡先做完", "숙제를 미리 끝내는 편이에요"], ["功課習慣最後一刻才做", "숙제를 마지막 순간에 하는 편이에요"]], "money": [["喜歡把錢存起來", "돈을 저축하는 걸 좋아해요"], ["喜歡把錢花在喜歡的東西上", "좋아하는 것에 돈을 쓰는 걸 좋아해요"]], "attraction": [["喜歡去遊樂園", "놀이공원에 가는 걸 좋아해요"], ["喜歡去水族館", "수족관에 가는 걸 좋아해요"]], "timetravel": [["想回到過去", "과거로 가 보고 싶어요"], ["想前往未來", "미래로 가 보고 싶어요"]]};
     const answer = key === "A" ? q.a : q.b;
     const label = descriptions[q.id] && descriptions[q.id][key === "A" ? 0 : 1];
     return { ...answer, zh: label ? label[0] : (q.zh ? q.zh + "：" + answer.zh : answer.zh), ko: label ? label[1] : (q.ko ? q.ko + ": " + answer.ko : answer.ko) };
@@ -3468,7 +3806,7 @@ function startRoom() {
     let e = null;
     while (e === null) e = await readEpoch(RN);
     EP = e; base = `${TOP(S, RN)}/e${EP}`;
-    SKEY = `kmatch26_me_${S}_${RN}_${EP}`; IDS = `kmatch26_ids_${S}_${RN}_${EP}`; RKEY = `kmatch26_r_${S}_${RN}_${EP}`;
+    SKEY = `kmatch28_me_${S}_${RN}_${EP}`; IDS = `kmatch28_ids_${S}_${RN}_${EP}`; RKEY = `kmatch28_r_${S}_${RN}_${EP}`;
     me = SS.get(SKEY, null);
     render(); connect();
   })();
@@ -3492,7 +3830,7 @@ function startLanding() {
   };
   function render() {
     app.innerHTML = `<div class="wrap">
-      <div class="topbar"><span class="landing-brand"><strong>默契二選一</strong><span class="brand-version">test 26</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
+      <div class="topbar"><span class="landing-brand"><strong>默契二選一</strong><span class="brand-version">test 28</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
       <div class="card">
         <h1 class="room-choice-title">${tri({zh:"選擇你的房間", ko:"방을 선택하세요"}, "inline")}</h1>
       </div>
