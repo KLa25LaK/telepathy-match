@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>默契大考驗 · 텔레파시 게임</title>
+<title>默契大挑戰 · 텔레파시 게임</title>
 <style>
 :root{
   --bg:#fff8ef; --ink:#1f2a44; --muted:#6b7280; --card:#ffffff; --line:#eadfce;
@@ -315,6 +315,10 @@ body{background:#fff4f8;background-image:radial-gradient(ellipse at 0% 0%,#ffe0e
 @media(max-width:1023px){.reveal-content{display:flex;flex-direction:column;gap:10px}.reveal-content>.match-milestone{order:-1;margin:0;width:100%}.reveal-content>.reveal-question{width:100%}.reveal-content>.match-milestone .milestone-title .zh{font-size:16px;color:#6d5124}.reveal-content>.match-milestone .milestone-title .ko{font-size:12px;color:#79613d}.reveal-content>.match-milestone .milestone-picker{margin-bottom:8px}.reveal-content>.match-milestone .milestone-person{max-height:230px}}
 @media(min-width:600px) and (max-width:1023px){.reveal-content>.match-milestone .milestone-title .zh{font-size:19px}.reveal-content>.match-milestone .milestone-title .ko{font-size:14px}.reveal-content>.match-milestone{padding:15px 18px}}
 #go{background:#75428c;color:#fff;border:1px solid #653276;box-shadow:0 3px 0 #542568;font-weight:750;opacity:1}#go .tri .zh,#go .tri .ko{color:#fff}#go:not(:disabled):hover{background:#66337e;box-shadow:0 3px 0 #542568}#go:disabled{background:#eee4f1;color:#765e7f;border-color:#dfd0e5;box-shadow:none;opacity:1;cursor:not-allowed}#go:disabled .tri .zh,#go:disabled .tri .ko{color:#765e7f}
+</style>
+<style id="test22-headings">
+.landing-brand{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;color:#654473}.landing-brand strong{font-size:27px;font-weight:800;letter-spacing:-.5px}.brand-version{font-size:13px;font-weight:700;color:#875191;white-space:nowrap}.brand-ko{font-size:12px;color:#715577;font-weight:500}.join-brand{font-size:29px;line-height:1.4}.join-brand .brand-ko{display:inline;margin-left:7px}.room-choice-title{margin:0}.room-choice-title>.tri.inline{display:flex;align-items:baseline;gap:8px;flex-wrap:nowrap}.room-choice-title .tri .zh{font-size:22px;white-space:nowrap;margin:0}.room-choice-title .tri .ko{font-size:14px;white-space:nowrap;margin:0}
+@media(max-width:520px){.landing-brand strong{font-size:23px}.landing-brand .brand-ko{font-size:10px}.landing-brand{gap:5px}.landing-brand .brand-version{font-size:12px}.join-brand{font-size:25px}.room-choice-title .tri .zh{font-size:20px}.room-choice-title .tri .ko{font-size:12px}.room-choice-title>.tri.inline{gap:7px}}
 </style>
 </head>
 <body>
@@ -2875,7 +2879,11 @@ function startRoom() {
     const p = P[pid]; if (!p || !p.n) return;
     if (p.left) { if (L.players[pid] && !L.removed[pid]) { L.removed[pid] = true; checkAuto(); } return; }
     if (L.removed[pid]) return;
-    if (!L.players[pid]) { if (L.phase !== "lobby") return; L.players[pid] = { n: p.n, c: p.c }; }
+    if (!L.players[pid]) {
+      L.players[pid] = { n: p.n, c: p.c };
+      // A newcomer joins the open question, so cancel any pending reveal.
+      if (L.phase === "q") { clearTimeout(revealTimer); revealTimer = null; }
+    }
     else { L.players[pid].n = p.n; L.players[pid].c = p.c; }
     if (L.phase === "q" && p.g === L.g && p.qi === L.qi && (p.a === "A" || p.a === "B") && !L.cur[pid]) { L.cur[pid] = p.a; checkAuto(); }
   }
@@ -3057,8 +3065,8 @@ function startRoom() {
   }
   function renderLate() {
     app.innerHTML = `<div class="wrap">${header()}<div class="card">
-      <h1>${tri({zh:"本輪已開始", ko:"이번 라운드가 이미 시작됐어요"})}</h1>
-      <div class="waiting"><span class="spinner"></span>${tri({zh:"請等組長開下一輪再加入。", ko:"조장이 다음 라운드를 시작할 때까지 기다려 주세요."})}</div></div></div>`;
+      <h1>${tri({zh:"正在加入這一組…", ko:"모둠에 입장하는 중…"})}</h1>
+      <div class="waiting"><span class="spinner"></span>${tri({zh:"正在同步遊戲進度，馬上就能加入。", ko:"게임 진행 상황을 동기화하고 있어요. 곧 참여할 수 있어요."})}</div></div></div>`;
     bind();
   }
   function renderNoState() {
@@ -3078,7 +3086,7 @@ function startRoom() {
     app.innerHTML = `<div class="wrap">
       <div class="topbar"><span class="roomtag">${TESTR ? "🧪 測試房間 · 테스트 방" : "房間 · 방 " + LBL}</span><button class="linkbtn" id="leave">← 換房間 · 방 선택</button></div>
       <div class="card">
-        <h1>默契大考驗 · 텔레파시 게임 ⭐</h1>
+        <h1 class="join-brand">默契大挑戰 <span class="brand-version">test 22</span><span class="brand-ko" lang="ko">텔레파시 게임</span></h1>
         <div class="muted">${tri({zh:"你們的默契有多好？一起來試試！", ko:"우리 얼마나 잘 통할까요? 같이 알아봐요!"})}</div>
         <label class="field"><span class="lbl">${tri({zh:"你的名字", ko:"이름"}, "inline")}</span>
           <input id="nm" type="text" maxlength="16" autocomplete="off" placeholder="例如：小安／민지" value="${esc(me ? me.n : "")}"></label>
@@ -3273,9 +3281,9 @@ function startLanding() {
   };
   function render() {
     app.innerHTML = `<div class="wrap">
-      <div class="topbar"><span class="roomtag">⭐ 默契大考驗 · 텔레파시 게임</span><span class="conn"><span class="dot ${conn}"></span></span></div>
+      <div class="topbar"><span class="landing-brand"><strong>默契大挑戰</strong><span class="brand-version">test 22</span><span class="brand-ko" lang="ko">텔레파시 게임</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
       <div class="card">
-        <h1>${tri({zh:"選擇你的房間", ko:"방을 선택하세요"})}</h1>
+        <h1 class="room-choice-title">${tri({zh:"選擇你的房間", ko:"방을 선택하세요"}, "inline")}</h1>
       </div>
       ${Array.from({ length: ROOMS }, (_, i) => i + 1).map(r => {
         const I = info[r]; const people = Object.keys(I.on).filter(pid => I.on[pid]).length;
