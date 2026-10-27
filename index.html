@@ -320,6 +320,21 @@ body{background:#fff4f8;background-image:radial-gradient(ellipse at 0% 0%,#ffe0e
 .landing-brand{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;color:#654473}.landing-brand strong{font-size:27px;font-weight:800;letter-spacing:-.5px}.brand-version{font-size:13px;font-weight:700;color:#875191;white-space:nowrap}.brand-ko{font-size:12px;color:#715577;font-weight:500}.join-brand{font-size:29px;line-height:1.4}.join-brand .brand-ko{display:inline;margin-left:7px}.room-choice-title{margin:0}.room-choice-title>.tri.inline{display:flex;align-items:baseline;gap:8px;flex-wrap:nowrap}.room-choice-title .tri .zh{font-size:22px;white-space:nowrap;margin:0}.room-choice-title .tri .ko{font-size:14px;white-space:nowrap;margin:0}
 @media(max-width:520px){.landing-brand strong{font-size:23px}.landing-brand .brand-ko{font-size:10px}.landing-brand{gap:5px}.landing-brand .brand-version{font-size:12px}.join-brand{font-size:25px}.room-choice-title .tri .zh{font-size:20px}.room-choice-title .tri .ko{font-size:12px}.room-choice-title>.tri.inline{gap:7px}}
 </style>
+<style id="bold-match-notice">
+/* Make the round's personal match result unmistakable. */
+.match-notice{background:#1555e8;border:2px solid #0842c6;border-left:6px solid #ffdb24;border-radius:13px;box-shadow:0 3px 0 #c7d7ff;padding:11px 13px}
+.match-notice .zh{color:#fff;font-size:16px;font-weight:800;line-height:1.45}
+.match-notice .ko{color:#fff;font-size:12px;font-weight:550;line-height:1.5;margin-top:5px}
+.match-notice .zh::before{content:"★ ";color:#ffdf28}
+@media(min-width:600px){.match-notice .zh{font-size:18px}.match-notice .ko{font-size:14px}}
+</style>
+<style id="meaningful-stars">
+.stars-panel-head{justify-content:space-between;align-items:center;gap:8px}.stars-panel-head b .zh{font-size:15px}.stars-panel-head b .ko{font-size:11px}.record-help{padding:8px 0 10px;border-bottom:1px dashed #e6cce4}.record-help .zh{font-size:12px;font-weight:500}.record-help .ko{font-size:11px}.star-record{border-bottom:1px dashed #ecd9e9}.star-record:last-child{border-bottom:0}.star-record>summary{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;cursor:pointer;list-style:none}.star-record>summary::-webkit-details-marker{display:none}.record-progress{margin-top:5px}.record-progress .zh{font-size:11px;font-weight:450}.record-progress .ko{font-size:10px}.record-score{font-size:20px;color:#956525;font-weight:750;white-space:nowrap;text-align:right}.record-expand{display:block;font-size:10px;color:#76558d;font-weight:500;margin-top:3px;line-height:1.3}.star-record[open] .record-expand{color:#9d426e}.record-choices{display:flex;flex-direction:column;gap:6px;padding-bottom:10px}.record-choice{display:flex;gap:8px;padding:8px;background:#f6eefa;border:1px solid #ebd9ef;border-radius:9px;align-items:flex-start}.record-choice>span:first-child{font-size:22px;flex:none}.record-choice .zh{font-size:12px;font-weight:650}.record-choice .ko{font-size:11px}.record-empty{padding:10px;background:#f7f0fa;border-radius:9px}.record-empty .zh{font-size:12px;font-weight:500}.record-empty .ko{font-size:11px}.star-record>summary:focus-visible{outline:2px solid #87589c;outline-offset:2px;border-radius:6px}
+</style>
+<style id="personal-final-ranking">
+.final-ranking h1 .zh{font-size:26px}.final-ranking h1 .ko{font-size:15px}.ranking-celebration{font-size:35px;line-height:1.2;margin-bottom:7px}.ranking-intro .zh{font-size:14px}.ranking-intro .ko{font-size:12px}.ranking-rule{background:#f6effa;border-radius:10px;padding:9px 11px;margin:12px 0}.ranking-rule .zh{font-size:12px;font-weight:500}.ranking-rule .ko{font-size:11px}.ranking-list{list-style:none;padding:0;margin:12px 0;display:flex;flex-direction:column;gap:8px}.ranking-row{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #ead6ed;border-radius:13px;background:#fffafd}.ranking-row:first-child{background:#fff3d5;border-color:#ecd69c}.ranking-position{width:30px;flex:none;text-align:center;font-size:22px;font-weight:750;color:#946a9a}.ranking-person{flex:1;min-width:0;overflow-wrap:anywhere}.ranking-person>b{font-size:16px}.ranking-person .tri .zh{font-size:11px;font-weight:450;margin-top:4px}.ranking-person .tri .ko{font-size:10px}.ranking-score{font-size:26px;font-weight:800;color:#895a95;text-align:right;flex:none}.ranking-score>span{display:block}.ranking-score .tri .zh{font-size:11px;color:#79577e}.ranking-score .tri .ko{font-size:10px}.ranking-disclaimer{background:#fff0f6;border:1px dashed #dca9c7;border-radius:11px;padding:11px;margin-top:14px}.ranking-disclaimer .zh{font-size:12px;font-weight:650;color:#74405e}.ranking-disclaimer .ko{font-size:11px;color:#775570;margin-top:6px}.ranking-empty,.ranking-pending{padding:10px 0}.ranking-empty .zh,.ranking-pending .zh{font-size:12px}.ranking-empty .ko,.ranking-pending .ko{font-size:11px}
+@media(min-width:1024px){.final-ranking{max-width:760px;margin:auto}.final-ranking h1 .zh{font-size:30px}.ranking-row{padding:14px 18px}}
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -2964,14 +2979,22 @@ function startRoom() {
     if (!st || !me || !(st.names || {})[me.pid]) return "";
     const others = Object.entries(st.names || {}).filter(([pid]) => pid !== me.pid);
     if (!others.length) return "";
-    let anyRed = false;
+    const valid = a => a === "A" || a === "B";
     const rows = others.map(([pid, o]) => {
-      const n = (st.history || []).filter(h => h.res[me.pid] && h.res[me.pid] === h.res[pid]).length;
-      const red = Math.floor(n / 5), gold = n % 5; if (red) anyRed = true;
-      const stars = '<i class="sg">★</i>'.repeat(gold) + '<i class="sr">★</i>'.repeat(red);
-      return `<div class="star-pair"><div class="pair-label">${tri({zh:"我和" + o.n, ko:"나와 " + o.n})}</div><div class="pair-result"><span class="pair-icons" role="img" aria-label="${n} 顆星 · 별 ${n}개">${stars || '<span class="muted">☆</span>'}</span></div></div>`;
+      const together = (st.history || []).filter(h => h.res && valid(h.res[me.pid]) && valid(h.res[pid]));
+      const shared = together.filter(h => h.res[me.pid] === h.res[pid]);
+      const n = shared.length, total = together.length;
+      const choices = shared.slice().reverse().map(h => {
+        const q = QBY[(st.ql || DEFAULT_SEL)[h.qi]];
+        if (!q) return "";
+        const answer = sharedChoiceDescription(q, h.res[me.pid]);
+        return `<div class="record-choice"><span aria-hidden="true">${esc(answer.e)}</span>${tri(answer)}</div>`;
+      }).join("");
+      const progress = total ? {zh:"一起答了 " + total + " 題，其中 " + n + " 題相同", ko:"함께 답한 " + total + "문제 중 " + n + "문제의 답이 같아요"} : {zh:"還沒有一起完成的題目",ko:"아직 함께 완료한 문제가 없어요"};
+      const empty = total ? {zh:"目前還沒有共同答案，下一題再發現！",ko:"아직 같은 답이 없어요. 다음 문제에서 찾아봐요!"} : {zh:"一起完成題目後，共同點會記在這裡。",ko:"함께 문제를 풀면 공통점이 여기에 기록돼요."};
+      return `<details class="star-record"><summary><div class="pair-label">${tri({zh:"我和" + o.n, ko:"나와 " + o.n})}<div class="record-progress">${tri(progress)}</div></div><span class="record-score">★ ${n}<span class="record-expand">查看 ›<br>보기</span></span></summary><div class="record-choices">${choices || `<div class="record-empty">${tri(empty)}</div>`}</div></details>`;
     }).join("");
-    return `<details class="stars-widget" ${starsPanelOpen ? "open" : ""}><summary>★ <span>我和別人的默契星星 <small>친구들과의 텔레파시 별</small></span></summary><section class="stars-panel" aria-label="你和其他人的默契星星"><div class="stars-panel-head"><button type="button" class="stars-close" aria-label="關閉 · 닫기">×</button></div><div class="star-pairs">${rows}</div></section></details>`;
+    return `<details class="stars-widget" ${starsPanelOpen ? "open" : ""}><summary>★ <span>我和別人的默契星星 <small>친구들과의 텔레파시 별</small></span></summary><section class="stars-panel" aria-label="你和其他人的默契星星"><div class="stars-panel-head"><b>${tri({zh:"我們的共同點紀錄",ko:"우리의 공통점 기록"})}</b><button type="button" class="stars-close" aria-label="關閉 · 닫기">×</button></div><div class="record-help">${tri({zh:"每個相同答案＝1 顆星。點人名，看看相同的是哪些題！",ko:"같은 답 하나마다 별 1개! 이름을 눌러 어떤 답이 같았는지 확인해요."})}</div><div class="star-pairs">${rows}</div></section></details>`;
   }
   function leadBar(html) { return isLeader ? `<div class="leadbar"><div class="who">👑 組長 · 조장</div>${html}</div>` : ""; }
   function waitLeader(msg) {
@@ -3052,7 +3075,12 @@ function startRoom() {
 
   let lastRenderedStep = "";
   function render() {
-    if (!me || editing) return renderJoin();
+    if (!me || editing) {
+      // Keep the live form and its focus while room/connection messages arrive.
+      // Role selection and validation already update this form in place.
+      if (app.querySelector("#nm")) return;
+      return renderJoin();
+    }
     if (!st || st.g === undefined) return renderNoState();
     if (!inRoster() && st.phase !== "lobby" && !isLeader) return renderLate();
     ({ lobby: renderLobby, q: renderQ, reveal: renderReveal, end: renderEnd }[st.phase] || renderNoState)();
@@ -3086,7 +3114,7 @@ function startRoom() {
     app.innerHTML = `<div class="wrap">
       <div class="topbar"><span class="roomtag">${TESTR ? "🧪 測試房間 · 테스트 방" : "房間 · 방 " + LBL}</span><button class="linkbtn" id="leave">← 換房間 · 방 선택</button></div>
       <div class="card">
-        <h1 class="join-brand">默契大挑戰 <span class="brand-version">test 22</span><span class="brand-ko" lang="ko">텔레파시 게임</span></h1>
+        <h1 class="join-brand">默契大挑戰 <span class="brand-version">test 23</span><span class="brand-ko" lang="ko">텔레파시 게임</span></h1>
         <div class="muted">${tri({zh:"你們的默契有多好？一起來試試！", ko:"우리 얼마나 잘 통할까요? 같이 알아봐요!"})}</div>
         <label class="field"><span class="lbl">${tri({zh:"你的名字", ko:"이름"}, "inline")}</span>
           <input id="nm" type="text" maxlength="16" autocomplete="off" placeholder="例如：小安／민지" value="${esc(me ? me.n : "")}"></label>
@@ -3214,8 +3242,8 @@ function startRoom() {
     if (!["A", "B"].includes(mine)) return { notice: "", milestones: "" };
     const matches = Object.entries(names).filter(([pid]) => pid !== me.pid && res[pid] === mine);
     const notice = `<div class="match-notice">${tri(matches.length ? {
-      zh: matches.map(([, p]) => p.n).join("、") + "，這題和你選一樣！",
-      ko: matches.map(([, p]) => p.n).join(", ") + " 님도 나와 같은 답을 골랐어요!"
+      zh: matches.map(([, p]) => p.n).join("、") + "，共 " + matches.length + " 人和你選一樣！",
+      ko: matches.map(([, p]) => p.n).join(", ") + " 님, 총 " + matches.length + "명이 나와 같은 답을 골랐어요!"
     } : { zh: "這題只有你選這個答案，聊聊你的理由吧！", ko: "이번에는 나만 이 답을 골랐어요. 이유를 나눠 봐요!" })}</div>`;
     const entries = matches.map(([pid, person]) => {
       const shared = sharedAnswers(pid), n = shared.length;
@@ -3247,9 +3275,28 @@ function startRoom() {
     const last = st.qi + 1 >= st.total;
     app.innerHTML = `<div class="wrap reveal-layout">${header()}<div class="reveal-content"><div class="card reveal-question"><div class="completion-heading"><span class="completion-icon">✓</span><div><div class="qhead">${st.qi + 1} / ${st.total}</div><h1>${tri({zh:"這題完成！",ko:"이번 문제 완료!"})}</h1></div></div><div class="completed-question">${tri(q)}</div>${discoveries.notice}<div class="answer-results">${col("A")}${col("B")}</div></div>${discoveries.milestones}</div>${scoreCards()}<div class="card discussion">${leadBar(`<button class="btn teal" data-act="next">${last ? "查看交流紀錄 · 기록 보기" : "下一題 ▶ · 다음 문제"}</button>${last ? "" : '<button class="btn ghost sm" data-act="finish">結束並查看交流紀錄 · 마치기</button>'}`)}${waitLeader({zh:"等待組長按下一題。", ko:"조장이 곧 다음 문제를 시작해요."})}</div></div>`;
   }
+  function personalRanking(state, selfId) {
+    const valid = a => a === "A" || a === "B";
+    const rows = Object.entries(state.names || {}).filter(([pid]) => pid !== selfId).map(([pid, person]) => {
+      const together = (state.history || []).filter(h => h.res && valid(h.res[selfId]) && valid(h.res[pid]));
+      return { pid, name: person.n, total: together.length, same: together.filter(h => h.res[selfId] === h.res[pid]).length };
+    });
+    rows.sort((a, b) => b.same - a.same);
+    let previous = null, rank = 0, eligible = 0;
+    return rows.map(row => {
+      if (!row.total) return { ...row, rank: null };
+      eligible++;
+      if (row.same !== previous) rank = eligible;
+      previous = row.same;
+      return { ...row, rank };
+    });
+  }
   function renderEnd() {
     const n = (st.history || []).length;
-    app.innerHTML = `<div class="wrap">${header()}<section class="card"><h1>${tri({zh:"我們的交流紀錄", ko:"우리의 대화 기록"})}</h1><p>${tri({zh:`我們分享了 ${n} 題的選擇。`, ko:`${n}개의 질문에 대한 선택을 나눴어요.`})}</p><p>${tri({zh:"你還想多了解誰的哪個選擇？", ko:"누구의 어떤 선택을 더 알아보고 싶나요?"})}</p>${leadBar('<button class="btn ghost sm" data-act="again">再聊一輪 · 다시 하기</button>')}<p class="small muted">${tri({zh:"可以截圖保存這次的交流紀錄。", ko:"스크린샷으로 이 기록을 저장할 수 있어요."})}</p></section></div>`;
+    const ranked = me ? personalRanking(st, me.pid) : [];
+    const rowHtml = ranked.filter(r => r.rank !== null).map(r => `<li class="ranking-row"><span class="ranking-position">${r.rank === 1 ? "👑" : r.rank}</span><div class="ranking-person"><b>${esc(r.name)}</b>${tri({zh:"共同完成 " + r.total + " 題",ko:"함께 답한 문제 " + r.total + "개"})}</div><div class="ranking-score">${r.same}<span>${tri({zh:"題相同",ko:"개 일치"})}</span></div></li>`).join("");
+    const pending = ranked.filter(r => r.rank === null);
+    app.innerHTML = `<div class="wrap">${header()}<section class="card final-ranking"><div class="ranking-celebration" aria-hidden="true">🏆</div><h1>${tri({zh:"誰和我最有默契？",ko:"나와 가장 잘 통하는 친구는?"})}</h1><p class="ranking-intro">${tri({zh:"本次已完成 " + n + " 題，以下是你的默契排名！",ko:"이번에 완료한 문제는 " + n + "개! 나의 텔레파시 순위예요."})}</p><div class="ranking-rule">${tri({zh:"按相同答案題數排名，同分並列；只計入兩人都作答的已完成題目。",ko:"같은 답의 수로 순위를 매기며 동점은 공동 순위예요. 두 사람 모두 답한 완료 문제만 집계해요."})}</div>${rowHtml ? `<ol class="ranking-list">${rowHtml}</ol>` : `<div class="ranking-empty">${tri({zh:"還沒有可排名的共同作答紀錄。",ko:"아직 순위를 매길 공동 답변 기록이 없어요."})}</div>`}${pending.length ? `<div class="ranking-pending">${tri({zh:pending.map(r => r.name).join("、") + "：沒有一起完成的題目，暫不排名。",ko:pending.map(r => r.name).join(", ") + " 님: 함께 완료한 문제가 없어 순위에서 제외했어요."})}</div>` : ""}<aside class="ranking-disclaimer">${tri({zh:"本遊戲完全未經心理學測試或驗證，純屬娛樂。排名僅代表這次選擇的相似程度，不代表人格、友情或真實的相處契合度。",ko:"이 게임은 어떠한 심리학적 검사나 검증도 거치지 않은 오락용 게임입니다. 순위는 이번 선택의 유사성만 나타내며 성격, 우정 또는 실제 관계의 적합성을 의미하지 않습니다."})}</aside>${leadBar('<button class="btn ghost sm" data-act="again">再聊一輪 · 다시 하기</button>')}<p class="small muted">${tri({zh:"可以截圖保存這次的交流紀錄。",ko:"스크린샷으로 이 기록을 저장할 수 있어요."})}</p></section></div>`;
   }
 
   app.innerHTML = `<div class="wrap"><div class="card center"><div class="waiting"><span class="spinner"></span>${tri({zh:"正在連線到房間…", ko:"방에 연결하는 중…"})}</div></div></div>`;
@@ -3281,7 +3328,7 @@ function startLanding() {
   };
   function render() {
     app.innerHTML = `<div class="wrap">
-      <div class="topbar"><span class="landing-brand"><strong>默契大挑戰</strong><span class="brand-version">test 22</span><span class="brand-ko" lang="ko">텔레파시 게임</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
+      <div class="topbar"><span class="landing-brand"><strong>默契大挑戰</strong><span class="brand-version">test 23</span><span class="brand-ko" lang="ko">텔레파시 게임</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
       <div class="card">
         <h1 class="room-choice-title">${tri({zh:"選擇你的房間", ko:"방을 선택하세요"}, "inline")}</h1>
       </div>
