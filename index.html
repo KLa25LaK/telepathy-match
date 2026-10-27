@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>默契大挑戰 · 텔레파시 게임</title>
+<title>默契二選一 · 텔레파시 둘 중 하나</title>
 <style>
 :root{
   --bg:#fff8ef; --ink:#1f2a44; --muted:#6b7280; --card:#ffffff; --line:#eadfce;
@@ -343,6 +343,7 @@ body{background:#fff4f8;background-image:radial-gradient(ellipse at 0% 0%,#ffe0e
 <style id="compact-star-badges-test25">
 .star-count-badge{display:inline-flex;align-items:center;justify-content:center;gap:5px;width:88px;min-height:34px;box-sizing:border-box;border:1px solid #dfd0e7;border-radius:999px;padding:5px 8px;background:#f3eaf9;color:#775b86;font-size:15px;line-height:1.2}.star-count-badge>b{font-size:19px;font-variant-numeric:tabular-nums}.star-count-badge.stars-medium{background:#d9c2ec;border-color:#c2a4d9;color:#604176}.star-count-badge.stars-many{background:#65377d;border-color:#542668;color:#fff}.star-count-badge.stars-zero{background:#f6f1f8;border-color:#e6dfea;color:#8b7a92}.badge-crown{font-size:13px;line-height:1}.record-score{font-size:15px}.record-expand{font-size:10px;margin-top:4px;white-space:nowrap}.record-choices>.record-progress{padding:6px 2px 8px;margin:0}.star-record>summary{padding:11px 0}.record-score .star-count-badge>span:not(.badge-crown){color:#e3ac35}.record-score .stars-many>span:not(.badge-crown){color:#ffe39a}
 </style>
+<style id="direct-choices-test26">.direct-choices{margin-top:14px}.direct-choices .tri .zh{font-size:24px}.direct-choices .tri .ko{font-size:14px}.direct-choices .choice{min-height:180px}@media(min-width:600px){.direct-choices .tri .zh{font-size:30px}.direct-choices .tri .ko{font-size:17px}.direct-choices .choice{min-height:220px}}</style>
 </head>
 <body>
 <div id="app"></div>
@@ -2689,50 +2690,205 @@ const BROKERS = {
   mosq:   { name: "Mosquitto（備用 2）", url: "wss://test.mosquitto.org:8081" }
 };
 function brokerUrl(id) { if (/^wss?:\/\//.test(id || "")) return id; return (BROKERS[id] || BROKERS.hivemq).url; }
-const TOP = (S, r) => `kmatch2/${S}/r${r}`;
+const TOP = (S, r) => `kmatch26/${S}/r${r}`;
 
 /* ================= question bank (A / B only) ================= */
 const BANK = [
-  { id:"temp", zh:"飲料溫度：一年四季都要冰的，還是喜歡溫熱的？", ko:"음료: 사계절 내내 아이스 아니면 따뜻한 음료?",
-    a:{e:"🧊", zh:"一年四季都要冰的", ko:"사계절 내내 아이스"}, b:{e:"☕", zh:"喜歡溫熱的飲料", ko:"따뜻한 음료"} },
-  { id:"mint", zh:"薄荷巧克力？", ko:"민트 초코?",
-    a:{e:"🍫", zh:"超級喜歡", ko:"완전 좋아!"}, b:{e:"🪥", zh:"絕對是牙膏味", ko:"그건 치약 맛이야"} },
-  { id:"pineapple", zh:"披薩加鳳梨（夏威夷披薩）？", ko:"피자에 파인애플 (하와이안 피자)?",
-    a:{e:"🍍", zh:"完全可以接受", ko:"완전 괜찮아"}, b:{e:"🙅", zh:"絕對不能接受", ko:"절대 안 돼"} },
-  { id:"spicy", zh:"吃辣程度？", ko:"매운 음식 얼마나 잘 먹어요?",
-    a:{e:"🌶️", zh:"愛吃辣（無辣不歡）", ko:"매운 게 최고"}, b:{e:"🥛", zh:"完全不敢吃辣（微辣也不行）", ko:"조금 매운 것도 못 먹어"} },
-  { id:"chicken", zh:"炸雞部位？", ko:"치킨 부위는?",
-    a:{e:"🍗", zh:"鮮嫩多汁的雞腿／雞翅", ko:"촉촉한 다리·날개"}, b:{e:"🐔", zh:"結實不油的雞胸肉", ko:"담백한 닭가슴살"} },
-  { id:"owl", zh:"作息型態？", ko:"아침형 인간 아니면 올빼미형?",
-    a:{e:"🌅", zh:"晨型人（早起讀書）", ko:"아침형 (일찍 일어나 공부)"}, b:{e:"🦉", zh:"夜貓子（熬夜夜衝）", ko:"올빼미형 (밤늦게까지)"} },
-  { id:"notes", zh:"寫筆記？", ko:"필기는 어떻게 해요?",
-    a:{e:"📓", zh:"手寫筆記本", ko:"손글씨 노트"}, b:{e:"📱", zh:"平板數位筆記（平板／筆電）", ko:"태블릿·노트북 필기"} },
-  { id:"studyplace", zh:"唸書環境？", ko:"공부하기 좋은 곳은?",
-    a:{e:"🤫", zh:"極度安靜的圖書館／自習中心", ko:"아주 조용한 도서관·독서실"}, b:{e:"☕", zh:"有背景白噪音的咖啡廳", ko:"적당히 소음 있는 카페"} },
-  { id:"exam", zh:"考試前一晚？", ko:"시험 전날 밤에는?",
-    a:{e:"📚", zh:"徹夜苦讀抱佛腳", ko:"밤새 벼락치기"}, b:{e:"😴", zh:"早早去睡靠平常實力", ko:"일찍 자고 실력으로 승부"} },
-  { id:"wear", zh:"上課穿著？", ko:"학교에서 입고 싶은 옷은?",
-    a:{e:"👔", zh:"最愛正式制服", ko:"교복"}, b:{e:"🏃", zh:"最愛舒適運動服（體育服）", ko:"편한 체육복"} },
-  { id:"after", zh:"課後偏好？", ko:"방과 후에는?",
-    a:{e:"🛋️", zh:"放學直接衝回家躺平", ko:"집에 가서 뒹굴기"}, b:{e:"🚶", zh:"跟朋友去逛街／補習／練社團", ko:"친구랑 쇼핑·학원·동아리"} },
-  { id:"holistudy", zh:"放假讀書？", ko:"쉬는 날 공부는?",
-    a:{e:"🧘", zh:"一人獨自閉關專心", ko:"혼자 집중해서"}, b:{e:"👯", zh:"跟同學約在咖啡廳一起刷題", ko:"친구들이랑 카페에서 같이"} },
-  { id:"mbti", zh:"人格傾向：外向還是內向？", ko:"성격: 외향적 아니면 내향적?",
-    a:{e:"🎉", zh:"外向、喜歡社交", ko:"외향적"}, b:{e:"🔋", zh:"內向、獨處充電", ko:"혼자 충전하기"} },
-  { id:"drama", zh:"追劇習慣？", ko:"드라마 볼 때는?",
-    a:{e:"📺", zh:"更新一集看一集", ko:"나올 때마다 한 편씩"}, b:{e:"🍿", zh:"等全季完結一次馬拉松追完", ko:"완결 후 한 번에 정주행"} },
-  { id:"trip", zh:"放假出遊？", ko:"여행 갈 때는?",
-    a:{e:"📋", zh:"事前做超詳細行程表（計畫型）", ko:"꼼꼼한 계획 (계획형)"}, b:{e:"🎈", zh:"當天看心情隨性走（隨性型）", ko:"그날 기분대로 (즉흥형)"} },
-  { id:"music", zh:"聽歌取向？", ko:"음악 취향은?",
-    a:{e:"💃", zh:"節奏強烈的 韓國流行音樂／跳舞歌", ko:"신나는 한국 대중음악·댄스곡"}, b:{e:"🎸", zh:"抒情慢歌／樂團獨立音樂", ko:"발라드·밴드·인디 음악"} },
-  { id:"photo", zh:"吃飯前：先拍照再吃，還是直接開動？", ko:"먹기 전에: 사진 먼저 아니면 바로 먹기",
-    a:{e:"📸", zh:"先拍照再吃", ko:"사진 먼저"}, b:{e:"🍴", zh:"直接開動", ko:"바로 먹기"} },
-  { id:"hangout", zh:"跟朋友去玩？", ko:"친구랑 놀 때는?",
-    a:{e:"🎤", zh:"在練歌房狂唱", ko:"노래방에서 열창"}, b:{e:"🏬", zh:"逛文創市集／商圈", ko:"플리마켓·번화가 구경"} },
-  { id:"reply", zh:"通訊聊天習慣？", ko:"메시지 답장은?",
-    a:{e:"⚡", zh:"秒讀秒回", ko:"읽자마자 바로 답장"}, b:{e:"🐢", zh:"累積一整天想到才一次回", ko:"모아 뒀다가 한 번에 답장"} },
-  { id:"gift", zh:"收禮物：喜歡驚喜，還是直接說想要什麼？", ko:"선물 받을 때: 깜짝 선물이 좋아 vs 원하는 걸 직접 말할래",
-    a:{e:"🎁", zh:"喜歡驚喜", ko:"깜짝 선물"}, b:{e:"📝", zh:"直接說想要什麼", ko:"원하는 거 말하기"} }
+  {
+    "id": "pets",
+    "zh": "貓派／狗派",
+    "ko": "고양이파 / 강아지파",
+    "a": {
+      "e": "🐱",
+      "zh": "貓派",
+      "ko": "고양이파"
+    },
+    "b": {
+      "e": "🐶",
+      "zh": "狗派",
+      "ko": "강아지파"
+    }
+  },
+  {
+    "id": "landscape",
+    "zh": "海邊／山上",
+    "ko": "바다 / 산",
+    "a": {
+      "e": "🏖️",
+      "zh": "海邊",
+      "ko": "바다"
+    },
+    "b": {
+      "e": "⛰️",
+      "zh": "山上",
+      "ko": "산"
+    }
+  },
+  {
+    "id": "outing",
+    "zh": "旅遊／宅家",
+    "ko": "여행 / 집콕",
+    "a": {
+      "e": "🧳",
+      "zh": "旅遊",
+      "ko": "여행"
+    },
+    "b": {
+      "e": "🏠",
+      "zh": "宅家",
+      "ko": "집콕"
+    }
+  },
+  {
+    "id": "drink",
+    "zh": "冰的／熱的",
+    "ko": "차가운 음료 / 따뜻한 음료",
+    "a": {
+      "e": "🧊",
+      "zh": "冰的",
+      "ko": "차가운 음료"
+    },
+    "b": {
+      "e": "☕",
+      "zh": "熱的",
+      "ko": "따뜻한 음료"
+    }
+  },
+  {
+    "id": "place",
+    "zh": "家鄉／國外",
+    "ko": "고향 / 해외",
+    "a": {
+      "e": "🏡",
+      "zh": "家鄉",
+      "ko": "고향"
+    },
+    "b": {
+      "e": "🌏",
+      "zh": "國外",
+      "ko": "해외"
+    }
+  },
+  {
+    "id": "personality",
+    "zh": "外向／內向",
+    "ko": "외향적 / 내향적",
+    "a": {
+      "e": "🎉",
+      "zh": "外向",
+      "ko": "외향적"
+    },
+    "b": {
+      "e": "📖",
+      "zh": "內向",
+      "ko": "내향적"
+    }
+  },
+  {
+    "id": "season",
+    "zh": "夏天／冬天",
+    "ko": "여름 / 겨울",
+    "a": {
+      "e": "☀️",
+      "zh": "夏天",
+      "ko": "여름"
+    },
+    "b": {
+      "e": "⛄",
+      "zh": "冬天",
+      "ko": "겨울"
+    }
+  },
+  {
+    "id": "living",
+    "zh": "城市／鄉村",
+    "ko": "도시 / 시골",
+    "a": {
+      "e": "🏙️",
+      "zh": "城市",
+      "ko": "도시"
+    },
+    "b": {
+      "e": "🌾",
+      "zh": "鄉村",
+      "ko": "시골"
+    }
+  },
+  {
+    "id": "weather",
+    "zh": "晴天／雨天",
+    "ko": "맑은 날 / 비 오는 날",
+    "a": {
+      "e": "🌞",
+      "zh": "晴天",
+      "ko": "맑은 날"
+    },
+    "b": {
+      "e": "🌧️",
+      "zh": "雨天",
+      "ko": "비 오는 날"
+    }
+  },
+  {
+    "id": "color",
+    "zh": "黑色／白色",
+    "ko": "검은색 / 흰색",
+    "a": {
+      "e": "🖤",
+      "zh": "黑色",
+      "ko": "검은색"
+    },
+    "b": {
+      "e": "🤍",
+      "zh": "白色",
+      "ko": "흰색"
+    }
+  },
+  {
+    "id": "staple",
+    "zh": "飯／麵",
+    "ko": "밥 / 면",
+    "a": {
+      "e": "🍚",
+      "zh": "飯",
+      "ko": "밥"
+    },
+    "b": {
+      "e": "🍜",
+      "zh": "麵",
+      "ko": "면"
+    }
+  },
+  {
+    "id": "curry",
+    "zh": "咖哩拌／咖哩不拌",
+    "ko": "카레 비벼 먹기 / 카레 안 비벼 먹기",
+    "a": {
+      "e": "🥄",
+      "zh": "咖哩拌",
+      "ko": "카레 비벼 먹기"
+    },
+    "b": {
+      "e": "🍛",
+      "zh": "咖哩不拌",
+      "ko": "카레 안 비벼 먹기"
+    }
+  },
+  {
+    "id": "hand",
+    "zh": "左撇子／右撇子",
+    "ko": "왼손잡이 / 오른손잡이",
+    "a": {
+      "e": "👈",
+      "zh": "左撇子",
+      "ko": "왼손잡이"
+    },
+    "b": {
+      "e": "👉",
+      "zh": "右撇子",
+      "ko": "오른손잡이"
+    }
+  }
 ];
 const QBY = Object.fromEntries(BANK.map(q => [q.id, q]));
 const DEFAULT_SEL = BANK.map(q => q.id);
@@ -2759,7 +2915,7 @@ const S = (params.get("s") || ("tk" + TODAY)).replace(/[^a-z0-9]/gi, "").slice(0
 const URLB = brokerUrl(params.get("b") || "hivemq");
 // Every room has an "epoch". A reset or a test-room clear starts a new epoch, so anything an old
 // device sends afterwards lands in the old epoch and can never show up in the room again.
-const RTOP = r => `kmatch2/${S}/r${r}/reset`;
+const RTOP = r => `kmatch26/${S}/r${r}/reset`;
 function readEpoch(r) {
   return new Promise(res => {
     let done = false;
@@ -3123,7 +3279,7 @@ function startRoom() {
     app.innerHTML = `<div class="wrap">
       <div class="topbar"><span class="roomtag">${TESTR ? "🧪 測試房間 · 테스트 방" : "房間 · 방 " + LBL}</span><button class="linkbtn" id="leave">← 換房間 · 방 선택</button></div>
       <div class="card">
-        <h1 class="join-brand">默契大挑戰 <span class="brand-version">test 25</span><span class="brand-ko" lang="ko">텔레파시 게임</span></h1>
+        <h1 class="join-brand">默契二選一 <span class="brand-version">test 26</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></h1>
         <div class="muted">${tri({zh:"你們的默契有多好？一起來試試！", ko:"우리 얼마나 잘 통할까요? 같이 알아봐요!"})}</div>
         <label class="field"><span class="lbl">${tri({zh:"你的名字", ko:"이름"}, "inline")}</span>
           <input id="nm" type="text" maxlength="16" autocomplete="off" placeholder="例如：小安／민지" value="${esc(me ? me.n : "")}"></label>
@@ -3219,8 +3375,7 @@ function startRoom() {
     app.innerHTML = `<div class="wrap">${header()}
       <div class="card">
         <div class="qhead">題目 · 문제 ${st.qi + 1} / ${st.total}</div>
-        <div class="question">${tri(q)}</div>
-        <div class="choices">${choiceBtn(q, "A")}${choiceBtn(q, "B")}</div>
+        <div class="choices direct-choices">${choiceBtn(q, "A")}${choiceBtn(q, "B")}</div>
         <div class="hint">${mine ? tri({zh:"已送出！等待大家作答…", ko:"보냈어요! 모두를 기다리는 중…"}) : tri({zh:"選一個！送出後不能更改。", ko:"하나를 골라요! 보낸 후에는 바꿀 수 없어요."})}</div>
         <div class="status">
           <div class="qhead" style="margin-bottom:8px">已作答 · 답변 완료 ${done} / ${r.length}</div>
@@ -3239,7 +3394,7 @@ function startRoom() {
     return (st.history || []).filter(h => h.res && ["A", "B"].includes(h.res[me.pid]) && h.res[me.pid] === h.res[pid]);
   }
   function sharedChoiceDescription(q, key) {
-    const descriptions = {"temp": [["喜歡喝冰飲", "차가운 음료를 좋아해요"], ["喜歡喝溫熱飲料", "따뜻한 음료를 좋아해요"]], "mint": [["喜歡薄荷巧克力", "민트 초코를 좋아해요"], ["覺得薄荷巧克力像牙膏", "민트 초코가 치약 맛 같아요"]], "pineapple": [["能接受披薩加鳳梨", "피자에 파인애플을 넣어도 괜찮아요"], ["不能接受披薩加鳳梨", "피자에 파인애플을 넣는 건 싫어요"]], "spicy": [["喜歡吃辣", "매운 음식을 좋아해요"], ["連微辣也不能吃", "조금 매운 음식도 못 먹어요"]], "chicken": [["炸雞偏好雞腿或雞翅", "치킨은 다리나 날개를 좋아해요"], ["炸雞偏好雞胸肉", "치킨은 가슴살을 좋아해요"]], "owl": [["習慣早起讀書", "일찍 일어나 공부하는 편이에요"], ["習慣晚睡、晚上活動", "늦게 자고 밤에 활동하는 편이에요"]], "notes": [["喜歡手寫筆記", "손으로 필기하는 걸 좋아해요"], ["喜歡用平板或筆電做筆記", "태블릿이나 노트북으로 필기하는 걸 좋아해요"]], "studyplace": [["喜歡在安靜的圖書館讀書", "조용한 도서관에서 공부하는 걸 좋아해요"], ["喜歡在有背景聲的咖啡廳讀書", "적당히 소음 있는 카페에서 공부하는 걸 좋아해요"]], "exam": [["考前一晚會熬夜讀書", "시험 전날 밤새 공부하는 편이에요"], ["考前一晚會早睡", "시험 전날 일찍 자는 편이에요"]], "wear": [["上課喜歡穿制服", "학교에서 교복 입는 걸 좋아해요"], ["上課喜歡穿運動服", "학교에서 체육복 입는 걸 좋아해요"]], "after": [["放學後喜歡回家休息", "방과 후 집에서 쉬는 걸 좋아해요"], ["放學後喜歡和朋友安排活動", "방과 후 친구들과 활동하는 걸 좋아해요"]], "holistudy": [["放假喜歡獨自讀書", "쉬는 날 혼자 공부하는 걸 좋아해요"], ["放假喜歡和同學在咖啡廳讀書", "쉬는 날 친구들과 카페에서 공부하는 걸 좋아해요"]], "mbti": [["個性外向、喜歡社交", "외향적이고 사람들과 어울리는 걸 좋아해요"], ["個性內向、喜歡獨處充電", "내향적이고 혼자 쉬며 에너지를 충전해요"]], "drama": [["追劇喜歡更新一集看一集", "드라마는 새 회차가 나올 때마다 봐요"], ["追劇喜歡等完結一次看完", "드라마는 완결 후 한 번에 몰아봐요"]], "trip": [["旅行前喜歡規劃詳細行程", "여행 전에 자세한 계획을 세우는 걸 좋아해요"], ["旅行喜歡隨心情安排", "여행은 그날 기분대로 다니는 걸 좋아해요"]], "music": [["喜歡韓國流行音樂或舞曲", "한국 대중음악이나 댄스곡을 좋아해요"], ["喜歡抒情歌或獨立樂團", "발라드나 인디 밴드 음악을 좋아해요"]], "photo": [["吃飯前習慣先拍照", "먹기 전에 사진부터 찍는 편이에요"], ["吃飯喜歡直接開動", "사진을 찍기보다 바로 먹는 편이에요"]], "hangout": [["和朋友出遊喜歡去練歌房", "친구와 놀 때 노래방에 가는 걸 좋아해요"], ["和朋友出遊喜歡逛市集或商圈", "친구와 놀 때 시장이나 번화가 구경을 좋아해요"]], "reply": [["習慣看到訊息就回覆", "메시지를 읽자마자 답장하는 편이에요"], ["習慣累積訊息後一起回覆", "메시지를 모아 뒀다가 한 번에 답장해요"]], "gift": [["收禮物喜歡有驚喜", "깜짝 선물을 받는 걸 좋아해요"], ["收禮物會直接說想要什麼", "받고 싶은 선물을 직접 말하는 편이에요"]]};
+    const descriptions = {"pets": [["喜歡貓", "고양이를 좋아해요"], ["喜歡狗", "강아지를 좋아해요"]], "landscape": [["喜歡去海邊", "바다에 가는 걸 좋아해요"], ["喜歡去山上", "산에 가는 걸 좋아해요"]], "outing": [["放假喜歡旅遊", "쉬는 날 여행하는 걸 좋아해요"], ["放假喜歡宅在家", "쉬는 날 집에 있는 걸 좋아해요"]], "drink": [["喜歡喝冰飲", "차가운 음료를 좋아해요"], ["喜歡喝熱飲", "따뜻한 음료를 좋아해요"]], "place": [["喜歡待在家鄉", "고향에 있는 걸 좋아해요"], ["喜歡到國外", "해외에 가는 걸 좋아해요"]], "personality": [["個性偏外向", "외향적인 편이에요"], ["個性偏內向", "내향적인 편이에요"]], "season": [["喜歡夏天", "여름을 좋아해요"], ["喜歡冬天", "겨울을 좋아해요"]], "living": [["喜歡城市", "도시를 좋아해요"], ["喜歡鄉村", "시골을 좋아해요"]], "weather": [["喜歡晴天", "맑은 날을 좋아해요"], ["喜歡雨天", "비 오는 날을 좋아해요"]], "color": [["喜歡黑色", "검은색을 좋아해요"], ["喜歡白色", "흰색을 좋아해요"]], "staple": [["主食偏好飯", "밥을 더 좋아해요"], ["主食偏好麵", "면을 더 좋아해요"]], "curry": [["吃咖哩飯會拌勻", "카레라이스를 비벼 먹어요"], ["吃咖哩飯不拌勻", "카레라이스를 비비지 않고 먹어요"]], "hand": [["慣用左手", "왼손잡이예요"], ["慣用右手", "오른손잡이예요"]]};
     const answer = key === "A" ? q.a : q.b;
     const label = descriptions[q.id] && descriptions[q.id][key === "A" ? 0 : 1];
     return { ...answer, zh: label ? label[0] : (q.zh ? q.zh + "：" + answer.zh : answer.zh), ko: label ? label[1] : (q.ko ? q.ko + ": " + answer.ko : answer.ko) };
@@ -3313,7 +3468,7 @@ function startRoom() {
     let e = null;
     while (e === null) e = await readEpoch(RN);
     EP = e; base = `${TOP(S, RN)}/e${EP}`;
-    SKEY = `kmatch2_me_${S}_${RN}_${EP}`; IDS = `kmatch2_ids_${S}_${RN}_${EP}`; RKEY = `kmatch2_r_${S}_${RN}_${EP}`;
+    SKEY = `kmatch26_me_${S}_${RN}_${EP}`; IDS = `kmatch26_ids_${S}_${RN}_${EP}`; RKEY = `kmatch26_r_${S}_${RN}_${EP}`;
     me = SS.get(SKEY, null);
     render(); connect();
   })();
@@ -3337,7 +3492,7 @@ function startLanding() {
   };
   function render() {
     app.innerHTML = `<div class="wrap">
-      <div class="topbar"><span class="landing-brand"><strong>默契大挑戰</strong><span class="brand-version">test 25</span><span class="brand-ko" lang="ko">텔레파시 게임</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
+      <div class="topbar"><span class="landing-brand"><strong>默契二選一</strong><span class="brand-version">test 26</span><span class="brand-ko" lang="ko">텔레파시 둘 중 하나</span></span><span class="conn"><span class="dot ${conn}"></span></span></div>
       <div class="card">
         <h1 class="room-choice-title">${tri({zh:"選擇你的房間", ko:"방을 선택하세요"}, "inline")}</h1>
       </div>
