@@ -2587,10 +2587,22 @@ const ROOMS = 5;
 const TODAY = new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10).replace(/-/g, "");
 const S = (params.get("s") || ("tk" + TODAY)).replace(/[^a-z0-9]/gi, "").slice(0, 16);
 const URLB = brokerUrl(params.get("b") || "hivemq");
-const RESET_TOPIC = `kmatch2/${S}/reset`, SEENKEY = `kmatch2_seen_${S}`;
+// Every room has an "epoch". A reset or a test-room clear starts a new epoch, so anything an old
+// device sends afterwards lands in the old epoch and can never show up in the room again.
+const RTOP = r => `kmatch2/${S}/r${r}/reset`;
+function readEpoch(r) {
+  return new Promise(res => {
+    let done = false;
+    const c = mqtt.connect(URLB, { clientId: "km_" + rid(12), clean: true, keepalive: 20, reconnectPeriod: 2000, connectTimeout: 10000 });
+    const fin = e => { if (done) return; done = true; try { c.end(true); } catch (_) {} res(e); };
+    c.on("connect", () => { c.subscribe(RTOP(r), { qos: 1 }); setTimeout(() => fin("0"), 1500); });
+    c.on("message", (t, m) => { let R = null; try { R = JSON.parse(m.toString()); } catch (_) {} fin(R && R.id ? R.id : "0"); });
+    c.on("error", () => {});
+    setTimeout(() => fin(null), 15000);
+  });
+}
 const RESET_HASH = "eycr3b756y", LEAD_HASH = "29lyr04fql0";
 function cyrb53(str, seed = 7) { let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed; for (let i = 0, ch; i < str.length; i++) { ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); } h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507); h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507); h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909); return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36); }
-function wipeRoomData(r) { try { localStorage.removeItem(`kmatch2_p_${S}_${r}`); localStorage.removeItem(`kmatch2_r_${S}_${r}`); localStorage.removeItem(`kmatch2_ids_${S}_${r}`); sessionStorage.removeItem(`kmatch2_me_${S}_${r}`); } catch (e) {} }
 const roomLabel = r => r === 0 ? "TEST" : String(r);
 const landingURL = () => location.pathname + (params.get("b") ? "?b=" + encodeURIComponent(params.get("b")) : "") + (params.get("s") ? (params.get("b") ? "&" : "?") + "s=" + encodeURIComponent(params.get("s")) : "");
 if (params.get("r")) startRoom(); else startLanding();
@@ -2606,9 +2618,8 @@ function startRoom() {
   const RN = TESTR ? 0 : Math.max(1, Math.min(ROOMS, parseInt(rp, 10) || 1));
   const LBL = roomLabel(RN);
   const QL = DEFAULT_SEL.slice();
-  const base = TOP(S, RN);
-  const SKEY = `kmatch2_me_${S}_${RN}`, IDS = `kmatch2_ids_${S}_${RN}`, RKEY = `kmatch2_r_${S}_${RN}`;
-  let me = SS.get(SKEY, null); // this tab's identity {pid,n,c,lead,last:{g,qi,a},at}
+  let base = null, EP = null, SKEY = null, IDS = null, RKEY = null; // set once the room's epoch is known
+  let me = null; // this tab's identity {pid,n,c,lead,last:{g,qi,a},at}
   let st = null, leaderInfo = null, conn = "re", client = null, editing = false, dead = false, willPid = null, clearing = null;
   const ON = {}, P = {}, offSince = {};
   let isLeader = false, L = null, pubTimer = null, revealTimer = null;
@@ -2641,7 +2652,7 @@ function startRoom() {
       will: me ? { topic: `${base}/on/${me.pid}`, payload: "0", qos: 1, retain: true } : undefined,
       status: s => { conn = s; const d = $("#conndot"); if (d) d.className = "dot " + s; },
       onConnect: c => {
-        c.subscribe([RESET_TOPIC, `${base}/state`, `${base}/leader`, `${base}/on/+`], { qos: 1 });
+        c.subscribe([RTOP(RN), `${base}/state`, `${base}/leader`, `${base}/on/+`], { qos: 1 });
         if (isLeader) c.subscribe(`${base}/p/+`, { qos: 1 });
         setTimeout(() => { if (dead || !me) return; publishMe(); if (me.lead && !isLeader) setTimeout(tryLead, 1200); else if (isLeader) claimTopic(); }, 600);
         render();
@@ -2650,8 +2661,7 @@ function startRoom() {
     });
   }
   function onMessage(t, m) {
-    if (clearing && m && (t.startsWith(`${base}/p/`) || t.startsWith(`${base}/on/`))) clearing.add(t);
-    if (t === RESET_TOPIC) return onReset(m);
+    if (t === RTOP(RN)) return onReset(m);
     if (dead) return;
     const rest = t.slice(base.length + 1);
     if (rest === "state") {
@@ -2677,18 +2687,12 @@ function startRoom() {
   }
   let touched = false, takePwVal = "";
   function onReset(m) {
-    let R; try { R = JSON.parse(m); } catch (e) { return; } if (!R || !R.id) return;
-    if (SS.get("kmatch2_ignore", null) === R.id) return;
-    const seen = LS.get(SEENKEY, null);
-    if (seen === R.id && !(me && (me.at || 0) < R.t && (R.rooms || []).includes(RN))) return;
-    if (!(R.rooms || []).includes(RN)) { LS.set(SEENKEY, R.id); return; }
-    const affected = seen ? true : !!(me && (me.at || 0) < R.t);
-    LS.set(SEENKEY, R.id);
-    if (!affected) return;
+    let R = null; try { R = JSON.parse(m); } catch (e) {}
+    const id = R && R.id ? R.id : "0";
+    if (dead || id === EP) return;
     dead = true; isLeader = false; clearTimeout(pubTimer);
-    wipeRoomData(RN);
     try { client.end(true); } catch (e) {}
-    alert(TESTR ? "TEST ROOM 的紀錄已被清除。\nThe test room was cleared." : "老師已重置這個房間，請重新選擇房間。\nThe room was reset. Please choose your room again.\n방이 초기화되었어요. 다시 방을 선택해 주세요.");
+    alert(TESTR ? "TEST ROOM 的紀錄已被清除，請重新選擇房間。\nThe test room was cleared." : "老師已重置這個房間，請重新選擇房間。\nThe room was reset. Please choose your room again.\n방이 초기화되었어요. 다시 방을 선택해 주세요.");
     location.href = landingURL();
   }
 
@@ -2834,16 +2838,11 @@ function startRoom() {
     if (!TESTR) return;
     if (!confirm("清除 TEST ROOM 的所有紀錄？房內所有人會回到選房間畫面。\nClear the test room for everyone?")) return;
     if (!client || !client.connected) { toast("尚未連線，請稍後再試"); return; }
-    const id = rid(8); SS.set("kmatch2_ignore", id);
-    clearing = new Set([`${base}/state`, `${base}/leader`]);
-    for (const pid in ON) clearing.add(`${base}/on/${pid}`);
     dead = true; isLeader = false; clearTimeout(pubTimer);
-    client.publish(RESET_TOPIC, JSON.stringify({ id, t: Date.now(), rooms: [0] }), { qos: 1, retain: true });
-    client.subscribe(`${base}/p/+`, { qos: 1 });
     app.innerHTML = `<div class="wrap"><div class="card center"><div class="waiting"><span class="spinner"></span>正在清除 TEST ROOM… Clearing…</div></div></div>`;
-    const wipe = () => { for (const t of clearing) client.publish(t, "", { qos: 1, retain: true }); };
-    setTimeout(wipe, 1500);
-    setTimeout(() => { wipe(); wipeRoomData(RN); try { client.end(false); } catch (e) {} location.href = landingURL(); }, 3000);
+    let left = false; const away = () => { if (left) return; left = true; try { client.end(false); } catch (e) {} location.href = landingURL(); };
+    client.publish(RTOP(RN), JSON.stringify({ id: rid(10), t: Date.now() }), { qos: 1, retain: true }, () => setTimeout(away, 300));
+    setTimeout(away, 4000);
   }
   function testBar() { return TESTR ? `<div class="center" style="margin-top:18px"><button class="btn ghost sm" id="clearTest">🧹 清除測試紀錄 · Clear test room</button><div class="small muted" style="margin-top:6px">測試用房間：同一個瀏覽器可以開多個分頁，用不同名字加入。</div></div>` : ""; }
   function leaveRoom() {
@@ -3027,8 +3026,15 @@ function startRoom() {
     app.innerHTML = `<div class="wrap">${header()}<section class="card"><h1>${tri({en:"Our conversation record", zh:"我們的交流紀錄", ko:"우리의 대화 기록"})}</h1><p>${tri({en:`We shared our choices on ${n} questions.`, zh:`我們分享了 ${n} 題的選擇。`, ko:`${n}개의 질문에 대한 선택을 나눴어요.`})}</p><p>${tri({en:"Which choice would you like to learn more about?", zh:"你還想多了解誰的哪個選擇？", ko:"누구의 어떤 선택을 더 알아보고 싶나요?"})}</p>${leadBar('<button class="btn ghost sm" data-act="again">再聊一輪 · Play again · 다시 하기</button>')}<p class="small muted">${tri({en:"You can save this record with a screenshot.", zh:"可以截圖保存這次的交流紀錄。", ko:"스크린샷으로 이 기록을 저장할 수 있어요."})}</p></section></div>`;
   }
 
-  render();
-  connect();
+  app.innerHTML = `<div class="wrap"><div class="card center"><div class="waiting"><span class="spinner"></span>${tri({en:"Connecting to your room…", zh:"正在連線到房間…", ko:"방에 연결하는 중…"})}</div></div></div>`;
+  (async () => {
+    let e = null;
+    while (e === null) e = await readEpoch(RN);
+    EP = e; base = `${TOP(S, RN)}/e${EP}`;
+    SKEY = `kmatch2_me_${S}_${RN}_${EP}`; IDS = `kmatch2_ids_${S}_${RN}_${EP}`; RKEY = `kmatch2_r_${S}_${RN}_${EP}`;
+    me = SS.get(SKEY, null);
+    render(); connect();
+  })();
   setInterval(() => { if (!dead && !isLeader && leaderInfo && !leaderOnline() && me && me.c === "TW" && !editing && !(document.activeElement && document.activeElement.id === "takePw")) render(); }, 5000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden && client && client.connected) { publishMe(); if (isLeader) schedulePub(); } });
 }
@@ -3042,7 +3048,7 @@ function startLanding() {
   const app = $("#app");
   const info = {}; for (let r = 0; r <= ROOMS; r++) info[r] = { lead: null, on: {} };
   let conn = "re", client = null;
-  const clearing = new Set(); let clearMode = null;
+  const ep = {};
   const go = (r, role) => {
     const p = new URLSearchParams(location.search); p.set("r", r); p.set("role", role);
     location.href = location.pathname + "?" + p.toString();
@@ -3108,33 +3114,33 @@ function startLanding() {
       close(); doReset(rooms);
     };
   }
+  function setEp(r, e) {
+    if (ep[r] === e) return;
+    if (ep[r] !== undefined && client) client.unsubscribe([`${TOP(S, r)}/e${ep[r]}/leader`, `${TOP(S, r)}/e${ep[r]}/on/+`]);
+    ep[r] = e; info[r] = { lead: null, on: {} };
+    if (client && client.connected) client.subscribe([`${TOP(S, r)}/e${e}/leader`, `${TOP(S, r)}/e${e}/on/+`], { qos: 1 });
+    later();
+  }
   function doReset(rooms) {
-    const id = rid(8);
-    SS.set("kmatch2_ignore", id);
-    rooms.forEach(wipeRoomData);
-    client.publish(RESET_TOPIC, JSON.stringify({ id, t: Date.now(), rooms }), { qos: 1, retain: true });
-    clearMode = new Set(rooms);
-    rooms.forEach(r => client.subscribe(`${TOP(S, r)}/p/+`, { qos: 1 }));
-    const wipe = () => rooms.forEach(r => {
-      client.publish(`${TOP(S, r)}/state`, "", { qos: 1, retain: true });
-      client.publish(`${TOP(S, r)}/leader`, "", { qos: 1, retain: true });
-      for (const pid of Object.keys(info[r].on)) client.publish(`${TOP(S, r)}/on/${pid}`, "", { qos: 1, retain: true });
-      info[r] = { lead: null, on: {} };
-    });
-    setTimeout(wipe, 1500);
-    setTimeout(() => { wipe(); rooms.forEach(r => client.unsubscribe(`${TOP(S, r)}/p/+`)); clearMode = null; render(); toast(`已重置 ${rooms.length === ROOMS ? "全部房間" : "Room " + rooms[0]}`); }, 3500);
+    rooms.forEach(r => { const id = rid(10); client.publish(RTOP(r), JSON.stringify({ id, t: Date.now() }), { qos: 1, retain: true }); setEp(r, id); });
+    render(); toast(`已重置 ${rooms.length === ROOMS ? "全部房間" : "Room " + rooms[0]}`);
   }
   render();
   let t = null; const later = () => { clearTimeout(t); t = setTimeout(render, 200); };
   client = connectMQTT(URLB, {
     status: s => { conn = s; later(); },
-    onConnect: c => { c.subscribe(RESET_TOPIC, { qos: 1 }); for (let r = 0; r <= ROOMS; r++) c.subscribe([`${TOP(S, r)}/leader`, `${TOP(S, r)}/on/+`], { qos: 1 }); },
+    onConnect: c => {
+      for (let r = 0; r <= ROOMS; r++) {
+        c.subscribe(RTOP(r), { qos: 1 });
+        if (ep[r] !== undefined) c.subscribe([`${TOP(S, r)}/e${ep[r]}/leader`, `${TOP(S, r)}/e${ep[r]}/on/+`], { qos: 1 });
+        else setTimeout(() => { if (ep[r] === undefined) setEp(r, "0"); }, 1500);
+      }
+    },
     onMessage: (tp, m) => {
-      if (tp === RESET_TOPIC) { try { const R = JSON.parse(m); if (R && R.id) { if (LS.get(SEENKEY, null) !== R.id) (R.rooms || []).forEach(wipeRoomData); LS.set(SEENKEY, R.id); } } catch (e) {} return; }
       const parts = tp.split("/"); const r = parseInt(parts[2].slice(1), 10); if (!info[r]) return;
-      if (parts[3] === "p") { if (m && clearMode && clearMode.has(r)) client.publish(tp, "", { qos: 1, retain: true }); return; }
-      if (clearMode && clearMode.has(r)) { if (m) client.publish(tp, "", { qos: 1, retain: true }); return; }
-      try { if (parts[3] === "leader") info[r].lead = m ? JSON.parse(m) : null; else if (parts[3] === "on") info[r].on[parts[4]] = m === "1"; } catch (e) {}
+      if (parts[3] === "reset") { let R = null; try { R = JSON.parse(m); } catch (e) {} setEp(r, R && R.id ? R.id : "0"); return; }
+      if (parts[3] !== "e" + ep[r]) return;
+      try { if (parts[4] === "leader") info[r].lead = m ? JSON.parse(m) : null; else if (parts[4] === "on") info[r].on[parts[5]] = m === "1"; } catch (e) {}
       later();
     }
   });
